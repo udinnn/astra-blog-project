@@ -2,8 +2,8 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div>
-      ini baca artikel
+    <div className='flex flex-col items-center justify-center h-screen'>
+      <h1 className='text-6xl'>Articles</h1> 
     </div>
   )
 }
