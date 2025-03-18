@@ -1,13 +1,59 @@
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React from 'react'
 
 const Menu = () => {
+  const router = useRouter();
+  const toggleHome = () => {
+    router.push('/');
+  };
+  const toggleAbout = () => {
+    router.push('/about');
+  };
+  const toggleArticles = () => {
+    router.push('/article');
+  };
+
   return (
-    <div className='relative justify-end w-48 border border-black rounded-sm bg-gray-300 p-4 shadow-lg z-10'>
-        <ul className='absolute inset-0 list-none p-0 m-0 z-10'>
-          <li className='p-2 mb-2 border border-black rounded-sm bg-gray-300 shadow-md'>Home</li>
-          <li className='p-2 mb-2 border border-black rounded-sm bg-gray-300 shadow-md'>About Us</li>
-          <li className='p-2 mb-2 border border-black rounded-sm bg-gray-300 shadow-md'>Articles</li>
+    <div className='relative flex flex-row justify-end items-center p-2 z-0'>
+      <div className='absolute flex flex-col justify-center items-center w-auto h-min-content border border-black right-4 top-4 z-10'>
+        <ul>
+          <li>
+            <Image 
+            src="/assets/home.png" 
+            alt="home" 
+            width={20} 
+            height={20} 
+            className="my-4 cursor-pointer"
+            onClick={toggleHome}
+            title='Home'
+            />
+          </li>
+          <li>
+          <Image 
+            src="/assets/about.png" 
+            alt="about" 
+            width={20} 
+            height={20} 
+            className="my-4 cursor-pointer"
+            onClick={toggleAbout}
+            title='About'
+            />
+          </li>
+          <li>
+          <Image 
+            src="/assets/articles.png" 
+            alt="articles" 
+            width={20} 
+            height={20} 
+            className="my-4 cursor-pointer"
+            onClick={toggleArticles}
+            title='Articles'
+            />
+          </li>
         </ul>
+      </div>
+      
     </div>
   )
 }
