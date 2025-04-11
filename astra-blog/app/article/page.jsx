@@ -3,7 +3,7 @@
 import Footer from "@/Components/Footer";
 import Menu from "@/Components/Menu";
 import Image from "next/image";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const page = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,20 +13,21 @@ const page = () => {
 
   return (
     <div>
-      <div className="flex flex-col justify-center text-center border-b-2 border-black p-2">
+      <div className="flex flex-row justify-between items-center border-b-2 border-black p-2">
+        <h1 className="text-4xl font-bold p-2 flex-grow text-center">
+          Articles
+        </h1>
         <Image
           src="/assets/menu.png"
           alt="menu"
           width={30}
           height={30}
-          className="absolute right-2 top-2 overflow-hidden"
           onClick={toggleMenu}
+          className="ml-auto cursor-pointer"
         />
-        <h1 className="text-4xl font-bold p-2">Articles</h1>
       </div>
 
       {isMenuOpen && <Menu />}
-
       <div className="flex flex-row flex-wrap justify-around items-center mt-10 mx-20 mb-20">
         <div className="w-auto flex flex-col h-min-content border border-black rounded-lg shadow-black shadow-lg p-4">
           <h1 className="font-bold text-xl py-2">Article Title</h1>
@@ -39,7 +40,7 @@ const page = () => {
           />
           <p className="text-sm py-2">Article Description</p>
           <button className="inline-block p-2 border border-black rounded-lg hover:bg-blue-300">
-            <a href="/article">Read More</a>
+            <a href="/read">Read More</a>
           </button>
         </div>
 
@@ -54,7 +55,7 @@ const page = () => {
           />
           <p className="text-sm py-2">Article Description</p>
           <button className="inline-block p-2 border border-black rounded-lg hover:bg-blue-300">
-            <a href="/article">Read More</a>
+            <a href="/read">Read More</a>
           </button>
         </div>
 
@@ -69,7 +70,7 @@ const page = () => {
           />
           <p className="text-sm py-2">Article Description</p>
           <button className="inline-block p-2 border border-black rounded-lg hover:bg-blue-300">
-            <a href="/article">Read More</a>
+            <a href="/read">Read More</a>
           </button>
         </div>
 
@@ -84,7 +85,7 @@ const page = () => {
           />
           <p className="text-sm py-2">Article Description</p>
           <button className="inline-block p-2 border border-black rounded-lg hover:bg-blue-300">
-            <a href="/article">Read More</a>
+            <a href="/read">Read More</a>
           </button>
         </div>
       </div>

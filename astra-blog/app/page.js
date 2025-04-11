@@ -7,7 +7,7 @@ export default function Home() {
     <div>
       <Header />
       <h1 className="flex justify-center font-bold text-4xl mt-40 mb-10">
-        PROGRAM HIGHLIGHT
+        PROGRAM HIGHLIGHTS
       </h1>
 
       {/* 1st Program */}

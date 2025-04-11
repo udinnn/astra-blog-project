@@ -1,11 +1,12 @@
-import React from 'react'
+import Sidebar from "@/Components/Sidebar";
+import React from "react";
 
 const page = () => {
   return (
-    <div className='flex flex-col items-center justify-center h-screen'>
-      <h1 className='text-6xl'>Admin</h1> 
+    <div>
+      <Sidebar />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;
