@@ -1,11 +1,19 @@
+"use client";
+
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 
-const Sidebar = () => {
+const Sidebar = ({setActivePage}) => {
+  const router = useRouter();
+  const handleLogout = () => {
+    router.push("/");
+    console.log("Logout clicked");
+  }
   return (
     <div>
-      <div className="fixed top-0 left-0 inline-flex flex-col p-4 h-screen bg-slate-600 rounded-lg shadow-md shadow-black">
-        <div className="font-bold text-3xl p-2 mb-5">Logo</div>
+      <div className="fixed top-0 left-0 inline-flex flex-col p-4 h-screen bg-slate-600 shadow-md shadow-black">
+        <div className="font-bold text-3xl mt-10 mb-5">Logo</div>
         <div className="flex flex-col">
           <div className="flex flex-row items-center">
             <Image
@@ -15,7 +23,12 @@ const Sidebar = () => {
               alt="dashboard"
               className="m-2 filter invert"
             />
-            <p className="text-lg text-white">Home</p>
+            <p
+              className="text-lg text-white cursor-pointer"
+              onClick={() => setActivePage("dashboard")}
+            >
+              Dashboard
+            </p>
           </div>
           <div className="flex flex-row items-center">
             <Image
@@ -25,7 +38,10 @@ const Sidebar = () => {
               alt="new"
               className="m-2 filter invert"
             />
-            <p className="text-lg text-white">New Article</p>
+            <p className="text-lg text-white cursor-pointer"
+              onClick={() => setActivePage("new")}>
+              New Article
+            </p>
           </div>
           <div className="flex flex-row items-center">
             <Image
@@ -35,7 +51,10 @@ const Sidebar = () => {
               alt="List"
               className="m-2 filter invert"
             />
-            <p className="text-lg text-white">Article List</p>
+            <p className="text-lg text-white cursor-pointer"
+              onClick={() => setActivePage("list")}>
+              Article List
+            </p>
           </div>
         </div>
         <div className="flex-grow"></div>
@@ -46,19 +65,20 @@ const Sidebar = () => {
               width={30}
               height={30}
               alt="admin"
-              className="m-2 filter invert"
+              className="m-2"
             />
             <Image
               src="/assets/logout.png"
               width={25}
               height={25}
               alt="logout"
-              className="m-2 filter invert"
+              className="m-2 cursor-pointer"
+              onClick={handleLogout}
             />
           </div>
-          <div className="flex flex-col w-full items-start">
-            <p className="text-sm">Admin</p>
-            <p className="text-sm">admin@gmail.com</p>
+          <div className="flex flex-col w-full items-star text-sm text-black">
+            <p>Admin</p>
+            <p>admin@gmail.com</p>
           </div>
         </div>
       </div>

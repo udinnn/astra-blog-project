@@ -32,8 +32,8 @@ const page = () => {
         <Image
           src="/assets/building.jpg"
           alt="Article Image"
-          width={screen.width * 0.85}
-          height={screen.width * 0.85}
+          width={1000}
+          height={100}
           className="shadow-black shadow-[4px_4px_10px_rgba(0,0,0,0.5)]"
         />
       </div>

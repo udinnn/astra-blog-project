@@ -1,32 +1,32 @@
+"use client";
+
 import Image from "next/image";
+import React, { useState } from "react";
 import Link from "next/link";
-import React from "react";
+import Login from "@/Components/Login"; // Pastikan path ke komponen Login benar
 
 const Footer = () => {
+  const [showLogin, setShowLogin] = useState(false);
+
   return (
     <div>
       <div className="flex flex-col flex-wrap justify-center items-center border-t border-black p-4">
         <h1 className="text-lg font-bold">Company Logo</h1>
         <div className="flex flex-row justify-around items-center p-2">
           <p className="mx-2 hover:bg-blue-500">
-          <Link href='/'>
-                Home
-              </Link>
+            <Link href="/">Home</Link>
           </p>
           <p className="mx-2 hover:bg-blue-500">
-          <Link href='/about'>
-                About
-              </Link>
+            <Link href="/about">About</Link>
           </p>
           <p className="mx-2 hover:bg-blue-500">
-          <Link href='/article'>
-                Articles
-              </Link>
+            <Link href="/article">Articles</Link>
           </p>
-          <p className="mx-2 hover:bg-blue-500">
-          <Link href='/admin'>
-                Admin
-              </Link>
+          <p
+            className="mx-2 hover:bg-blue-500 cursor-pointer"
+            onClick={() => setShowLogin(true)}
+          >
+            Admin
           </p>
         </div>
         <div className="flex flex-row justify-around items-center p-2">
@@ -79,6 +79,7 @@ const Footer = () => {
           </p>
         </div>
       </div>
+      {showLogin && <Login onClose={() => setShowLogin(false)} />}
     </div>
   );
 };
