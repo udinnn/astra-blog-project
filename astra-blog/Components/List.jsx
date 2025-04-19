@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React, { useState } from "react";
 
-const List = () => {
+const List = ({setActivePage}) => {
   const [isModalVisible, setIsModalVisible] = useState(false); // State untuk mengontrol visibilitas modal
   const [selectedArticle, setSelectedArticle] = useState(null); // State untuk menyimpan artikel yang dipilih
 
@@ -13,11 +13,6 @@ const List = () => {
   const handleCloseModal = () => {
     setIsModalVisible(false); // Tutup modal
     setSelectedArticle(null); // Reset artikel yang dipilih
-  };
-
-  const handleEdit = () => {
-    console.log(`Editing article with ID: ${selectedArticle}`);
-    handleCloseModal();
   };
 
   const handleDelete = () => {
@@ -90,7 +85,7 @@ const List = () => {
             <div className="flex justify-between">
               <button
                 className="bg-blue-500 text-white p-2 rounded-lg"
-                onClick={handleEdit}
+                onClick={() => setActivePage("edit")}
               >
                 Edit Article
               </button>

@@ -28,69 +28,79 @@ const page = () => {
 
       {isMenuOpen && <Menu />}
 
-      <div className="flex flex-col items-center mt-10">
-        <Image
-          src="/assets/building.jpg"
-          alt="Article Image"
-          width={1000}
-          height={100}
-          className="shadow-black shadow-[4px_4px_10px_rgba(0,0,0,0.5)]"
-        />
-      </div>
-      <div className="flex flex-col items-start w-max-screen mx-20 my-10 gap-x-12">
-        <p className="text-sm text-justify py-2">
-          Picture Description: Lorem ipsum dolor sit amet, consectetur
-          adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
-          magna aliqua.
-        </p>
-        <h1 className="text-4xl text-justify font-bold py-2">Article Title</h1>
-        <p className="text-sm text-justify py-2">December 12, 2025</p>
-        <p className="text-sm text-justify py-4">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum. Sed ut
-          perspiciatis unde omnis iste natus error sit voluptatem accusantium
-          doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo
-          inventore veritatis et quasi architecto beatae vitae dicta sunt
-          explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut
-          odit aut fugit, sed quia consequuntur magni dolores eos qui ratione
-          voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum
-          quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam
-          eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat
-          voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem
-          ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi
-          consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate
-          velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum
-          fugiat quo voluptas nulla pariatur?
-        </p>
-      </div>
-      <div className="flex flex-row justify-between items-center pb-8 mx-20">
-        <div className="flex flex-row justify-around items-center mx-2">
-          <Image
-            src="/assets/back-button.png"
-            alt="Previous"
-            width={15}
-            height={15}
-          />
-          <button className="cursor-pointer text-black bg-transparent underline rounded-lg hover:text-blue-300 mx-2">
-            Previous
-          </button>
-        </div>
+      {/* Parent dengan konten di tengah */}
+      <div className="flex justify-center items-center min-h-screen max-w-6xl my-10 mx-auto"
+        style={{
+          boxShadow: "10px 10px 0px rgba(0, 0, 0, 1)",
+          borderRadius: "8px",
+        }}>
+        {/* Konten di dalam parent */}
+        <div className="inline-flex flex-col justify-center items-center text-left p-8 border border-black rounded-lg relative">
+          {/* Gambar dengan overlay */}
+          <div className="relative w-full group">
+            <Image
+              src="/assets/business.jpg"
+              alt="Building"
+              width={1920 * 0.5}
+              height={1080 * 0.5}
+              className="object-cover w-full h-full"
+              style={{
+                clipPath: "inset(0 0% 25% 0)",
+              }}
+            />
+            {/* Overlay di bagian bawah gambar */}
+            <div className="absolute bottom-1/4 right-0 w-auto bg-black bg-opacity-50 text-white text-right p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <p className="text-sm">This is the description of the image.</p>
+            </div>
+          </div>
 
-        <div className="flex flex-row justify-around items-center mx-2">
-          <button className="cursor-pointer text-black bg-transparent underline rounded-lg hover:text-blue-300 mx-2">
-            Next
-          </button>
-          <Image
-            src="/assets/right.png"
-            alt="Previous"
-            width={15}
-            height={15}
-          />
+          {/* Elemen berada di sebelah kiri */}
+          <h1 className="text-5xl font-bold mt-4 self-start">Article Title</h1>
+          <p className="text-md italic py-2 self-start">December 12, 2024</p>
+          <p className="text-sm py-2 text-justify">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+            ullamcorper, nunc et bibendum facilisis, nunc nisl aliquet nunc,
+            eget aliquam nisl nunc eget nunc. Sed euismod, nisl eget aliquam
+            ullamcorper, nisl nunc aliquet nunc, eget aliquam nisl nunc eget
+            nunc. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+            ullamcorper, nunc et bibendum facilisis, nunc nisl aliquet nunc,
+            eget aliquam nisl nunc eget nunc. Sed euismod, nisl eget aliquam
+            ullamcorper, nisl nunc aliquet nunc, eget aliquam nisl nunc eget
+            nunc. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+            ullamcorper, nunc et bibendum facilisis, nunc nisl aliquet nunc,
+            eget aliquam nisl nunc eget nunc. Sed euismod, nisl eget aliquam
+            ullamcorper, nisl nunc aliquet nunc, eget aliquam nisl nunc eget
+            nunc. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+            ullamcorper, nunc et bibendum facilisis, nunc nisl aliquet nunc,
+            eget aliquam nisl nunc eget nunc. Sed euismod, nisl eget aliquam
+            ullamcorper, nisl nunc aliquet nunc, eget aliquam nisl nunc eget
+            nunc. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+            ullamcorper, nunc et bibendum facilisis, nunc nisl aliquet nunc,
+            eget aliquam nisl nunc eget nunc. Sed euismod, nisl eget aliquam
+            ullamcorper, nisl nunc aliquet nunc, eget aliquam nisl nunc eget
+            nunc. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+            ullamcorper, nunc et bibendum facilisis, nunc nisl aliquet nunc,
+            eget aliquam nisl nunc eget nunc. Sed euismod, nisl eget aliquam
+            ullamcorper, nisl nunc aliquet nunc, eget aliquam nisl nunc eget
+            nunc.
+          </p>
+
+          {/* Tombol Previous dan Next */}
+          <div className="flex flex-row justify-between items-center w-full py-2">
+            {/* Tombol Previous di ujung kiri */}
+            <div className="flex flex-row items-center">
+              <button className="cursor-pointer text-black bg-transparent hover:underline rounded-lg hover:text-blue-600">
+                Previous...
+              </button>
+            </div>
+
+            {/* Tombol Next di ujung kanan */}
+            <div className="flex flex-row items-center">
+              <button className="cursor-pointer text-black bg-transparent hover:underline rounded-lg hover:text-blue-600">
+                ...Next
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       <Footer />

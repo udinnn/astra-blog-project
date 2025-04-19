@@ -1,7 +1,27 @@
-import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter untuk navigasi
 
 const Login = ({ onClose }) => {
+  const [email, setEmail] = useState(""); // State untuk email
+  const [password, setPassword] = useState(""); // State untuk password
+  const [error, setError] = useState(""); // State untuk pesan error
+  const router = useRouter(); // Inisialisasi router
+
+  const handleLogin = () => {
+    // Hardcoded credentials
+    const validEmail = "astra";
+    const validPassword = "juga";
+
+    if (email === validEmail && password === validPassword) {
+      // Jika email dan password sesuai
+      localStorage.setItem("isLoggedIn", "true"); // Simpan status login di localStorage
+      router.push("/admin"); // Navigasi ke halaman admin
+    } else {
+      // Jika email atau password salah
+      setError("Invalid email or password. Please try again.");
+    }
+  };
+
   return (
     <div className="fixed inset-0 flex justify-center items-center z-50">
       {/* Background blur */}
@@ -18,18 +38,24 @@ const Login = ({ onClose }) => {
           type="text"
           placeholder="Input your email..."
           className="border border-gray-300 rounded-lg p-2 mt-2 mb-4 w-full"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)} // Update state email
         />
         <h3 className="text-center mb-2">Password</h3>
         <input
           type="password"
           placeholder="Input your password..."
           className="border border-gray-300 rounded-lg p-2 mb-4 w-full"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)} // Update state password
         />
-        <p
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>} {/* Pesan error */}
+        <button
           className="text-center bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 mb-4 w-full"
+          onClick={handleLogin} // Panggil fungsi login
         >
-          <Link href="/admin">Login</Link>
-        </p>
+          Login
+        </button>
         <p
           className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 w-full cursor-pointer text-center"
           onClick={onClose}

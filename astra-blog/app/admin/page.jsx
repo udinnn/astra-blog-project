@@ -4,12 +4,26 @@ import Dashboard from "@/Components/Dashboard";
 import List from "@/Components/List";
 import New from "@/Components/New";
 import Sidebar from "@/Components/Sidebar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Edit from "@/Components/Edit";
+import { useRouter } from "next/navigation"; // Import useRouter untuk navigasi
 
 const Page = () => {
-  const [activePage, setActivePage] = useState("dashboard");
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const [activePage, setActivePage] = useState("dashboard"); // State untuk halaman aktif
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false); // State untuk visibilitas sidebar
+  const [isLoading, setIsLoading] = useState(true); // State untuk menampilkan halaman loading
+  const router = useRouter(); // Inisialisasi router
+
+  useEffect(() => {
+    // Periksa apakah user sudah login
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (!isLoggedIn) {
+      router.push("/unauthorized"); // Redirect ke halaman unauthorized jika belum login
+    } else {
+      setIsLoading(false); // Hentikan loading jika user sudah login
+    }
+  }, [router]);
 
   const renderContent = () => {
     switch (activePage) {
@@ -18,13 +32,22 @@ const Page = () => {
       case "new":
         return <New />;
       case "list":
-        return <List />;
+        return <List setActivePage={setActivePage} />; // Kirim setActivePage ke komponen List
       case "edit":
-        return <Edit />; // Assuming the edit page is the same as the new article page
+        return <Edit />; // Gunakan komponen New untuk halaman edit
       default:
         return <Dashboard />;
     }
   };
+
+  if (isLoading) {
+    // Tampilkan halaman loading jika sedang memeriksa login
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-100">
+        <h1 className="text-2xl font-bold text-gray-700">Loading...</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="relative flex flex-col md:flex-row">
@@ -33,9 +56,9 @@ const Page = () => {
         className={`fixed top-0 left-0 h-full text-white transition-transform duration-300 ${
           isSidebarVisible ? "translate-x-0" : "-translate-x-full"
         }`}
-        style={{ width: "250px" }} // Lebar sidebar
-        onMouseEnter={() => setIsSidebarVisible(true)} // Tampilkan sidebar saat kursor masuk
-        onMouseLeave={() => setIsSidebarVisible(false)} // Sembunyikan sidebar saat kursor keluar
+        style={{ width: "250px" }}
+        onMouseEnter={() => setIsSidebarVisible(true)}
+        onMouseLeave={() => setIsSidebarVisible(false)}
       >
         <Sidebar setActivePage={setActivePage} />
       </div>
@@ -45,10 +68,10 @@ const Page = () => {
         className={`fixed top-1/2 transform -translate-y-1/2 cursor-pointer z-40 transition-transform duration-300 ${
           isSidebarVisible ? "-translate-x-[250px]" : "translate-x-0"
         }`}
-        onMouseEnter={() => setIsSidebarVisible(true)} // Tampilkan sidebar saat kursor diarahkan ke icon
+        onMouseEnter={() => setIsSidebarVisible(true)}
       >
         <Image
-          src="/assets/vertical.png" // Ganti dengan path gambar Anda
+          src="/assets/vertical.png"
           alt="Show Sidebar"
           width={35}
           height={35}

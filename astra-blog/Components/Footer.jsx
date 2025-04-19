@@ -4,27 +4,38 @@ import Image from "next/image";
 import React, { useState } from "react";
 import Link from "next/link";
 import Login from "@/Components/Login"; // Pastikan path ke komponen Login benar
+import { useRouter } from "next/navigation"; // Import useRouter untuk navigasi
 
 const Footer = () => {
   const [showLogin, setShowLogin] = useState(false);
+  const router = useRouter(); // Inisialisasi router
+
+  const handleAdminClick = () => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn"); // Periksa status login di localStorage
+    if (isLoggedIn) {
+      router.push("/admin"); // Arahkan ke halaman admin jika sudah login
+    } else {
+      setShowLogin(true); // Tampilkan modal login jika belum login
+    }
+  };
 
   return (
     <div>
-      <div className="flex flex-col flex-wrap justify-center items-center border-t border-black p-4">
-        <h1 className="text-lg font-bold">Company Logo</h1>
+      <div className="flex flex-col flex-wrap justify-center items-center border-t border-black pt-4">
+        <h1 className="text-lg font-bold mt-2">Company Logo</h1>
         <div className="flex flex-row justify-around items-center p-2">
-          <p className="mx-2 hover:bg-blue-500">
+          <p className="mx-2 hover:text-blue-600 hover:underline">
             <Link href="/">Home</Link>
           </p>
-          <p className="mx-2 hover:bg-blue-500">
+          <p className="mx-2 hover:text-blue-600 hover:underline">
             <Link href="/about">About</Link>
           </p>
-          <p className="mx-2 hover:bg-blue-500">
+          <p className="mx-2 hover:text-blue-600 hover:underline">
             <Link href="/article">Articles</Link>
           </p>
           <p
-            className="mx-2 hover:bg-blue-500 cursor-pointer"
-            onClick={() => setShowLogin(true)}
+            className="mx-2 hover:text-blue-600 cursor-pointer hover:underline"
+            onClick={handleAdminClick} // Panggil fungsi handleAdminClick
           >
             Admin
           </p>

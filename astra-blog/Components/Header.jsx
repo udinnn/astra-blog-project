@@ -1,56 +1,44 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import React from 'react'
+import Image from "next/image";
+import React from "react";
 
 const Header = () => {
   return (
     <div>
-      <div className='flex flex-row justify-around items-center border-b border-black text-black py-4'>
-        <h1 className='text-2xl font-bold items-start mr-4'>Company Logo</h1>
-        <nav>
-          <ul className='flex flex-row justify-around items-center'>
-            <li 
-            className='mx-2  hover:bg-blue-500'
-            >
-              <Link href='/'>
-                Home
-              </Link>
-            </li>
-            <li className='mx-2  hover:bg-blue-500'>
-            <Link href='/about'>
-                About
-              </Link>
-            </li>
-            <li className='mx-2  hover:bg-blue-500'>
-            <Link href='/article'>
-                Articles
-              </Link>
-            </li>
-          </ul>
-        </nav>
-        <div className='flex flex-row justify-around items-end ml-4'>
-          <input type='text' placeholder='Search...' className='border border-gray-300 p-1 rounded-lg' />
-          <button className='bg-blue-500 text-white p-1 rounded-lg ml-2'>Search</button>
-        </div>
+      {/* Wrapper untuk gambar dan overlay */}
+      <div className="relative w-full h-screen z-0">
+        {/* Gambar */}
+        <Image
+          src="/assets/business.jpg" // Path relatif ke folder public
+          alt="Building"
+          width={1920} // Lebar gambar
+          height={1080} // Tinggi gambar
+          className="object-cover w-full h-full" // Menjaga proporsi gambar
+          style={{
+            clipPath: "inset(0 0% 25% 0)",
+            backgroundColor: "black", // Warna latar belakang jika gambar tidak dimuat
+            filter: "brightness(0.25)", // Menggelapkan gambar
+            zIndex: -1, // Menempatkan gambar di belakang overlay
+          }}
+        />
       </div>
-      <div className="flex flex-row flex-wrap justify-around items-center mt-5 mx-20">
-        <div className="flex flex-col justify-center text-start">
-          <p>This is Company Headline</p>
-          <h1 className="font-bold text-3xl mb-20 py-2">Company Name</h1>
-          <p>This is Company Vision</p>
-        </div>
-        <div className="flex flex-col justify-center items-center">
-          <Image
-            src="/assets/building.jpg"
-            alt="Company Logo"
-            width={400}
-            height={400}
-            className="rounded-3xl"
-          />
+      {/* Heading berada di atas overlay */}
+      <div className="absolute top-0 w-full flex flex-col justify-center items-center text-center text-white mt-10 z-10">
+        <h1 className="text-4xl font-bold">COMPANY NAME</h1>
+        <h2 className="text-2xl p-2">
+          Pertama, Terbaik, Salam Telekomunikasi #PTST
+        </h2>
+        <p className="text-sm p-2">Write your company vision here</p>
+        <div className="flex flex-row justify-center items-center p-2 mt-10">
+          <button className="hover:bg-blue-700 text-white font-bold p-2 mx-2 rounded-lg border border-white">
+            Articles
+          </button>
+          <button className="hover:bg-blue-700 text-white font-bold p-2 mx-2 rounded-lg border border-white">
+            About
+          </button>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
