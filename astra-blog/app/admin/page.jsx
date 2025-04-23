@@ -70,12 +70,20 @@ const Page = () => {
         }`}
         onMouseEnter={() => setIsSidebarVisible(true)}
       >
-        <Image
-          src="/assets/vertical.png"
-          alt="Show Sidebar"
-          width={35}
-          height={35}
-        />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="35"
+          height="35"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="black"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="text-black"
+        >
+          <line x1="12" y1="2" x2="12" y2="22"></line>
+        </svg>
       </div>
 
       {/* Content */}

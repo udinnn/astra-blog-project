@@ -1,10 +1,10 @@
-import { Outfit } from "next/font/google";
+import { Roboto_Serif } from "next/font/google";
 import "./globals.css";
 
-const outfit = Outfit({
-  variable: "--font-geist-sans",
+const roboto = Roboto_Serif({
+  variable: "--font-roboto-serif",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"]
+  weight: ["400", "500", "700", "900"],
 });
 
 export const metadata = {
@@ -15,9 +15,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${outfit .variable}`}
-      >
+      <body className={`${roboto.variable}`}>
         {children}
       </body>
     </html>

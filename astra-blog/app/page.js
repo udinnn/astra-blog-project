@@ -21,7 +21,7 @@ export default function Home() {
         <div
           className="inline-flex flex-col justify-center items-center p-8 border border-black rounded-lg transform transition-transform duration-300 hover:-translate-y-2 hover:translate-x-2 hover:scale-105"
           style={{
-            boxShadow: "10px 10px 0px rgba(0, 0, 0, 1)", // Shadow hitam penuh di kanan bawah
+            boxShadow: "10px 10px 8px rgba(0, 0, 0, 0.5)", // Shadow hitam penuh di kanan bawah
           }}
         >
           {/* 1st Program */}
@@ -41,7 +41,7 @@ export default function Home() {
 
             <div className="flex flex-col flex-wrap max-w-md space-y-2">
               <h1 className="font-bold text-2xl">Program Title</h1>
-              <p className="text-justify">
+              <p className="text-justify text-sm">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
                 enim ad minim veniam, quis nostrud exercitation ullamco laboris
@@ -57,7 +57,7 @@ export default function Home() {
           <div className="flex flex-row flex-wrap justify-around items-start mt-20 space-x-8">
             <div className="flex flex-col flex-wrap max-w-md space-y-2">
               <h1 className="font-bold text-2xl">Program Title</h1>
-              <p className="text-justify">
+              <p className="text-justify text-sm">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
                 enim ad minim veniam, quis nostrud exercitation ullamco laboris
@@ -97,7 +97,7 @@ export default function Home() {
             </div>
             <div className="flex flex-col flex-wrap max-w-md space-y-2">
               <h1 className="font-bold text-2xl">Program Title</h1>
-              <p className="text-justify">
+              <p className="text-justify text-sm">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
                 enim ad minim veniam, quis nostrud exercitation ullamco laboris
@@ -113,7 +113,7 @@ export default function Home() {
           <div className="flex flex-row flex-wrap justify-around items-start mt-20 space-x-8">
             <div className="flex flex-col flex-wrap max-w-md space-y-2">
               <h1 className="font-bold text-2xl">Program Title</h1>
-              <p className="text-justify">
+              <p className="text-justify text-sm">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
                 enim ad minim veniam, quis nostrud exercitation ullamco laboris
@@ -158,6 +158,7 @@ export default function Home() {
               alt="Article Image"
               width={300}
               height={100}
+              className="rounded-t-3xl"
             />
             <div className="absolute bottom-0 right-0 w-auto bg-black bg-opacity-50 text-white text-right p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <p className="text-sm">This is the description of the image.</p>
@@ -166,10 +167,8 @@ export default function Home() {
           <h1 className="font-bold text-xl mt-2">Article Title</h1>
           <p className="text-sm py-2">
             Lorem ipsum dolor sit amet...
-            <span className="hover:text-blue-500">
-              <a href="/read">read more</a>
-            </span>
           </p>
+          <a className="text-sm hover:text-blue-600 hover:underline" href="/read">read more</a>
         </div>
 
         <div className="w-auto flex flex-col h-min-content p-4">
@@ -179,6 +178,7 @@ export default function Home() {
               alt="Article Image"
               width={300}
               height={100}
+              className="rounded-t-3xl"
             />
             <div className="absolute bottom-0 right-0 w-auto bg-black bg-opacity-50 text-white text-right p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <p className="text-sm">This is the description of the image.</p>
@@ -187,10 +187,8 @@ export default function Home() {
           <h1 className="font-bold text-xl mt-2">Article Title</h1>
           <p className="text-sm py-2">
             Lorem ipsum dolor sit amet...
-            <span className="hover:text-blue-500">
-              <a href="/read">read more</a>
-            </span>
           </p>
+          <a className="text-sm hover:text-blue-600 hover:underline" href="/read">read more</a>
         </div>
 
         <div className="w-auto flex flex-col h-min-content p-4">
@@ -200,6 +198,7 @@ export default function Home() {
               alt="Article Image"
               width={300}
               height={100}
+              className="rounded-t-3xl"
             />
             <div className="absolute bottom-0 right-0 w-auto bg-black bg-opacity-50 text-white text-right p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <p className="text-sm">This is the description of the image.</p>
@@ -208,10 +207,8 @@ export default function Home() {
           <h1 className="font-bold text-xl mt-2">Article Title</h1>
           <p className="text-sm py-2">
             Lorem ipsum dolor sit amet...
-            <span className="hover:text-blue-500">
-              <a href="/read">read more</a>
-            </span>
           </p>
+          <a className="text-sm hover:text-blue-600 hover:underline" href="/read">read more</a>
         </div>
       </div>
 

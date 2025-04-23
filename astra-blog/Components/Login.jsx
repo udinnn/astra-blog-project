@@ -31,37 +31,47 @@ const Login = ({ onClose }) => {
       ></div>
 
       {/* Login modal */}
-      <div className="relative z-10 flex flex-col bg-white rounded-lg border border-black p-4 shadow-lg w-96">
-        <h1 className="text-center font-bold text-xl mt-2 mb-4">Login</h1>
-        <h3 className="text-center mb-2">Email</h3>
+      <div className="relative z-10 flex flex-col bg-white rounded-lg border border-black p-4 w-96">
+        <div className="absolute top-2 right-2 cursor-pointer" onClick={onClose}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </div>
+        <h1 className="text-center font-bold text-3xl mt-2 mb-4">Login</h1>
+        <h3 className="text-center text-sm mb-2">Email</h3>
         <input
           type="text"
           placeholder="Input your email..."
-          className="border border-gray-300 rounded-lg p-2 mt-2 mb-4 w-full"
+          className="text-sm border border-gray-300 rounded-lg p-2 mt-2 mb-4 w-full"
           value={email}
           onChange={(e) => setEmail(e.target.value)} // Update state email
         />
-        <h3 className="text-center mb-2">Password</h3>
+        <h3 className="text-center text-sm mb-2">Password</h3>
         <input
           type="password"
           placeholder="Input your password..."
-          className="border border-gray-300 rounded-lg p-2 mb-4 w-full"
+          className="text-sm border border-gray-300 rounded-lg p-2 mb-4 w-full"
           value={password}
           onChange={(e) => setPassword(e.target.value)} // Update state password
         />
         {error && <p className="text-red-500 text-center mb-4">{error}</p>} {/* Pesan error */}
         <button
-          className="text-center bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 mb-4 w-full"
+          className="text-center text-black p-2 rounded-lg mb-4 hover:bg-blue-600"
           onClick={handleLogin} // Panggil fungsi login
         >
           Login
         </button>
-        <p
-          className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 w-full cursor-pointer text-center"
-          onClick={onClose}
-        >
-          Close
-        </p>
       </div>
     </div>
   );
