@@ -94,16 +94,14 @@ const page = () => {
                     color="black"
                     size="lg"
                     onClick={handlePrev}
-                    className="!absolute top-2/4 left-4 -translate-y-2/4"
-                  >
+                    className="!absolute top-2/4 left-4 -translate-y-2/4">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       strokeWidth={2}
                       stroke="black"
-                      className="h-6 w-6"
-                    >
+                      className="h-6 w-6">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -118,16 +116,14 @@ const page = () => {
                     color="black"
                     size="lg"
                     onClick={handleNext}
-                    className="!absolute top-2/4 !right-4 -translate-y-2/4"
-                  >
+                    className="!absolute top-2/4 !right-4 -translate-y-2/4">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       strokeWidth={2}
                       stroke="black"
-                      className="h-6 w-6"
-                    >
+                      className="h-6 w-6">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -148,8 +144,7 @@ const page = () => {
                       />
                     ))}
                   </div>
-                )}
-              >
+                )}>
                 <div className="relative h-full w-full">
                   <img
                     src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2560&q=80"
@@ -166,10 +161,10 @@ const page = () => {
                       />
                       <div className="flex flex-col w-full p-2 justify-center text-left">
                         <h1 className="text-4xl font-bold mb-2">
-                          Mixue Gembrot
+                          Mixue Bing Chilling
                         </h1>
                         <p className="text-sm">
-                          Mixue Gembrot merupakan maskot ternama dari project
+                          Bing Chilling merupakan maskot ternama dari project
                           ini. Ia memiliki warna putih yang menggambarkan
                           kesucian dan warna merah yang melambangkan keberanian,
                           sama seperti bendera negara tercinta kita, Indonesia.
@@ -200,14 +195,12 @@ const page = () => {
                           }`}
                           onClick={() => router.push(item.fokusLink)}
                           onMouseEnter={() => setHoveredCard(index)}
-                          onMouseLeave={() => setHoveredCard(null)}
-                        >
+                          onMouseLeave={() => setHoveredCard(null)}>
                           <CardHeader
                             floated={false}
                             shadow={false}
                             color="transparent"
-                            className="absolute inset-0 m-0 h-full w-full rounded-none bg-light-blue-900"
-                          >
+                            className="absolute inset-0 m-0 h-full w-full rounded-none bg-light-blue-900">
                             <div className="absolute inset-0 h-full w-full" />
                           </CardHeader>
                           <CardBody className="relative flex items-center justify-center py-14 px-6 md:px-12">

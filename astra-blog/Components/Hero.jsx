@@ -35,8 +35,7 @@ const Hero = () => {
             <div className="flex">
               <button
                 onClick={() => router.push("/about")} // Navigasi ke halaman About
-                className="my-2 bg-white rounded-lg text-black p-2 text-sm inline-block"
-              >
+                className="my-2 bg-white rounded-lg text-black p-2 text-sm inline-block">
                 Kenalan Lebih Dekat Dengan AORTA
               </button>
             </div>

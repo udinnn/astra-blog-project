@@ -67,27 +67,31 @@ export default function Home() {
       </div>
 
       {/* Gambar Maskot */}
-      <div className="absolute bottom-0 right-0 mb-24 mr-4">
+      <div className="absolute bottom-0 right-0 mb-[25vh] mr-[2vw]">
         <Image
           src="/assets/maskot.png"
           alt="Maskot"
-          width={350}
-          height={350}
-          className="relative"
-          style={{ transform: "translateY(25%)" }} // Menempatkan gambar di 1/4 tinggi layar dari bawah
+          width={500}
+          height={500}
+          className="relative w-[25vw] h-auto"
+          style={{ transform: "translateY(25%)" }}
         />
         {/* Embed Video YouTube */}
-        <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/4 mt-8 w-[320px] h-[180px]">
+        <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/4 mt-8">
           <iframe
-            width="320"
-            height="180"
+            width={400}
+            height={225}
+            style={{
+              width: "calc(20vw + 100px)",
+              height: "calc(11.25vw + 56.25px)", // Maintains 16:9 aspect ratio
+              minWidth: "320px",
+              minHeight: "180px",
+            }}
             src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
             title="YouTube video"
-            frameBorder="0"
             allow="autoplay; encrypted-media"
             allowFullScreen
-            className="rounded-lg shadow-lg"
-          ></iframe>
+            className="rounded-lg shadow-lg"></iframe>
         </div>
       </div>
     </div>
