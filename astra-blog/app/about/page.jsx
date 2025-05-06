@@ -1,124 +1,231 @@
 "use client";
 
 import Footer from "@/Components/Footer";
-import Menu from "@/Components/Menu";
+import Header from "@/Components/Header";
+import Maskot from "@/Components/Maskot";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Carousel,
+  IconButton,
+} from "@material-tailwind/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const page = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isImageMoved, setIsImageMoved] = useState(false);
+  const [hoveredCard, setHoveredCard] = useState(null); // State untuk melacak card yang di-hover
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-    setIsImageMoved(!isImageMoved); // Mengontrol posisi gambar
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const maskotImages = ["/assets/maskot.png", "/assets/mixue.png"];
+
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % maskotImages.length);
   };
+
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? maskotImages.length - 1 : prevIndex - 1
+    );
+  };
+
+  // Router initialization
+  const router = useRouter();
+
+  // Data untuk fokus isu
+  const data = [
+    {
+      title: "Kesehatan Reproduksi",
+      fokusLink: "/fokus_isu/kesehatan_reproduksi",
+    },
+    {
+      title: "Kesehatan Mental",
+      fokusLink: "/fokus_isu/kesehatan_mental",
+    },
+    {
+      title: "PHBS",
+      fokusLink: "/fokus_isu/PHBS",
+    },
+    {
+      title: "Gizi Remaja",
+      fokusLink: "/fokus_isu/gizi_remaja",
+    },
+  ];
 
   return (
     <div>
-      <div className="flex flex-row justify-between items-center border-b-2 border-black p-2">
-        <h1 className="text-4xl font-bold p-2 flex-grow text-center">About</h1>
+      {/* Header tetap fixed */}
+      <Header />
+      <Maskot />
+
+      {/* Tambahkan padding-top untuk menghindari konten tertutup header */}
+      <div className="relative w-full h-screen flex justify-center z-0">
+        <Image
+          src="/assets/about.jpg"
+          fill
+          alt="Tentang Aorta"
+          className="object-cover"
+          priority
+        />
       </div>
-      <div className="absolute top-0 right-0 p-4 z-50 transition-all duration-300">
-        <button
-          className="flex flex-col justify-center items-center relative p-2"
-          onClick={toggleMenu}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="30"
-            viewBox="0 -2 32 32"
-            fill="none"
-            className={`cursor-pointer transition-colors duration-300 ${
-              isMenuOpen ? "fill-white" : "fill-black"
-            }`}
-          >
-            <g
-              id="Page-1"
-              stroke="none"
-              strokeWidth="1"
-              fill="none"
-              fillRule="evenodd"
-            >
-              <g
-                id="Icon-Set"
-                transform="translate(-308.000000, -1037.000000)"
-                className={isMenuOpen ? "fill-white" : "fill-black"}
+      <div className="absolute inset-x-0 top-3/4 bg-white rounded-3xl mt-8">
+        <h1 className="text-4xl font-bold text-center mt-10">Tentang Aorta</h1>
+        <div className="flex flex-row flex-grow justify-around items-start space-x-2 p-8">
+          <div className="inline-flex flex-col justify-center items-center text-center p-2">
+            <p className="text-sm">
+              Aksi Solidaritas Remaja Kesehatan Astra atau yang dikenal dengan
+              AORTA Community merupakan suatu komunitas binaan PT. Astra
+              Internasional Tbk yang memiliki kepedulian terhadap isu-isu
+              kesehatan remaja di Indonesia. AORTA dikukuhkan untuk pertama
+              kalinya pada tanggal 21 November 2019 di Belitung oleh Chief of
+              Corporate Affair Astra Bapak Riza Deliansyah didampingi oleh
+              Deputi Pencegahan BNN Bapak Drs. Anjan Pramuka Putra, SH. M. Hum
+              dan Sekretaris utama BKKBN Bapak H. Nofrizal, S. P, MA.
+            </p>
+            {/* Carousel */}
+            <div className="relative w-[1200px] h-min-content flex flex-wrap justify-center items-center">
+              <Carousel
+                className="rounded-xl"
+                prevArrow={({ handlePrev }) => (
+                  <IconButton
+                    variant="text"
+                    color="black"
+                    size="lg"
+                    onClick={handlePrev}
+                    className="!absolute top-2/4 left-4 -translate-y-2/4"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="black"
+                      className="h-6 w-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                      />
+                    </svg>
+                  </IconButton>
+                )}
+                nextArrow={({ handleNext }) => (
+                  <IconButton
+                    variant="text"
+                    color="black"
+                    size="lg"
+                    onClick={handleNext}
+                    className="!absolute top-2/4 !right-4 -translate-y-2/4"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="black"
+                      className="h-6 w-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                      />
+                    </svg>
+                  </IconButton>
+                )}
+                navigation={({ setActiveIndex, activeIndex, length }) => (
+                  <div className="absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2">
+                    {new Array(length).fill("").map((_, i) => (
+                      <span
+                        key={i}
+                        className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
+                          activeIndex === i ? "w-8 bg-black" : "w-4 bg-black/50"
+                        }`}
+                        onClick={() => setActiveIndex(i)}
+                      />
+                    ))}
+                  </div>
+                )}
               >
-                <path
-                  d="M336,1063 L312,1063 C310.896,1063 310,1062.1 310,1061 C310,1059.9 310.896,1059 312,1059 L336,1059 C337.104,1059 338,1059.9 338,1061 C338,1062.1 337.104,1063 336,1063 L336,1063 Z M336,1057 L312,1057 C309.791,1057 308,1058.79 308,1061 C308,1063.21 309.791,1065 312,1065 L336,1065 C338.209,1065 340,1063.21 340,1061 C340,1058.79 338.209,1057 336,1057 L336,1057 Z M336,1053 L312,1053 C310.896,1053 310,1052.1 310,1051 C310,1049.9 310.896,1049 312,1049 L336,1049 C337.104,1049 338,1049.9 338,1051 C338,1052.1 337.104,1053 336,1053 L336,1053 Z M336,1047 L312,1047 C309.791,1047 308,1048.79 308,1051 C308,1053.21 309.791,1055 312,1055 L336,1055 C338.209,1055 340,1053.21 340,1051 C340,1048.79 338.209,1047 336,1047 L336,1047 Z M312,1039 L336,1039 C337.104,1039 338,1039.9 338,1041 C338,1042.1 337.104,1043 336,1043 L312,1043 C310.896,1043 310,1042.1 310,1041 C310,1039.9 310.896,1039 312,1039 L312,1039 Z M312,1045 L336,1045 C338.209,1045 340,1043.21 340,1041 C340,1038.79 338.209,1037 336,1037 L312,1037 C309.791,1037 308,1038.79 308,1041 C308,1043.21 309.791,1045 312,1045 L312,1045 Z"
-                  id="hamburger-2"
-                ></path>
-              </g>
-            </g>
-          </svg>
-        </button>
-      </div>
-
-      <div
-        className={`absolute top-0 left-0 w-full h-screen z-20 transform ${
-          isMenuOpen ? "translate-y-0 fill-white" : "-translate-y-full"
-        } transition-transform duration-300 ease-in-out`}
-      >
-        <Menu />
-      </div>
-
-      <div className="flex flex-row justify-between items-start mx-20 my-10 gap-x-12">
-        {/* Parent pertama dengan lebar setengah layar */}
-        <div className="relative group flex">
-          <Image
-            src="/assets/building.jpg"
-            alt="Company building"
-            width={500}
-            height={500}
-            className="rounded-t-3xl"
-          />
-          <div className="absolute bottom-0 right-0 w-auto bg-black bg-opacity-50 text-white text-right p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <p className="text-sm">This is the description of the image.</p>
+                <div className="relative h-full w-full">
+                  <img
+                    src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2560&q=80"
+                    alt="image 1"
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="absolute inset-0 flex h-full w-full place-items-center bg-white">
+                    <div className="flex flex-row mr-16 ml-2 justify-center">
+                      <Image
+                        src="/assets/maskot.png"
+                        alt="maskot"
+                        width={400}
+                        height={400}
+                      />
+                      <div className="flex flex-col w-full p-2 justify-center text-left">
+                        <h1 className="text-4xl font-bold mb-2">
+                          Mixue Gembrot
+                        </h1>
+                        <p className="text-sm">
+                          Mixue Gembrot merupakan maskot ternama dari project
+                          ini. Ia memiliki warna putih yang menggambarkan
+                          kesucian dan warna merah yang melambangkan keberanian,
+                          sama seperti bendera negara tercinta kita, Indonesia.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="relative h-full w-full">
+                  <img
+                    src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2560&q=80"
+                    alt="image 1"
+                    className="h-full w-full object-cover"
+                  />
+                  <div className="absolute inset-0 flex flex-col h-full w-full justify-center items-center bg-white">
+                    <div className="w-3/4 text-center md:w-2/4 mt-10">
+                      <h1 className="text-4xl font-bold mb-8">Fokus Isu</h1>
+                    </div>
+                    <div className="flex flex-row space-x-8 p-2">
+                      {data.map((item, index) => (
+                        <Card
+                          key={index}
+                          shadow={false}
+                          className={`relative flex h-[20rem] w-full max-w-[15rem] items-center justify-center overflow-hidden text-center transition-all duration-300 cursor-pointer ${
+                            hoveredCard !== null && hoveredCard !== index
+                              ? "blur-sm"
+                              : "blur-none scale-105"
+                          }`}
+                          onClick={() => router.push(item.fokusLink)}
+                          onMouseEnter={() => setHoveredCard(index)}
+                          onMouseLeave={() => setHoveredCard(null)}
+                        >
+                          <CardHeader
+                            floated={false}
+                            shadow={false}
+                            color="transparent"
+                            className="absolute inset-0 m-0 h-full w-full rounded-none bg-light-blue-900"
+                          >
+                            <div className="absolute inset-0 h-full w-full" />
+                          </CardHeader>
+                          <CardBody className="relative flex items-center justify-center py-14 px-6 md:px-12">
+                            <h1 className="font-bold text-black">
+                              {item.title}
+                            </h1>
+                          </CardBody>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </Carousel>
+            </div>
           </div>
         </div>
-
-        {/* Parent kedua dengan lebar setengah layar */}
-        <div className="flex flex-col justify-center items-start space-y-8 w-1/2">
-          <div className="w-full inline-flex flex-col justify-center items-center p-4 bg-slate-800 text-white border border-black rounded-lg hover:scale-105 transition-transform duration-300 shadow-black shadow-lg">
-            <div className="flex flex-col text-justify">
-              <h1 className="text-2xl font-bold pb-2">Company Name</h1>
-              <p className="text-sm pb-2">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </p>
-            </div>
-          </div>
-
-          <div className="w-full inline-flex justify-center items-center p-4 bg-slate-800 text-white border border-black rounded-lg hover:scale-105 transition-transform duration-300 shadow-black shadow-lg">
-            <div className="flex flex-col text-justify">
-              <h1 className="text-2xl font-bold py-2">Vision</h1>
-              <p className="text-sm pb-2">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </p>
-            </div>
-          </div>
-
-          <div className="w-full inline-flex text-left p-4 bg-slate-800 text-white border border-black rounded-lg hover:scale-105 transition-transform duration-300 shadow-black shadow-lg">
-            <div className="flex flex-col text-justify">
-              <h1 className="text-2xl font-bold py-2">Mission</h1>
-              <ul className="text-sm list-disc list-inside pb-2">
-                <li>Lorem Ipsum</li>
-                <li>Lorem Ipsum</li>
-                <li>Lorem Ipsum</li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        <Footer />
       </div>
-      <Footer />
     </div>
   );
 };

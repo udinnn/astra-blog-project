@@ -109,7 +109,7 @@ const Dashboard = () => {
           </div>
 
           {/* statistik */}
-          <div className="flex flex-row justify-center items-center p-4 mx-2 bg-slate-800 rounded-lg w-auto shadow-lg shadow-black">
+          <div className="flex flex-row justify-center items-center p-4 mx-2 bg-blue-800 rounded-lg w-auto shadow-lg shadow-black">
             <div className="flex flex-col text-left">
               <p className="text-sm">Total Viewers</p>
               <div className="flex flex-row items-left my-2">
@@ -139,7 +139,7 @@ const Dashboard = () => {
               </div>
               <div className="flex flex-row justify-around items-center">
                 <p className="text-sm">Since last week</p>
-                <div className="flex flex-row bg-slate-300 w-auto p-1 mx-2">
+                <div className="flex flex-row bg-blue-300 w-auto p-1 mx-2">
                   <p className="text-sm text-black">+5%</p>
                   <Image
                     src="/assets/up.png"
@@ -178,7 +178,7 @@ const Dashboard = () => {
           </div>
 
           {/* statistik */}
-          <div className="flex flex-row justify-around items-center p-4 mx-2 bg-slate-800 rounded-lg w-auto shadow-lg shadow-black">
+          <div className="flex flex-row justify-around items-center p-4 mx-2 bg-blue-800 rounded-lg w-auto shadow-lg shadow-black">
             <div className="flex flex-col text-left">
               <p className="text-sm">Total Readings</p>
               <div className="flex flex-row items-left my-2">
@@ -208,7 +208,7 @@ const Dashboard = () => {
               </div>
               <div className="flex flex-row justify-around items-center">
                 <p className="text-sm">Since last week</p>
-                <div className="flex flex-row bg-slate-300 w-auto p-1 mx-2">
+                <div className="flex flex-row bg-blue-300 w-auto p-1 mx-2">
                   <p className="text-sm text-black">-5%</p>
                   <Image
                     src="/assets/down.png"

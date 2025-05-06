@@ -1,13 +1,13 @@
 "use client";
 
-import Dashboard from "@/Components/Dashboard";
 import List from "@/Components/List";
 import New from "@/Components/New";
 import Sidebar from "@/Components/Sidebar";
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import Edit from "@/Components/Edit";
 import { useRouter } from "next/navigation"; // Import useRouter untuk navigasi
+import KolaborAksi from "@/Components/KolaborAksi";
+import Chapter from "@/Components/Chapter";
 
 const Page = () => {
   const [activePage, setActivePage] = useState("dashboard"); // State untuk halaman aktif
@@ -27,16 +27,18 @@ const Page = () => {
 
   const renderContent = () => {
     switch (activePage) {
-      case "dashboard":
-        return <Dashboard />;
       case "new":
         return <New />;
       case "list":
-        return <List setActivePage={setActivePage} />; // Kirim setActivePage ke komponen List
+        return <List setActivePage={setActivePage} />;
+        case "kolaboraksi":
+        return <KolaborAksi />;
+        case "chapter":
+        return <Chapter />; // Kirim setActivePage ke komponen List
       case "edit":
         return <Edit />; // Gunakan komponen New untuk halaman edit
       default:
-        return <Dashboard />;
+        return <List />;
     }
   };
 
