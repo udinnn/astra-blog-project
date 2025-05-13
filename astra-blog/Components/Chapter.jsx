@@ -7,7 +7,7 @@ const Chapter = () => {
   const [cityName, setCityName] = useState("");
   const [chapterDate, setChapterDate] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
-  
+
   // Retrieve existing chapters from localStorage on component mount
   useEffect(() => {
     const savedChapters = localStorage.getItem("chapters");
@@ -22,7 +22,7 @@ const Chapter = () => {
       // Create an object URL instead of base64 for display only
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
-      
+
       // Store file name instead of the full image data
       // In a real app, you would upload this to a server
     }
@@ -33,6 +33,18 @@ const Chapter = () => {
       alert("Please fill all required fields!");
       return;
     }
+
+    // Check if chapter with same name already exists
+    const savedChapters = JSON.parse(localStorage.getItem("chapters") || "[]");
+    const existingChapter = savedChapters.find(
+      (chapter) => chapter.name.toLowerCase() === cityName.toLowerCase()
+    );
+
+    if (existingChapter) {
+      alert("A chapter with this city name already exists!");
+      return;
+    }
+
     setIsModalVisible(true);
   };
 
@@ -49,24 +61,29 @@ const Chapter = () => {
 
     // Get existing chapters
     const savedChapters = JSON.parse(localStorage.getItem("chapters") || "[]");
-    
+
     // Add new chapter
     const updatedChapters = [...savedChapters, chapterData];
-    
+
     // Save to localStorage with error handling
     try {
       localStorage.setItem("chapters", JSON.stringify(updatedChapters));
 
-    // Reset form
-    setImage(null);
-    setCityName("");
-    setChapterDate("");
-    setIsModalVisible(false);
-    
-    alert("Chapter saved successfully!");
+      // Reset form
+      setImage(null);
+      setCityName("");
+      setChapterDate("");
+      setIsModalVisible(false);
+
+      alert("Chapter saved successfully!");
+
+      // Dispatch storage event to notify other components of the change
+      window.dispatchEvent(new Event("storage"));
     } catch (error) {
       console.error("Storage error:", error);
-      alert("Could not save data. Storage quota might be exceeded. Try using fewer or smaller images.");
+      alert(
+        "Could not save data. Storage quota might be exceeded. Try using fewer or smaller images."
+      );
     }
   };
 
@@ -137,8 +154,7 @@ const Chapter = () => {
       <div className="flex flex-row justify-end items-end mb-4 mx-20">
         <button
           className="bg-blue-500 text-white p-2 rounded-lg mx-2"
-          onClick={handleSave}
-        >
+          onClick={handleSave}>
           Save
         </button>
       </div>
@@ -152,14 +168,12 @@ const Chapter = () => {
             <div className="flex justify-between">
               <button
                 className="text-sm bg-blue-500 text-white p-2 rounded-lg"
-                onClick={confirmSave}
-              >
+                onClick={confirmSave}>
                 Yes, Save
               </button>
               <button
                 className="text-sm bg-red-500 text-white p-2 rounded-lg"
-                onClick={cancelSave}
-              >
+                onClick={cancelSave}>
                 Cancel
               </button>
             </div>
