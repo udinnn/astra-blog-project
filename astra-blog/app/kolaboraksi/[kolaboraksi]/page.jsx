@@ -95,6 +95,7 @@ const KolaboraksiPage = () => {
         </div>
 
         {/* Collaboration Info */}
+        {/* Collaboration Info */}
         {/* {partnerDetails && (
           <div className="flex flex-col items-center p-8">
             <div className="max-w-4xl w-full">
