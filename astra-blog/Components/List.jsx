@@ -2,13 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 
-const List = () => {
+const List = ({setActivePage}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [filter, setFilter] = useState("all");
   const [articles, setArticles] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredArticles, setFilteredArticles] = useState([]);
+
 
   // Load articles from localStorage on component mount
   useEffect(() => {
@@ -67,6 +68,11 @@ const List = () => {
       console.error("Storage error:", error);
       alert("Could not delete article. Storage error occurred.");
     }
+  };
+
+  const handleItemClick = (item) => {
+    setActivePage(item); // Panggil fungsi untuk mengubah halaman aktif
+  handleCloseModal();
   };
 
   const handleEdit = () => {
@@ -180,7 +186,7 @@ const List = () => {
             <div className="flex justify-between">
               <button
                 className="text-sm bg-blue-500 text-white p-2 rounded-lg"
-                onClick={handleEdit}
+                onClick={() => handleItemClick("edit")}
               >
                 Edit Article
               </button>

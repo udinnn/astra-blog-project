@@ -25,13 +25,20 @@ const Sidebar = ({ setActivePage }) => {
 
   return (
     <div>
-      <div className="fixed top-0 left-0 inline-flex flex-col p-4 h-screen bg-blue-800">
-        <div className="font-bold text-3xl mt-10 mb-5">Logo</div>
-        <div className="flex flex-col justify-center items-start">
+      <div className="fixed top-0 left-0 inline-flex flex-col p-4 h-screen bg-astraColor-100">
+        <img
+        src="/assets/aorta.png"
+        width={150}
+        height={150}
+        alt="Logo"
+        className="p-2"
+        />
+        
+        <div className="flex flex-col justify-center items-start space-y-2">
           {/* Article List */}
           <div
-            className={`inline-flex flex-row items-center p-1 rounded-lg cursor-pointer gap-x-2 ${
-              activeItem === "list" ? "bg-gray-700" : ""
+            className={`inline-flex flex-row items-center p-2 rounded-lg cursor-pointer gap-x-2 ${
+              activeItem === "list" ? "bg-astraColor-200" : ""
             }`}
             onClick={() => handleItemClick("list")}
           >
@@ -41,7 +48,6 @@ const Sidebar = ({ setActivePage }) => {
               height="25"
               viewBox="0 -0.5 21 21"
               fill="white"
-              className="m-2"
             >
               <g
                 id="Page-1"
@@ -66,8 +72,8 @@ const Sidebar = ({ setActivePage }) => {
 
           {/* New Article */}
           <div
-            className={`inline-flex flex-row items-center p-1 rounded-lg cursor-pointer gap-x-2 ${
-              activeItem === "new" ? "bg-gray-700" : ""
+            className={`inline-flex flex-row items-center p-2 rounded-lg cursor-pointer gap-x-2 ${
+              activeItem === "new" ? "bg-astraColor-200" : ""
             }`}
             onClick={() => handleItemClick("new")}
           >
@@ -78,7 +84,6 @@ const Sidebar = ({ setActivePage }) => {
               viewBox="0 0 16 16"
               fill="rgb(255, 255, 255)"
               fillRule="evenodd"
-              className="m-2"
             >
               <path d="M 11 10 C 11.5128 10 11.9355 10.386 11.9933 10.8834 L 12 11 L 12 12 L 13 12 C 13.5523 12 14 12.4477 14 13 C 14 13.5128 13.614 13.9355 13.1166 13.9933 L 13 14 L 12 14 L 12 15 C 12 15.5523 11.5523 16 11 16 C 10.4872 16 10.0645 15.614 10.0067 15.1166 L 10 15 L 10 14 L 9 14 C 8.44772 14 8 13.5523 8 13 C 8 12.4872 8.38604 12.0645 8.88338 12.0067 L 9 12 L 10 12 L 10 11 C 10 10.4477 10.4477 10 11 10 Z M 9 1 C 9.9606 1 10.763 1.67722 10.9559 2.58026 L 13.9947 4.33474 C 14.9513 4.88702 15.2791 6.11021 14.7268 7.06679 L 13.5936 9.03175 C 13.3176 9.51034 12.7058 9.67443 12.2273 9.3982 C 11.7492 9.12215 11.5852 8.51085 11.861 8.03259 L 12.9947 6.06679 L 11 4.91513 L 11 8 C 11 8.55228 10.5523 9 10 9 C 9.44772 9 9 8.55228 9 8 L 9 3 L 3 3 L 3 13 L 5 13 C 5.55228 13 6 13.4477 6 14 C 6 14.5523 5.55228 15 5 15 L 3 15 C 1.89543 15 1 14.1046 1 13 L 1 3 C 1 1.89543 1.89543 1 3 1 L 9 1 Z" />
             </svg>
@@ -87,8 +92,8 @@ const Sidebar = ({ setActivePage }) => {
 
           {/* New kolaboraksi */}
           <div
-            className={`inline-flex flex-row items-center p-1 rounded-lg cursor-pointer gap-x-2 ${
-              activeItem === "kolaboraksi" ? "bg-gray-700" : ""
+            className={`inline-flex flex-row items-center p-2 rounded-lg cursor-pointer gap-x-2 ${
+              activeItem === "kolaboraksi" ? "bg-astraColor-200" : ""
             }`}
             onClick={() => handleItemClick("kolaboraksi")}
           >
@@ -100,7 +105,6 @@ const Sidebar = ({ setActivePage }) => {
               version="1.1"
               viewBox="0 0 297.23 297.23"
               enableBackground="new 0 0 297.23 297.23"
-              className="m-2"
             >
               <g>
                 <path d="m149.416,61.02c14.139,0 25.642-11.503 25.642-25.642 0-14.139-11.503-25.642-25.642-25.642s-25.642,11.503-25.642,25.642c0,14.139 11.503,25.642 25.642,25.642z" />
@@ -120,8 +124,8 @@ const Sidebar = ({ setActivePage }) => {
 
           {/* New Chapter */}
           <div
-            className={`inline-flex flex-row items-center p-1 rounded-lg cursor-pointer gap-x-2 ${
-              activeItem === "chapter" ? "bg-gray-700" : ""
+            className={`inline-flex flex-row items-center p-2 rounded-lg cursor-pointer gap-x-2 ${
+              activeItem === "chapter" ? "bg-astraColor-200" : ""
             }`}
             onClick={() => handleItemClick("chapter")}
           >
@@ -131,10 +135,7 @@ const Sidebar = ({ setActivePage }) => {
               width="25"
               height="25"
               viewBox="0 0 32 32"
-              className="m-2"
             >
-              <title />
-
               <g data-name="Layer 11" id="Layer_11">
                 <path d="M16,17a5,5,0,1,0-5-5A5,5,0,0,0,16,17Zm0-8a3,3,0,1,1-3,3A3,3,0,0,1,16,9Z" />
 
@@ -143,9 +144,33 @@ const Sidebar = ({ setActivePage }) => {
             </svg>
             <p className="text-md text-white">New Chapter</p>
           </div>
+
+          {/* New Kegiatan */}
+          <div
+            className={`inline-flex flex-row items-center p-2 rounded-lg cursor-pointer gap-x-2 ${
+              activeItem === "kegiatan" ? "bg-astraColor-200" : ""
+            }`}
+            onClick={() => handleItemClick("kegiatan")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="#ffffff"
+              height="25"
+              width="25"
+              version="1.1"
+              id="Capa_1"
+              viewBox="0 0 428.637 428.637"
+            >
+              <path
+                id="XMLID_40_"
+                d="M379.149,179.217h-1.99V86.306C377.159,38.717,338.442,0,290.854,0H157.899  c-47.588,0-86.305,38.717-86.305,86.306v16.104h-2.106c-16.266,0-29.5,13.234-29.5,29.501v164.814  c0,16.267,13.234,29.501,29.5,29.501h2.106v16.104c0,47.589,38.716,86.306,86.305,86.306h132.955  c47.589,0,86.306-38.717,86.306-86.306v-92.91h1.99c5.247,0,9.5-4.253,9.5-9.5v-51.204  C388.649,183.47,384.396,179.217,379.149,179.217z M290.854,19c37.112,0,67.306,30.193,67.306,67.306v92.911h-67.002V86.306  c0-19.049-6.474-37.23-18.721-52.579c-4.369-5.476-9.38-10.42-14.876-14.727H290.854z M90.594,86.306  C90.594,49.193,120.787,19,157.899,19h32.46c-20.201,15.982-32.762,40.543-32.762,67.306v16.104H90.594V86.306z M69.488,307.227  c-5.79,0-10.5-4.711-10.5-10.501V131.911c0-5.79,4.71-10.501,10.5-10.501h113.611c5.792,0,10.503,4.711,10.503,10.501v164.814  c0,5.79-4.711,10.501-10.503,10.501H69.488z M157.899,409.637c-37.112,0-67.305-30.193-67.305-67.306v-16.104h67.002v16.104  c0,18.312,6.69,36.104,19.347,51.458c4.861,5.896,10.467,11.228,16.604,15.848H157.899z M224.59,405.284  c-24.299-9.171-47.994-33.12-47.994-62.953v-16.104h6.502c16.268,0,29.503-13.234,29.503-29.501v-58.812  c0.337,0.036,0.68,0.055,1.027,0.055c5.247,0,9.5-4.253,9.5-9.5v-28.302c0-5.247-4.253-9.5-9.5-9.5c-0.347,0-0.69,0.019-1.027,0.055  v-58.811c0-16.267-13.235-29.501-29.503-29.501h-6.502V86.306c0-29.329,19.419-55.274,47.546-63.988  c27.974,9.123,48.014,35.625,48.014,63.988v92.911h-4.33c-5.247,0-9.5,4.253-9.5,9.5v51.204c0,5.247,4.253,9.5,9.5,9.5h4.33v92.91  C272.157,372.291,248.716,396.166,224.59,405.284z M358.159,342.331c0,37.112-30.193,67.306-67.306,67.306h-35.296  c6.059-4.589,11.592-9.884,16.389-15.74c12.567-15.343,19.21-33.174,19.21-51.565v-92.91h67.002V342.331z M369.649,230.421h-92.322  v-32.204h92.322V230.421z M152.371,171.881c-8.718-2.949-18.168-2.048-26.076,2.228c-7.907-4.275-17.358-5.176-26.077-2.228  c-17.098,5.782-26.304,24.397-20.522,41.496c3.453,10.209,18.201,23.55,34.313,37.47c2.437,2.105,4.542,3.924,5.848,5.128  c1.819,1.675,4.128,2.513,6.437,2.513c2.309,0,4.618-0.838,6.436-2.513c1.306-1.202,3.408-3.019,5.842-5.121  c16.115-13.923,30.867-27.266,34.32-37.477c2.802-8.283,2.21-17.161-1.666-24.999C167.351,180.541,160.654,174.682,152.371,171.881z   M154.894,207.29c-2.066,6.107-21.863,23.241-28.6,29.062c-6.729-5.813-26.534-22.954-28.6-29.062  c-2.426-7.174,1.437-14.984,8.61-17.411c1.435-0.485,2.917-0.722,4.39-0.722c3.358,0,6.664,1.231,9.232,3.551  c3.616,3.267,9.117,3.268,12.734,0.001c3.697-3.337,8.917-4.421,13.624-2.83c3.476,1.176,6.285,3.634,7.911,6.922  C155.822,200.089,156.07,203.813,154.894,207.29z"
+              />
+            </svg>
+            <p className="text-md text-white">New Kegiatan</p>
+          </div>
         </div>
         <div className="flex-grow"></div>
-        <div className="flex flex-col bg-gray-300 h-min-content rounded-lg p-2 mt-auto">
+        <div className="flex flex-col bg-astraColor-200 h-min-content rounded-lg p-2 mt-auto">
           <div className="flex flex-row justify-between w-full items-center mb-4">
             <Image
               src="/assets/maskot.png"

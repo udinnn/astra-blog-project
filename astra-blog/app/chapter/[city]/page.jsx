@@ -7,13 +7,13 @@ import Maskot from "@/Components/Maskot";
 import Footer from "@/Components/Footer";
 
 const CityPage = () => {
-  const { city } = useParams();
-  const [articles, setArticles] = useState([]);
-  const [currentArticle, setCurrentArticle] = useState(null);
-  const [chapterDetails, setChapterDetails] = useState(null);
+  const { city } = useParams(); // Ambil parameter kota dari URL
+  const [articles, setArticles] = useState([]); // State untuk menyimpan daftar artikel
+  const [currentArticle, setCurrentArticle] = useState(null); // State untuk artikel yang sedang ditampilkan
+  const [chapterDetails, setChapterDetails] = useState(null); // State untuk detail chapter
 
   useEffect(() => {
-    // Load all articles and chapter details from localStorage
+    // Fungsi untuk memuat data artikel dan chapter dari localStorage
     const loadData = () => {
       const savedArticles = JSON.parse(
         localStorage.getItem("articles") || "[]"
@@ -22,16 +22,16 @@ const CityPage = () => {
         localStorage.getItem("chapters") || "[]"
       );
 
-      // Find articles for this city
+      // Filter artikel berdasarkan kota dan jenis publishType "chapter"
       const cityArticles = savedArticles
         .filter(
           (article) =>
             article.publishType === "chapter" &&
             article.target === decodeURIComponent(city)
         )
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
+        .sort((a, b) => new Date(b.date) - new Date(a.date)); // Urutkan artikel berdasarkan tanggal (terbaru di atas)
 
-      // Find chapter details
+      // Cari detail chapter berdasarkan nama kota
       const chapterInfo = savedChapters.find(
         (chapter) => chapter.name === decodeURIComponent(city)
       );
@@ -39,7 +39,7 @@ const CityPage = () => {
       setArticles(cityArticles);
       setChapterDetails(chapterInfo);
 
-      // Set the most recent article as the current one to display
+      // Set artikel terbaru sebagai artikel utama
       if (cityArticles.length > 0) {
         setCurrentArticle(cityArticles[0]);
       }
@@ -47,7 +47,7 @@ const CityPage = () => {
 
     loadData();
 
-    // Refresh when localStorage changes
+    // Tambahkan event listener untuk memuat ulang data jika localStorage berubah
     window.addEventListener("storage", loadData);
 
     return () => {
@@ -55,12 +55,13 @@ const CityPage = () => {
     };
   }, [city]);
 
+  // Fungsi untuk memformat tanggal
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  // If there's no data yet, show a loading message
+  // Jika data belum dimuat, tampilkan pesan loading
   if (!chapterDetails && !currentArticle) {
     return (
       <div>
@@ -94,20 +95,6 @@ const CityPage = () => {
           </div>
         </div>
 
-        {/* Chapter Info
-        {chapterDetails && (
-          <div className="flex flex-col items-center p-8">
-            <div className="max-w-4xl w-full">
-              <p className="text-lg font-medium">
-                Chapter established:{" "}
-                {chapterDetails.chapterDate
-                  ? formatDate(chapterDetails.chapterDate)
-                  : "Date not available"}
-              </p>
-            </div>
-          </div>
-        )} */}
-
         {/* Article Content */}
         {currentArticle ? (
           <div className="flex flex-col items-center p-8 space-y-8">
@@ -122,13 +109,10 @@ const CityPage = () => {
             </p>
 
             {/* Article Content */}
-            <div className="max-w-4xl text-justify space-y-6">
-              {currentArticle.content.split("\n\n").map((paragraph, idx) => (
-                <p key={idx} className="text-lg">
-                  {paragraph}
-                </p>
-              ))}
-            </div>
+            <div
+              className="max-w-4xl text-justify space-y-6"
+              dangerouslySetInnerHTML={{ __html: currentArticle.content }}
+            ></div>
           </div>
         ) : (
           <div className="flex flex-col items-center p-8">
@@ -148,7 +132,8 @@ const CityPage = () => {
                 <div
                   key={article.id}
                   className="border p-4 rounded-lg cursor-pointer hover:bg-gray-50"
-                  onClick={() => setCurrentArticle(article)}>
+                  onClick={() => setCurrentArticle(article)}
+                >
                   <h4 className="font-bold text-lg">{article.title}</h4>
                   <p className="text-sm text-gray-500">
                     {formatDate(article.date)}

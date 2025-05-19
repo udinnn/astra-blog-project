@@ -6,7 +6,7 @@ const Maskot = () => {
     <div>
       <div className='fixed bottom-0 right-0 z-50 m-4'>
         <Image
-        src="/assets/maskot.png"
+        src="/assets/chatbot.png"
         width={100}
         height={100}
         alt='maskot'

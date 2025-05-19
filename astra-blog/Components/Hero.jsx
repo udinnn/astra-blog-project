@@ -22,8 +22,8 @@ const Hero = () => {
         <div className="absolute inset-0 bg-blue-500 bg-opacity-50"></div>
         {/* Konten di atas overlay */}
         <div className="absolute inset-0 flex flex-row justify-start items-center space-x-4 m-2">
-          <div className="flex flex-col w-1/2 text-left text-white p-4 space-y-4">
-            <section className="font-bold text-3xl">
+          <div className="flex flex-col w-1/2 text-left p-4 space-y-4">
+            <section className="font-bold text-3xl text-white">
               <h1 className="my-2">
                 Remaja SMART: Sehat, Mandiri, Aktif, Resilien, Peduli Gizi
               </h1>
@@ -35,7 +35,7 @@ const Hero = () => {
             <div className="flex">
               <button
                 onClick={() => router.push("/about")} // Navigasi ke halaman About
-                className="my-2 bg-white rounded-lg text-black p-2 text-sm inline-block">
+                className="my-2 bg-white rounded-lg text-astraColor-100 px-4 py-2 text-sm inline-block hover:scale-105 duration-300 ease-in-out">
                 Kenalan Lebih Dekat Dengan AORTA
               </button>
             </div>

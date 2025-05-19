@@ -9,13 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@lexical/code": "^0.31.1",
+    "@lexical/html": "^0.31.1",
+    "@lexical/link": "^0.31.1",
+    "@lexical/list": "^0.31.1",
+    "@lexical/react": "^0.31.1",
+    "@lexical/rich-text": "^0.31.1",
+    "@lexical/selection": "^0.31.1",
+    "@lexical/utils": "^0.31.1",
     "@material-tailwind/react": "^2.1.10",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.8",
+    "draft-js": "^0.11.7",
+    "lexical": "^0.31.1",
     "next": "^15.1.7",
-    "react": "^19.0.0",
+    "react": "^18.3.1",
     "react-chartjs-2": "^5.3.0",
-    "react-dom": "^19.0.0",
+    "react-dom": "^18.3.1",
+    "react-quill": "^2.0.0",
+    "react-router-dom": "^7.6.0",
     "swiper": "^11.2.6"
   },
   "devDependencies": {

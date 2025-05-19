@@ -1,13 +1,7 @@
 "use client";
 
 import { createPortal } from "react-dom";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   List,
   Input,
@@ -17,7 +11,7 @@ import {
   Typography,
   ListItemPrefix,
 } from "@material-tailwind/react";
-
+ 
 // lexical
 import {
   $getNodeByKey,
@@ -62,12 +56,10 @@ import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
-import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import { $generateHtmlFromNodes } from "@lexical/html";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-
+ 
 const LowPriority = 1;
-
+ 
 const supportedBlockTypes = new Set([
   "paragraph",
   "quote",
@@ -77,7 +69,7 @@ const supportedBlockTypes = new Set([
   "ul",
   "ol",
 ]);
-
+ 
 const blockTypeToBlockName = {
   code: "Code",
   h1: "Large Heading",
@@ -90,11 +82,11 @@ const blockTypeToBlockName = {
   quote: "Quote",
   ul: "Bulleted List",
 };
-
+ 
 function Divider() {
   return <div className="mx-1 h-6 w-px bg-gray-400" />;
 }
-
+ 
 function Placeholder() {
   return (
     <div className="pointer-events-none absolute left-2.5 top-4 inline-block select-none overflow-hidden text-base font-normal text-gray-400">
@@ -102,7 +94,7 @@ function Placeholder() {
     </div>
   );
 }
-
+ 
 function Select({ onChange, className, options, value }) {
   return (
     <select className={className} onChange={onChange} value={value}>
@@ -115,7 +107,7 @@ function Select({ onChange, className, options, value }) {
     </select>
   );
 }
-
+ 
 function getSelectedNode(selection) {
   const anchor = selection.anchor;
   const focus = selection.focus;
@@ -131,7 +123,7 @@ function getSelectedNode(selection) {
     return $isAtNodeEnd(anchor) ? focusNode : anchorNode;
   }
 }
-
+ 
 function BlockOptionsDropdownList({
   editor,
   blockType,
@@ -139,43 +131,43 @@ function BlockOptionsDropdownList({
   setShowBlockOptionsDropDown,
 }) {
   const dropDownRef = useRef(null);
-
+ 
   useEffect(() => {
     const toolbar = toolbarRef.current;
     const dropDown = dropDownRef.current;
-
+ 
     if (toolbar !== null && dropDown !== null) {
       const { top, left } = toolbar.getBoundingClientRect();
       dropDown.style.top = `${top + 40}px`;
       dropDown.style.left = `${left}px`;
     }
   }, [dropDownRef, toolbarRef]);
-
+ 
   useEffect(() => {
     const dropDown = dropDownRef.current;
     const toolbar = toolbarRef.current;
-
+ 
     if (dropDown !== null && toolbar !== null) {
       const handle = (event) => {
         const target = event.target;
-
+ 
         if (!dropDown.contains(target) && !toolbar.contains(target)) {
           setShowBlockOptionsDropDown(false);
         }
       };
       document.addEventListener("click", handle);
-
+ 
       return () => {
         document.removeEventListener("click", handle);
       };
     }
   }, [dropDownRef, setShowBlockOptionsDropDown, toolbarRef]);
-
+ 
   const formatParagraph = () => {
     if (blockType !== "paragraph") {
       editor.update(() => {
         const selection = $getSelection();
-
+ 
         if ($isRangeSelection(selection)) {
           $wrapNodes(selection, () => $createParagraphNode());
         }
@@ -183,12 +175,12 @@ function BlockOptionsDropdownList({
     }
     setShowBlockOptionsDropDown(false);
   };
-
+ 
   const formatLargeHeading = () => {
     if (blockType !== "h1") {
       editor.update(() => {
         const selection = $getSelection();
-
+ 
         if ($isRangeSelection(selection)) {
           $wrapNodes(selection, () => $createHeadingNode("h1"));
         }
@@ -196,12 +188,12 @@ function BlockOptionsDropdownList({
     }
     setShowBlockOptionsDropDown(false);
   };
-
+ 
   const formatSmallHeading = () => {
     if (blockType !== "h2") {
       editor.update(() => {
         const selection = $getSelection();
-
+ 
         if ($isRangeSelection(selection)) {
           $wrapNodes(selection, () => $createHeadingNode("h2"));
         }
@@ -209,7 +201,7 @@ function BlockOptionsDropdownList({
     }
     setShowBlockOptionsDropDown(false);
   };
-
+ 
   const formatBulletList = () => {
     if (blockType !== "ul") {
       editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND);
@@ -218,7 +210,7 @@ function BlockOptionsDropdownList({
     }
     setShowBlockOptionsDropDown(false);
   };
-
+ 
   const formatNumberedList = () => {
     if (blockType !== "ol") {
       editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND);
@@ -227,12 +219,12 @@ function BlockOptionsDropdownList({
     }
     setShowBlockOptionsDropDown(false);
   };
-
+ 
   const formatQuote = () => {
     if (blockType !== "quote") {
       editor.update(() => {
         const selection = $getSelection();
-
+ 
         if ($isRangeSelection(selection)) {
           $wrapNodes(selection, () => $createQuoteNode());
         }
@@ -240,12 +232,12 @@ function BlockOptionsDropdownList({
     }
     setShowBlockOptionsDropDown(false);
   };
-
+ 
   const formatCode = () => {
     if (blockType !== "code") {
       editor.update(() => {
         const selection = $getSelection();
-
+ 
         if ($isRangeSelection(selection)) {
           $wrapNodes(selection, () => $createCodeNode());
         }
@@ -253,7 +245,7 @@ function BlockOptionsDropdownList({
     }
     setShowBlockOptionsDropDown(false);
   };
-
+ 
   return (
     <List
       className="absolute z-[5] flex flex-col gap-0.5 rounded-lg border border-blue-gray-50 bg-white p-1"
@@ -575,7 +567,7 @@ function BlockOptionsDropdownList({
     </List>
   );
 }
-
+ 
 function positionEditorElement(editor, rect) {
   if (rect === null) {
     editor.style.opacity = "0";
@@ -589,7 +581,7 @@ function positionEditorElement(editor, rect) {
     }px`;
   }
 }
-
+ 
 function FloatingLinkEditor({ editor }) {
   const editorRef = useRef(null);
   const inputRef = useRef(null);
@@ -597,7 +589,7 @@ function FloatingLinkEditor({ editor }) {
   const [linkUrl, setLinkUrl] = useState("");
   const [isEditMode, setEditMode] = useState(false);
   const [lastSelection, setLastSelection] = useState(null);
-
+ 
   const updateLinkEditor = useCallback(() => {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
@@ -614,11 +606,11 @@ function FloatingLinkEditor({ editor }) {
     const editorElem = editorRef.current;
     const nativeSelection = window.getSelection();
     const activeElement = document.activeElement;
-
+ 
     if (editorElem === null) {
       return;
     }
-
+ 
     const rootElement = editor.getRootElement();
     if (
       selection !== null &&
@@ -637,7 +629,7 @@ function FloatingLinkEditor({ editor }) {
       } else {
         rect = domRange.getBoundingClientRect();
       }
-
+ 
       if (!mouseDownRef.current) {
         positionEditorElement(editorElem, rect);
       }
@@ -648,10 +640,10 @@ function FloatingLinkEditor({ editor }) {
       setEditMode(false);
       setLinkUrl("");
     }
-
+ 
     return true;
   }, [editor]);
-
+ 
   useEffect(() => {
     return mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
@@ -659,30 +651,30 @@ function FloatingLinkEditor({ editor }) {
           updateLinkEditor();
         });
       }),
-
+ 
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
         () => {
           updateLinkEditor();
           return true;
         },
-        LowPriority
-      )
+        LowPriority,
+      ),
     );
   }, [editor, updateLinkEditor]);
-
+ 
   useEffect(() => {
     editor.getEditorState().read(() => {
       updateLinkEditor();
     });
   }, [editor, updateLinkEditor]);
-
+ 
   useEffect(() => {
     if (isEditMode && inputRef.current) {
       inputRef.current.focus();
     }
   }, [isEditMode]);
-
+ 
   return (
     <div
       ref={editorRef}
@@ -755,7 +747,7 @@ function FloatingLinkEditor({ editor }) {
     </div>
   );
 }
-
+ 
 function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
   const toolbarRef = useRef(null);
@@ -769,7 +761,7 @@ function ToolbarPlugin() {
   const [isItalic, setIsItalic] = useState(false);
   const [isStrikethrough, setIsStrikethrough] = useState(false);
   const [isCode, setIsCode] = useState(false);
-
+ 
   const updateToolbar = useCallback(() => {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
@@ -801,7 +793,7 @@ function ToolbarPlugin() {
       setIsItalic(selection.hasFormat("italic"));
       setIsStrikethrough(selection.hasFormat("strikethrough"));
       setIsCode(selection.hasFormat("code"));
-
+ 
       // Update links
       const node = getSelectedNode(selection);
       const parent = node.getParent();
@@ -812,7 +804,7 @@ function ToolbarPlugin() {
       }
     }
   }, [editor]);
-
+ 
   useEffect(() => {
     return mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
@@ -826,11 +818,11 @@ function ToolbarPlugin() {
           updateToolbar();
           return false;
         },
-        LowPriority
-      )
+        LowPriority,
+      ),
     );
   }, [editor, updateToolbar]);
-
+ 
   const codeLanguges = useMemo(() => getCodeLanguages(), []);
   const onCodeLanguageSelect = useCallback(
     (e) => {
@@ -843,9 +835,9 @@ function ToolbarPlugin() {
         }
       });
     },
-    [editor, selectedElementKey]
+    [editor, selectedElementKey],
   );
-
+ 
   const insertLink = useCallback(() => {
     if (!isLink) {
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, "https://");
@@ -853,7 +845,7 @@ function ToolbarPlugin() {
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
     }
   }, [editor, isLink]);
-
+ 
   return (
     <div
       className="m-1 flex items-center gap-0.5 rounded-lg bg-gray-100 p-1"
@@ -891,7 +883,7 @@ function ToolbarPlugin() {
                 toolbarRef={toolbarRef}
                 setShowBlockOptionsDropDown={setShowBlockOptionsDropDown}
               />,
-              document.body
+              document.body,
             )}
           <Divider />
         </>
@@ -1027,7 +1019,7 @@ function ToolbarPlugin() {
     </div>
   );
 }
-
+ 
 const editorConfig = {
   namespace: "MyEditor",
   onError(error) {
@@ -1044,270 +1036,25 @@ const editorConfig = {
     LinkNode,
   ],
 };
-
-const New = () => {
-  const editorRef = useRef(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const [publishType, setPublishType] = useState("");
-  const [selectedOption, setSelectedOption] = useState("");
-  const [title, setTitle] = useState("");
-  const [date, setDate] = useState("");
-  const [content, setContent] = useState("");
-
-  // State for chapters and collaborations data
-  const [chapters, setChapters] = useState([]);
-  const [collaborations, setCollaborations] = useState([]);
-
-  // Load chapters and collaborations data from localStorage on component mount
-  useEffect(() => {
-    const loadedChapters = JSON.parse(localStorage.getItem("chapters") || "[]");
-    const loadedCollaborations = JSON.parse(
-      localStorage.getItem("collaborations") || "[]"
-    );
-
-    setChapters(loadedChapters);
-    setCollaborations(loadedCollaborations);
-  }, []);
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      // Create an object URL instead of base64 for display only
-      const imageUrl = URL.createObjectURL(file);
-      setImagePreview(imageUrl);
-
-      // In a real app, you would upload this to a server and get back a URL
-    }
-  };
-
-  const generateArticleId = (type) => {
-    // Get existing articles
-    const existingArticles = JSON.parse(
-      localStorage.getItem("articles") || "[]"
-    );
-
-    // Filter articles by type
-    const typeArticles = existingArticles.filter(
-      (article) => article.publishType === type
-    );
-
-    // Determine next number in sequence
-    const nextNumber = typeArticles.length + 1;
-
-    // Create ID with prefix C or K based on type
-    const prefix = type === "chapter" ? "C" : "K";
-    return `${prefix}${String(nextNumber).padStart(3, "0")}`;
-  };
-
-  const handleEditorChange = (editorState, editor) => {
-    editorRef.current = editor;
-    editorState.read(() => {
-      // Simpan plain text ke state (opsional, jika ingin preview)
-      // const plain = $getRoot().getTextContent();
-      // setContent(plain);
-      // Atau biarkan kosong, karena kita akan ambil HTML saat publish
-    });
-  };
-
-  const handlePublish = () => {
-    if (!publishType || !selectedOption || !title || !date) {
-      alert("Please fill all required fields!");
-      return;
-    }
-
-    // Ambil isi editor dalam format HTML
-    let htmlContent = "";
-    if (editorRef.current) {
-      editorRef.current.update(() => {
-        htmlContent = $generateHtmlFromNodes(editorRef.current, null);
-      });
-    }
-
-    if (!htmlContent) {
-      alert("Please fill the content!");
-      return;
-    }
-
-    const articleData = {
-      id: generateArticleId(publishType),
-      imageReference: "article_image_" + Date.now(),
-      title,
-      date,
-      content: htmlContent, // Simpan HTML
-      publishType,
-      target: selectedOption,
-      createdAt: new Date().toISOString(),
-      type: publishType,
-    };
-
-    const existingArticles = JSON.parse(
-      localStorage.getItem("articles") || "[]"
-    );
-    const updatedArticles = [...existingArticles, articleData];
-
-    try {
-      localStorage.setItem("articles", JSON.stringify(updatedArticles));
-      setImagePreview(null);
-      setPublishType("");
-      setSelectedOption("");
-      setTitle("");
-      setDate("");
-      setContent("");
-      alert("Article published successfully!");
-    } catch (error) {
-      console.error("Storage error:", error);
-      alert(
-        "Could not save article. Storage quota might be exceeded. Try using less content or clearing some existing articles."
-      );
-    }
-  };
-
+ 
+export function TextEditorReact() {
   return (
-    <div>
-      <div className="flex flex-row justify-between items-center mb-4 w-auto">
-        <h1 className="font-bold text-4xl">NEW ARTICLE</h1>
-      </div>
-
-      {/* Pilihan Publish */}
-      <div className="flex flex-col mx-20 mt-4">
-        <label className="font-bold text-lg mb-2">Publish To</label>
-        <select
-          className="text-sm border border-gray-300 p-2 rounded-lg mb-4"
-          value={publishType}
-          onChange={(e) => {
-            setPublishType(e.target.value);
-            setSelectedOption(""); // Reset selection when changing type
-          }}
-        >
-          <option value="">Select Publish Type</option>
-          <option value="chapter">Chapter</option>
-          <option value="kolaboraksi">KolaborAksi</option>
-        </select>
-
-        {/* Dropdown Nama Mitra/Nama Kota */}
-        {publishType && (
-          <div className="flex flex-col mb-4">
-            <label className="font-bold text-lg mb-2">
-              {publishType === "chapter" ? "Select City" : "Select Partner"}
-            </label>
-            <select
-              className="text-sm border border-gray-300 p-2 rounded-lg"
-              value={selectedOption}
-              onChange={(e) => setSelectedOption(e.target.value)}
-            >
-              <option value="">
-                {publishType === "chapter"
-                  ? "Select a City"
-                  : "Select a Partner"}
-              </option>
-              {(publishType === "chapter" ? chapters : collaborations).map(
-                (item, index) => (
-                  <option key={index} value={item.name || item.partnerName}>
-                    {item.name || item.partnerName}
-                  </option>
-                )
-              )}
-            </select>
-          </div>
-        )}
-      </div>
-
-      {/* Input Artikel */}
-      <div className="flex flex-col justify-start items-start mx-20 mt-10">
-        {/* Input Gambar */}
-        <div className="flex flex-col mb-4">
-          <label className="text-lg font-bold">Add Image</label>
-          <input
-            type="file"
-            accept="image/*"
-            className="text-sm border border-gray-300 p-1 rounded-lg"
-            onChange={handleImageChange}
+    <LexicalComposer initialConfig={editorConfig}>
+      <div className="relative mx-auto overflow-hidden my-5 w-full max-w-xl rounded-xl border border-gray-300 bg-white text-left font-normal leading-5 text-gray-900">
+        <ToolbarPlugin />
+        <div className="relative rounded-b-lg border-opacity-5 bg-white">
+          <RichTextPlugin
+            contentEditable={
+              <ContentEditable className="lexical min-h-[280px] resize-none px-2.5 py-4 text-base caret-gray-900 outline-none" />
+            }
+            placeholder={<Placeholder />}
+            ErrorBoundary={null}
           />
-          {imagePreview && (
-            <div className="mt-4">
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="w-62 h-64 object-cover rounded-lg my-2"
-              />
-            </div>
-          )}
-        </div>
-
-        {/* Input Judul */}
-        <div className="flex flex-col mb-4 w-full">
-          <label className="font-bold text-lg">Title</label>
-          <input
-            type="text"
-            placeholder="Enter Title"
-            className="text-sm border border-gray-300 p-1 rounded-lg"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </div>
-
-        {/* Input Tanggal */}
-        <div className="flex flex-col mb-4">
-          <label className="font-bold text-lg">Date</label>
-          <input
-            type="date"
-            className="text-sm border border-gray-300 p-1 rounded-lg"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            required
-          />
-        </div>
-
-        {/* Input Isi Artikel */}
-        <div className="flex flex-col mb-4 w-full">
-          <label className="font-bold text-lg">Content</label>
-          <LexicalComposer initialConfig={editorConfig}>
-            <div className="relative mx-auto overflow-hidden my-5 w-full max-w-xl rounded-xl border border-gray-300 bg-white text-left font-normal leading-5 text-gray-900">
-              <ToolbarPlugin />
-              <div className="relative rounded-b-lg border-opacity-5 bg-white">
-                <RichTextPlugin
-                  contentEditable={
-                    <ContentEditable className="lexical min-h-[280px] resize-none px-2.5 py-4 text-base caret-gray-900 outline-none" />
-                  }
-                  placeholder={<Placeholder />}
-                  ErrorBoundary={null}
-                />
-                <AutoFocusPlugin />
-                <ListPlugin />
-                <LinkPlugin />
-              </div>
-            </div>
-            {/* Tambahkan OnChangePlugin */}
-            <OnChangePlugin onChange={handleEditorChange} />
-          </LexicalComposer>
+          <AutoFocusPlugin />
+          <ListPlugin />
+          <LinkPlugin />
         </div>
       </div>
-
-      {/* Tombol Publish dan Cancel */}
-      <div className="flex flex-row justify-end items-end mb-4 mx-20">
-        <button
-          className="bg-blue-500 text-white p-2 rounded-lg mx-2"
-          onClick={handlePublish}
-        >
-          Publish
-        </button>
-        <button
-          className="bg-red-500 text-white p-2 rounded-lg"
-          onClick={() => {
-            setImagePreview(null);
-            setPublishType("");
-            setSelectedOption("");
-            setTitle("");
-            setDate("");
-            setContent("");
-          }}
-        >
-          Cancel
-        </button>
-      </div>
-    </div>
+    </LexicalComposer>
   );
-};
-
-export default New;
+}

@@ -11,6 +11,10 @@ const config = withMT({
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        astraColor: {
+          100: "#004996",
+          200: "#BABFE0",
+        }
       },
     },
   },

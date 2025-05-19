@@ -8,6 +8,8 @@ import Edit from "@/Components/Edit";
 import { useRouter } from "next/navigation"; // Import useRouter untuk navigasi
 import KolaborAksi from "@/Components/KolaborAksi";
 import Chapter from "@/Components/Chapter";
+import Kegiatan from "@/Components/Kegiatan";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const Page = () => {
   const [activePage, setActivePage] = useState("dashboard"); // State untuk halaman aktif
@@ -31,14 +33,16 @@ const Page = () => {
         return <New />;
       case "list":
         return <List setActivePage={setActivePage} />;
-        case "kolaboraksi":
+      case "kolaboraksi":
         return <KolaborAksi />;
-        case "chapter":
+      case "chapter":
         return <Chapter />; // Kirim setActivePage ke komponen List
       case "edit":
-        return <Edit />; // Gunakan komponen New untuk halaman edit
+        return <Edit />;
+      case "kegiatan":
+        return <Kegiatan />; // Gunakan komponen New untuk halaman edit
       default:
-        return <List />;
+        return <List setActivePage={setActivePage}/>;
     }
   };
 

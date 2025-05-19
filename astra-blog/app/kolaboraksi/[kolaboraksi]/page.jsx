@@ -94,21 +94,6 @@ const KolaboraksiPage = () => {
           </div>
         </div>
 
-        {/* Collaboration Info */}
-        {/* Collaboration Info */}
-        {/* {partnerDetails && (
-          <div className="flex flex-col items-center p-8">
-            <div className="max-w-4xl w-full">
-              <p className="text-lg font-medium">
-                Collaboration started:{" "}
-                {partnerDetails.collaborationDate
-                  ? formatDate(partnerDetails.collaborationDate)
-                  : "Date not available"}
-              </p>
-            </div>
-          </div>
-        )} */}
-
         {/* Article Content */}
         {currentArticle ? (
           <div className="flex flex-col items-center p-8 space-y-8">
@@ -123,13 +108,10 @@ const KolaboraksiPage = () => {
             </p>
 
             {/* Article Content */}
-            <div className="max-w-4xl text-justify space-y-6">
-              {currentArticle.content.split("\n\n").map((paragraph, idx) => (
-                <p key={idx} className="text-lg">
-                  {paragraph}
-                </p>
-              ))}
-            </div>
+            <div
+              className="max-w-4xl text-justify space-y-6"
+              dangerouslySetInnerHTML={{ __html: currentArticle.content }}
+            ></div>
           </div>
         ) : (
           <div className="flex flex-col items-center p-8">
@@ -149,7 +131,8 @@ const KolaboraksiPage = () => {
                 <div
                   key={article.id}
                   className="border p-4 rounded-lg cursor-pointer hover:bg-gray-50"
-                  onClick={() => setCurrentArticle(article)}>
+                  onClick={() => setCurrentArticle(article)}
+                >
                   <h4 className="font-bold text-lg">{article.title}</h4>
                   <p className="text-sm text-gray-500">
                     {formatDate(article.date)}

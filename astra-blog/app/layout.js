@@ -1,10 +1,10 @@
-import { Roboto_Serif } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const roboto = Roboto_Serif({
-  variable: "--font-roboto-serif",
+const dm_sans = DM_Sans({
+  variable: "--font-DM-Sans",
   subsets: ["latin"],
-  weight: ["400", "500", "700", "900"],
+  weight: ["300", "400", "700", "900"],
 });
 
 export const metadata = {
@@ -15,7 +15,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${roboto.variable}`}>
+      <body className={`${dm_sans.variable}`}>
         {children}
       </body>
     </html>

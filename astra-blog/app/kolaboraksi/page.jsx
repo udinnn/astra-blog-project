@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/Components/Header";
 import Maskot from "@/Components/Maskot";
 import Footer from "@/Components/Footer";
+import Link from "next/link";
 
 const Page = () => {
   const router = useRouter();
@@ -36,7 +37,7 @@ const Page = () => {
 
   return (
     <div>
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-content">
         {/* Header and Content */}
         <div className="flex-grow">
           <Header />
@@ -125,20 +126,20 @@ const Page = () => {
         </div>
       </div>
 
-      <div className="relative z-0 w-full h-[360px]">
+      <div className="relative z-0 w-full h-[400px]">
         <div className="flex flex-col justify-center items-start h-3/4 p-8 w-full text-white bg-blue-800">
           <h1 className="text-5xl font-bold py-2">COLLABORATION</h1>
           <h3 className="text-xl font-semibold">
             Let's collaborate for better future
           </h3>
           <button className="text-black rounded-lg bg-white px-4 py-2 my-4">
-            Ajukan Kolaborasi
+            <Link href="/daftar">Ajukan Kolaboraksi</Link>
           </button>
         </div>
         <img
-          src="/assets/maskot.png"
+          src="/assets/alya-aryo.png"
           alt="maskot"
-          className="absolute right-0 bottom-0 w-[300px] h-[300px] z-10 mx-8"
+          className="absolute right-0 bottom-0 w-[400px] h-[400px] z-10 mx-8 -translate-y-8"
         />
       </div>
       <Footer />

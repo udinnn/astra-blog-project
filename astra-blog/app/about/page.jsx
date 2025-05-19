@@ -72,9 +72,9 @@ const page = () => {
       </div>
       <div className="absolute inset-x-0 top-3/4 bg-white rounded-3xl mt-8">
         <h1 className="text-4xl font-bold text-center mt-10">Tentang Aorta</h1>
-        <div className="flex flex-row flex-grow justify-around items-start space-x-2 p-8">
+        <div className="flex flex-row flex-grow justify-around items-start space-x-2">
           <div className="inline-flex flex-col justify-center items-center text-center p-2">
-            <p className="text-sm">
+            <p className="text-md p-8">
               Aksi Solidaritas Remaja Kesehatan Astra atau yang dikenal dengan
               AORTA Community merupakan suatu komunitas binaan PT. Astra
               Internasional Tbk yang memiliki kepedulian terhadap isu-isu
@@ -94,14 +94,16 @@ const page = () => {
                     color="black"
                     size="lg"
                     onClick={handlePrev}
-                    className="!absolute top-2/4 left-4 -translate-y-2/4">
+                    className="!absolute top-2/4 left-4 -translate-y-2/4"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       strokeWidth={2}
                       stroke="black"
-                      className="h-6 w-6">
+                      className="h-6 w-6"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -116,14 +118,16 @@ const page = () => {
                     color="black"
                     size="lg"
                     onClick={handleNext}
-                    className="!absolute top-2/4 !right-4 -translate-y-2/4">
+                    className="!absolute top-2/4 !right-4 -translate-y-2/4"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       strokeWidth={2}
                       stroke="black"
-                      className="h-6 w-6">
+                      className="h-6 w-6"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -144,7 +148,8 @@ const page = () => {
                       />
                     ))}
                   </div>
-                )}>
+                )}
+              >
                 <div className="relative h-full w-full">
                   <img
                     src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2560&q=80"
@@ -154,20 +159,25 @@ const page = () => {
                   <div className="absolute inset-0 flex h-full w-full place-items-center bg-white">
                     <div className="flex flex-row mr-16 ml-2 justify-center">
                       <Image
-                        src="/assets/maskot.png"
+                        src="/assets/alya.png"
                         alt="maskot"
-                        width={400}
-                        height={400}
+                        width={450}
+                        height={450}
+                        style={{
+                          filter: "drop-shadow(0 0 4px rgb(245 127 13))",
+                        }}
                       />
                       <div className="flex flex-col w-full p-2 justify-center text-left">
                         <h1 className="text-4xl font-bold mb-2">
-                          Mixue Bing Chilling
+                          Hi! Aku <span className="text-yellow-900">ALYA</span>
                         </h1>
                         <p className="text-sm">
-                          Bing Chilling merupakan maskot ternama dari project
-                          ini. Ia memiliki warna putih yang menggambarkan
-                          kesucian dan warna merah yang melambangkan keberanian,
-                          sama seperti bendera negara tercinta kita, Indonesia.
+                          Aku kakaknya Aryo. Hobiku adalah membaca buku. Seperti
+                          arti namaku, yaitu "cahaya", kalian bakal sering
+                          ketemu aku di postingan-postingan AORTA Community
+                          seputar tips-tips kesehatan untuk memberikan
+                          pencerahan kepada kalian seputar kesehatan. Ayo
+                          bertemu adikku!
                         </p>
                       </div>
                     </div>
@@ -179,41 +189,75 @@ const page = () => {
                     alt="image 1"
                     className="h-full w-full object-cover"
                   />
-                  <div className="absolute inset-0 flex flex-col h-full w-full justify-center items-center bg-white">
-                    <div className="w-3/4 text-center md:w-2/4 mt-10">
-                      <h1 className="text-4xl font-bold mb-8">Fokus Isu</h1>
-                    </div>
-                    <div className="flex flex-row space-x-8 p-2">
-                      {data.map((item, index) => (
-                        <Card
-                          key={index}
-                          shadow={false}
-                          className={`relative flex h-[20rem] w-full max-w-[15rem] items-center justify-center overflow-hidden text-center transition-all duration-300 cursor-pointer ${
-                            hoveredCard !== null && hoveredCard !== index
-                              ? "blur-sm"
-                              : "blur-none scale-105"
-                          }`}
-                          onClick={() => router.push(item.fokusLink)}
-                          onMouseEnter={() => setHoveredCard(index)}
-                          onMouseLeave={() => setHoveredCard(null)}>
-                          <CardHeader
-                            floated={false}
-                            shadow={false}
-                            color="transparent"
-                            className="absolute inset-0 m-0 h-full w-full rounded-none bg-light-blue-900">
-                            <div className="absolute inset-0 h-full w-full" />
-                          </CardHeader>
-                          <CardBody className="relative flex items-center justify-center py-14 px-6 md:px-12">
-                            <h1 className="font-bold text-black">
-                              {item.title}
-                            </h1>
-                          </CardBody>
-                        </Card>
-                      ))}
+                  <div className="absolute inset-0 flex h-full w-full place-items-center bg-white">
+                    <div className="flex flex-row mr-16 ml-2 justify-center">
+                      <div className="flex flex-col w-full p-2 ml-12 justify-center text-left">
+                        <h1 className="text-4xl font-bold mb-2">
+                          Hi! Aku <span className="text-blue-900">ARYO</span>
+                        </h1>
+                        <p className="text-sm">
+                          Aku Si Bungsu, adik dari Kak Alya. Cita-citaku mau
+                          jadi Superman supaya bisa bantu orang banyak! Sama
+                          seperti namaku yang berarti "ksatria", aku ini berani
+                          dan kuat walau lebih muda dari Kak Alya. Jadi, aku
+                          akan memandu kalian dalam setiap challenge yang ada di
+                          AORTA Community agar kalian jadi berani dan kuat
+                          sepertiku!
+                        </p>
+                      </div>
+                      <Image
+                        src="/assets/aryo.png"
+                        alt="maskot"
+                        width={400}
+                        height={400}
+                        style={{
+                          filter: "drop-shadow(0 0 4px rgb(13 71 161))",
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
               </Carousel>
+            </div>
+          </div>
+        </div>
+        <div className="relative h-full w-full">
+          <img
+            src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2560&q=80"
+            alt="image 1"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 flex flex-col h-full w-full justify-center items-center bg-white">
+            <div className="w-3/4 text-center md:w-2/4">
+              <h1 className="text-4xl font-bold mb-8">Fokus Isu</h1>
+            </div>
+            <div className="flex flex-row space-x-8 p-2">
+              {data.map((item, index) => (
+                <Card
+                  key={index}
+                  shadow={false}
+                  className={`relative flex h-[20rem] w-full max-w-[15rem] items-center justify-center overflow-hidden text-center transition-all duration-300 cursor-pointer ${
+                    hoveredCard !== null && hoveredCard !== index
+                      ? "blur-sm"
+                      : "blur-none scale-105"
+                  }`}
+                  onClick={() => router.push(item.fokusLink)}
+                  onMouseEnter={() => setHoveredCard(index)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                >
+                  <CardHeader
+                    floated={false}
+                    shadow={false}
+                    color="transparent"
+                    className="absolute inset-0 m-0 h-full w-full rounded-none bg-light-blue-900"
+                  >
+                    <div className="absolute inset-0 h-full w-full" />
+                  </CardHeader>
+                  <CardBody className="relative flex items-center justify-center py-14 px-6 md:px-12">
+                    <h1 className="font-bold text-black">{item.title}</h1>
+                  </CardBody>
+                </Card>
+              ))}
             </div>
           </div>
         </div>

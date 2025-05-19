@@ -1,17 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Edit = () => {
+  const [article, setArticle] = useState(null); // State untuk menyimpan artikel yang akan diedit
   const [imagePreview, setImagePreview] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false); // State untuk modal
   const [modalType, setModalType] = useState(""); // State untuk menentukan jenis modal (Save/Cancel)
+
+  useEffect(() => {
+    // Ambil artikel dari localStorage
+    const articleToEdit = JSON.parse(localStorage.getItem("articleToEdit"));
+    if (articleToEdit) {
+      setArticle(articleToEdit);
+      setImagePreview(articleToEdit.imageReference); // Tampilkan gambar jika ada
+    }
+  }, []);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setImagePreview(imageUrl);
+      setArticle({ ...article, imageReference: imageUrl }); // Perbarui referensi gambar di artikel
     }
   };
 
@@ -27,9 +38,15 @@ const Edit = () => {
 
   const handleConfirm = () => {
     if (modalType === "save") {
-      console.log("Article saved!");
+      // Simpan perubahan artikel ke localStorage
+      const articles = JSON.parse(localStorage.getItem("articles") || "[]");
+      const updatedArticles = articles.map((item) =>
+        item.id === article.id ? article : item
+      );
+      localStorage.setItem("articles", JSON.stringify(updatedArticles));
+      alert("Article saved successfully!");
     } else if (modalType === "cancel") {
-      console.log("Action canceled!");
+      alert("Action canceled!");
     }
     setIsModalVisible(false); // Tutup modal setelah konfirmasi
   };
@@ -45,71 +62,88 @@ const Edit = () => {
           <h1 className="font-bold text-4xl">EDIT ARTICLE</h1>
         </div>
 
-        <div className="flex flex-col justify-start items-start mx-20 mt-10">
-          <div className="flex flex-col mb-4">
-            <label className="font-bold text-lg">Article ID</label>
-            <input
-              type="text"
-              placeholder="Enter Title"
-              className="text-sm border border-gray-300 p-1 rounded-lg"
-            />
-          </div>
+        {article ? (
+          <div className="flex flex-col justify-start items-start mx-20 mt-10">
+            <div className="flex flex-col mb-4">
+              <label className="font-bold text-lg">Article ID</label>
+              <input
+                type="text"
+                className="text-sm border border-gray-300 p-1 rounded-lg"
+                value={article.id}
+                readOnly // ID tidak dapat diedit
+              />
+            </div>
 
-          <div className="flex flex-col mb-4">
-            <label className="text-lg font-bold">Add Image</label>
-            <input
-              type="file"
-              accept="image/*"
-              className="text-sm border border-gray-300 p-1 rounded-lg"
-              onChange={handleImageChange}
-            />
-            {imagePreview && (
-              <div className="mt-4">
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className="w-62 h-64 object-cover rounded-lg my-2"
-                />
-              </div>
-            )}
-          </div>
+            <div className="flex flex-col mb-4">
+              <label className="text-lg font-bold">Add Image</label>
+              <input
+                type="file"
+                accept="image/*"
+                className="text-sm border border-gray-300 p-1 rounded-lg"
+                onChange={handleImageChange}
+              />
+              {imagePreview && (
+                <div className="mt-4">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-62 h-64 object-cover rounded-lg my-2"
+                  />
+                </div>
+              )}
+            </div>
 
-          <div className="flex flex-col mb-4 w-full">
-            <label className="font-bold text-lg">Title</label>
-            <input
-              type="text"
-              placeholder="Enter Title"
-              className="text-sm border border-gray-300 p-1 rounded-lg"
-            />
-          </div>
+            <div className="flex flex-col mb-4 w-full">
+              <label className="font-bold text-lg">Title</label>
+              <input
+                type="text"
+                className="text-sm border border-gray-300 p-1 rounded-lg"
+                value={article.title}
+                onChange={(e) =>
+                  setArticle({ ...article, title: e.target.value })
+                }
+              />
+            </div>
 
-          <div className="flex flex-col mb-4 w-full">
-            <label className="font-bold text-lg">Image Description</label>
-            <input
-              type="text"
-              placeholder="Enter Image Description"
-              className="text-sm border border-gray-300 p-1 rounded-lg"
-            />
-          </div>
+            <div className="flex flex-col mb-4 w-full">
+              <label className="font-bold text-lg">Image Description</label>
+              <input
+                type="text"
+                className="text-sm border border-gray-300 p-1 rounded-lg"
+                value={article.imageDescription || ""}
+                onChange={(e) =>
+                  setArticle({ ...article, imageDescription: e.target.value })
+                }
+              />
+            </div>
 
-          <div className="flex flex-col mb-4">
-            <label className="font-bold text-lg">Date</label>
-            <input
-              type="date"
-              placeholder="Enter Date"
-              className="text-sm border border-gray-300 p-1 rounded-lg"
-            />
-          </div>
+            <div className="flex flex-col mb-4">
+              <label className="font-bold text-lg">Date</label>
+              <input
+                type="date"
+                className="text-sm border border-gray-300 p-1 rounded-lg"
+                value={article.date}
+                onChange={(e) =>
+                  setArticle({ ...article, date: e.target.value })
+                }
+              />
+            </div>
 
-          <div className="flex flex-col mb-4 w-full">
-            <label className="font-bold text-lg">Content</label>
-            <textarea
-              placeholder="Enter Content"
-              className="text-sm border border-gray-300 p-1 rounded-lg resize-none overflow-y-auto"
-              rows="10"
-            ></textarea>
+            <div className="flex flex-col mb-4 w-full">
+              <label className="font-bold text-lg">Content</label>
+              <textarea
+                className="text-sm border border-gray-300 p-1 rounded-lg resize-none overflow-y-auto"
+                rows="10"
+                value={article.content}
+                onChange={(e) =>
+                  setArticle({ ...article, content: e.target.value })
+                }
+              ></textarea>
+            </div>
           </div>
-        </div>
+        ) : (
+          <p className="text-center text-gray-500">Loading article...</p>
+        )}
 
         <div className="flex flex-row justify-end items-end mb-4 mx-20">
           <button
