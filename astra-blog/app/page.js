@@ -1,24 +1,77 @@
+"use client";
 
 import Footer from "@/Components/Footer";
 import Header from "@/Components/Header";
 import Hero from "@/Components/Hero";
 import Maskot from "@/Components/Maskot";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter(); // Inisialisasi router
+
   return (
     <div className="relative">
-      <Header />
-      <Hero />
-      <Maskot />
-      {/* Container di depan Hero */}
-      <div className="absolute inset-x-0 top-3/4 bg-white rounded-3xl mt-4 sm:mt-6 md:mt-8">
+        <Header />
+
+      {/* Background Batik */}
+      <div
+        className="fixed inset-0 z-0"
+        style={{
+          backgroundImage: "url('/assets/batik.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          opacity: 0.8, // atur transparansi sesuai kebutuhan
+          pointerEvents: "none", // agar tidak mengganggu klik konten
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Hero section */}
+      <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-screen lg:h-screen flex items-center justify-center sm:justify-start pt-[72px] sm:pt-[90px] md:pt-[110px] z-10 overflow-hidden">
+        {/* Gambar */}
+        <Image
+          src="/assets/teenagers.jpg"
+          fill
+          alt="Teenagers"
+          className="object-cover"
+          priority
+          sizes="100vw"
+          style={{ zIndex: 1 }}
+        />
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-blue-500 bg-opacity-50 z-10"></div>
+        {/* Konten di atas overlay */}
+        <div className="absolute inset-0 flex flex-col items-start justify-center px-4 z-20">
+          <div className="flex flex-col w-full sm:w-1/2 p-2 sm:p-4 space-y-4">
+            <div className="font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl text-white leading-tight drop-shadow-lg">
+              <h1 className="my-2">
+                Remaja SMART: Sehat, Mandiri, Aktif, Resilien, Peduli Gizi
+              </h1>
+              <h1>
+                &ldquo;Empower the Future: Youth Collaboration for a Resilient
+                Indonesia&ldquo;
+              </h1>
+            </div>
+            <div className="flex justify-start">
+              <button
+                onClick={() => router.push("/about")}
+                className="bg-white rounded-lg text-astraColor-100 px-4 py-2 text-sm font-semibold inline-block hover:scale-105 duration-300 ease-in-out shadow-md"
+              >
+                Kenalan Lebih Dekat Dengan AORTA
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute inset-x-0 z-10 bg-white bg-opacity-80">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mt-4 sm:mt-6 md:mt-10">
           TESTIMONI
         </h2>
 
         {/* Flex container yang berubah menjadi column pada mobile */}
-        <div className="flex flex-col sm:flex-row flex-wrap justify-around items-center sm:items-start space-y-6 sm:space-y-0 sm:space-x-2 py-4 sm:py-6 md:py-8 px-4 sm:px-2">
+        <div className="flex flex-col sm:flex-row flex-wrap justify-around items-center sm:items-center space-y-6 sm:space-y-0 sm:space-x-2 sm:py-6 md:py-8 sm:px-2 p-2">
           {/* Testimoni 1 */}
           <div className="inline-flex flex-col justify-center items-center text-left p-2 max-w-full">
             <Image
@@ -76,32 +129,7 @@ export default function Home() {
 
         <Footer />
       </div>
-
-      {/* Gambar Maskot */}
-      <div className="absolute bottom-0 right-0 mb-[5vh] md:mb-[15vh] lg:mb-[25vh] mr-[2vw]">
-        <div className="relative">
-          {/* Gambar Aryo */}
-          <Image
-            src="/assets/Aryo.png"
-            alt="Maskot"
-            width={500}
-            height={500}
-            className="w-[40vw] sm:w-[35vw] md:w-[30vw] lg:w-[25vw] h-auto"
-            style={{ transform: "translateY(40%)" }}
-          />
-
-          {/* Embed Video YouTube */}
-          <div className="absolute top-0 left-0 -translate-x-[60%] sm:-translate-x-[65%] md:-translate-x-[70%] lg:-translate-x-[75%]">
-            <iframe
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-              title="YouTube video"
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-              className="rounded-lg shadow-lg w-[200px] h-[113px] sm:w-[240px] sm:h-[135px] md:w-[280px] md:h-[158px] lg:w-[320px] lg:h-[180px]"
-            ></iframe>
-          </div>
-        </div>
-      </div>
+      <Maskot />
     </div>
   );
 }

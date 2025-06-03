@@ -20,7 +20,7 @@ const Footer = () => {
 
   return (
     <div className="flex flex-col w-full justify-center items-center bg-astraColor-100">
-      <footer className="flex w-full flex-row md:flex-row items-center justify-around space-x-8 py-4 text-center text-white">
+      <div className="flex w-full flex-row items-center justify-around space-x-8 py-4 text-center text-white">
         {/* Bagian Maskot */}
         <div className="flex flex-row justify-center items-center space-x-8">
           <Image
@@ -47,7 +47,7 @@ const Footer = () => {
         </div>
 
         {/* Bagian Navigasi */}
-        <ul className="flex flex-row space-x-8 text-sm font-medium text-white">
+        <ul className="flex flex-row justify-center items-center space-x-8 text-sm font-medium text-white">
           <li>
             <a
               href="/"
@@ -182,7 +182,7 @@ const Footer = () => {
             </svg>
           </a>
         </div>
-      </footer>
+      </div>
 
       {/* Copyright */}
       <p className="w-full bg-black/50 text-white text-sm py-1 text-center">

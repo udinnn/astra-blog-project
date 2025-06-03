@@ -132,7 +132,7 @@ const Maskot = () => {
                 />
                 <button
                   onClick={handleSendMessage}
-                  className="bg-gradient-to-r from-blue-500 to-blue-400 text-black px-5 py-2 rounded-full font-semibold shadow hover:from-blue-600 hover:to-blue-500 transition-all duration-200 flex-shrink-0"
+                  className="bg-gradient-to-r from-blue-500 to-pink-400 text-black px-5 py-2 rounded-full font-semibold shadow hover:from-blue-600 hover:to-blue-500 transition-all duration-200 flex-shrink-0"
                 >
                   Kirim
                 </button>
