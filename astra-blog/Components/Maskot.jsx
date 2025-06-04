@@ -58,7 +58,7 @@ const Maskot = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-end justify-end z-50 p-4">
           <div className="w-full max-w-[400px] h-[600px] max-h-[90vh] rounded-2xl shadow-2xl border border-blue-200 bg-white flex flex-col animate-fadeIn overflow-hidden">
             {/* Header */}
-            <div className="bg-gradient-to-r from-blue-500 to-blue-400 text-white p-4 flex justify-between items-center shadow-lg flex-shrink-0">
+            <div className="bg-gradient-to-r from-astraColor-100 to-blue-400 text-white p-4 flex justify-between items-center shadow-lg flex-shrink-0">
               <div className="flex items-center gap-2">
                 <Image 
                   src="/assets/chatbot.png" 
@@ -132,7 +132,7 @@ const Maskot = () => {
                 />
                 <button
                   onClick={handleSendMessage}
-                  className="bg-gradient-to-r from-blue-500 to-pink-400 text-black px-5 py-2 rounded-full font-semibold shadow hover:from-blue-600 hover:to-blue-500 transition-all duration-200 flex-shrink-0"
+                  className="border-astraColor-100 border-2 text-black px-5 py-2 rounded-full font-semibold shadow hover:bg-astraColor-100 hover:text-white transition-all duration-200 flex-shrink-0"
                 >
                   Kirim
                 </button>
