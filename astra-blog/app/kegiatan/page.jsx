@@ -33,22 +33,22 @@ const Page = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Header dan Konten */}
       <div className="flex-grow">
         <Header />
         <Maskot />
 
-        <div className="flex flex-col mt-10 p-8">
-          <h1 className="text-4xl font-bold text-center p-2">Kegiatan AORTA</h1>
+        <div className="flex flex-col mt-10 p-6 md:p-8">
+          <h1 className="text-4xl font-extrabold text-center p-2 text-gray-700">Kegiatan AORTA</h1>
 
           {/* Daftar Kegiatan */}
-          <div className="flex flex-wrap gap-4 justify-center mt-4">
+          <div className="flex flex-wrap gap-4 justify-center mt-6">
             {activities.length > 0 ? (
               activities.map((activity, index) => (
                 <div
                   key={index}
-                  className="p-4 border border-gray-300 rounded-lg shadow-md w-64"
+                  className="p-4 border border-gray-300 rounded-lg shadow-md w-full sm:w-64 md:w-72 lg:w-80 hover:scale-105 transition-transform duration-300"
                 >
                   <img
                     onClick={() => openModal(activity.imageReference)} // Buka modal saat gambar diklik
@@ -56,6 +56,7 @@ const Page = () => {
                     className="h-36 w-full cursor-pointer rounded-lg object-cover object-center hover:scale-110 transition-transform duration-300"
                     alt={`activity-${index}`}
                   />
+                  <p className="mt-2 text-center text-lg font-semibold">{activity.title}</p>
                 </div>
               ))
             ) : (
@@ -68,7 +69,7 @@ const Page = () => {
       {/* Modal */}
       <Dialog size="md" open={isModalOpen} handler={closeModal}>
         <DialogHeader>
-          <h1 className="text-left text-xl">Kegiatan AORTA</h1>
+          <h1 className="text-left text-xl font-semibold">Kegiatan AORTA</h1>
         </DialogHeader>
         <DialogBody>
           <img
