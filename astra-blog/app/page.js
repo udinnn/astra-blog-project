@@ -43,8 +43,8 @@ export default function Home() {
         <div className="absolute inset-0 bg-astraColor-100 bg-opacity-50 z-10"></div>
 
         {/* Konten di atas overlay - Dipusatkan */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-4 z-20">
-          <div className="flex flex-col w-full max-w-4xl text-center space-y-6">
+        <div className="absolute inset-0 flex flex-col items-start justify-center z-20">
+          <div className="flex flex-col w-3/5 text-start p-4 ml-8 space-y-6">
             <div className="font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-white leading-tight drop-shadow-lg">
               <h1 className="mb-4">
                 Remaja SMART: Sehat, Mandiri, Aktif, Resilien, Peduli Gizi
@@ -54,7 +54,7 @@ export default function Home() {
                 Indonesia&rdquo;
               </h1>
             </div>
-            <div className="flex justify-center mt-8">
+            <div className="flex justify-start mt-8">
               <button
                 onClick={() => router.push("/about")}
                 className="bg-white rounded-lg text-astraColor-100 px-6 py-3 text-sm sm:text-base font-semibold inline-block hover:scale-105 duration-300 ease-in-out shadow-lg hover:shadow-xl transform transition-all"
@@ -62,6 +62,34 @@ export default function Home() {
                 Kenalan Lebih Dekat Dengan AORTA
               </button>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative w-full">
+        <div className="absolute right-0 bottom-0 z-[60] -translate-x-16 -translate-y-8">
+          <Image
+            src="/assets/aryo.png"
+            width={300}
+            height={300}
+            alt="maskot"
+            draggable={false}
+            priority
+            className="w-32 h-32 sm:w-40 sm:h-40 md:w-60 md:h-60 lg:w-72 lg:h-72 xl:w-80 xl:h-80 object-contain"
+          />
+        </div>
+        <div className="absolute right-20 bottom-32 sm:right-28 sm:bottom-40 md:right-40 md:bottom-48 lg:right-48 lg:bottom-56 xl:right-72 xl:bottom-64 z-[65]">
+          <div className="rounded-lg shadow-lg p-2 md:p-3">
+            <iframe
+              width="120"
+              height="68"
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+              title="AORTA Program Video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="rounded md:w-32 md:h-18 lg:w-40 lg:h-24 xl:w-48 xl:h-28"
+            ></iframe>
           </div>
         </div>
       </div>
@@ -80,7 +108,7 @@ export default function Home() {
           {/* Overlay untuk background batik */}
           <div className="absolute inset-0 bg-gray-300 bg-opacity-80 backdrop-blur-sm"></div>
           <div className="relative flex flex-col flex-wrap justify-center items-center space-y-8 p-4 z-10">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mt-8 text-astraColor-100">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center mt-8 text-astraColor-100">
               TESTIMONI
             </h2>
 
