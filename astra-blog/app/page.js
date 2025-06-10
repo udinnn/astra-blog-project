@@ -13,7 +13,7 @@ export default function Home() {
     <div className="relative min-h-screen">
       <Header />
 
-      {/* Background Batik */}
+      {/* Background Batik
       <div
         className="fixed inset-0 z-0"
         style={{
@@ -24,7 +24,7 @@ export default function Home() {
           pointerEvents: "none",
         }}
         aria-hidden="true"
-      />
+      /> */}
 
       {/* Hero section */}
       <div className="relative w-full h-screen flex items-center justify-center pt-[72px] sm:pt-[90px] md:pt-[110px] z-10 overflow-hidden">
@@ -99,14 +99,14 @@ export default function Home() {
         {/* Container Testimoni dengan Rounded Top dan Background Batik */}
         <div
           className="relative rounded-t-[3rem] sm:rounded-t-[4rem] md:rounded-t-[5rem] z-20 -mt-16 sm:-mt-20 md:-mt-24 overflow-hidden"
-          style={{
-            backgroundImage: "url('/assets/batik2.jpg')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
+          // style={{
+          //   backgroundImage: "url('/assets/batik2.jpg')",
+          //   backgroundSize: "cover",
+          //   backgroundPosition: "center",
+          // }}
         >
           {/* Overlay untuk background batik */}
-          <div className="absolute inset-0 bg-gray-300 bg-opacity-80 backdrop-blur-sm"></div>
+          <div className="absolute inset-0 bg-gray-300 bg-opacity-100 backdrop-blur-sm"></div>
           <div className="relative flex flex-col flex-wrap justify-center items-center space-y-8 p-4 z-10">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center mt-8 text-astraColor-100">
               TESTIMONI

@@ -1,18 +1,10 @@
-"use client";
+// components/RichTextEditor.js
+// Salin semua kode Lexical dari komponen New.js Anda ke sini
+// (ToolbarPlugin, FloatingLinkEditor, Placeholder, dll.)
+// dan ekspor sebagai satu komponen.
 
-import { createPortal } from "react-dom";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  List,
-  Input,
-  Button,
-  ListItem,
-  IconButton,
-  Typography,
-  ListItemPrefix,
-} from "@material-tailwind/react";
- 
-// lexical
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { List, ListItem, ListItemPrefix, Input, Typography, IconButton, Button } from "@material-tailwind/react";
 import {
   $getNodeByKey,
   $getSelection,
@@ -56,10 +48,12 @@ import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
+import { $generateHtmlFromNodes } from "@lexical/html";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
- 
+
 const LowPriority = 1;
- 
+
 const supportedBlockTypes = new Set([
   "paragraph",
   "quote",
@@ -69,7 +63,7 @@ const supportedBlockTypes = new Set([
   "ul",
   "ol",
 ]);
- 
+
 const blockTypeToBlockName = {
   code: "Code",
   h1: "Large Heading",
@@ -82,11 +76,11 @@ const blockTypeToBlockName = {
   quote: "Quote",
   ul: "Bulleted List",
 };
- 
+
 function Divider() {
   return <div className="mx-1 h-6 w-px bg-gray-400" />;
 }
- 
+
 function Placeholder() {
   return (
     <div className="pointer-events-none absolute left-2.5 top-4 inline-block select-none overflow-hidden text-base font-normal text-gray-400">
@@ -94,7 +88,7 @@ function Placeholder() {
     </div>
   );
 }
- 
+
 function Select({ onChange, className, options, value }) {
   return (
     <select className={className} onChange={onChange} value={value}>
@@ -107,7 +101,7 @@ function Select({ onChange, className, options, value }) {
     </select>
   );
 }
- 
+
 function getSelectedNode(selection) {
   const anchor = selection.anchor;
   const focus = selection.focus;
@@ -123,7 +117,7 @@ function getSelectedNode(selection) {
     return $isAtNodeEnd(anchor) ? focusNode : anchorNode;
   }
 }
- 
+
 function BlockOptionsDropdownList({
   editor,
   blockType,
@@ -131,43 +125,43 @@ function BlockOptionsDropdownList({
   setShowBlockOptionsDropDown,
 }) {
   const dropDownRef = useRef(null);
- 
+
   useEffect(() => {
     const toolbar = toolbarRef.current;
     const dropDown = dropDownRef.current;
- 
+
     if (toolbar !== null && dropDown !== null) {
       const { top, left } = toolbar.getBoundingClientRect();
       dropDown.style.top = `${top + 40}px`;
       dropDown.style.left = `${left}px`;
     }
   }, [dropDownRef, toolbarRef]);
- 
+
   useEffect(() => {
     const dropDown = dropDownRef.current;
     const toolbar = toolbarRef.current;
- 
+
     if (dropDown !== null && toolbar !== null) {
       const handle = (event) => {
         const target = event.target;
- 
+
         if (!dropDown.contains(target) && !toolbar.contains(target)) {
           setShowBlockOptionsDropDown(false);
         }
       };
       document.addEventListener("click", handle);
- 
+
       return () => {
         document.removeEventListener("click", handle);
       };
     }
   }, [dropDownRef, setShowBlockOptionsDropDown, toolbarRef]);
- 
+
   const formatParagraph = () => {
     if (blockType !== "paragraph") {
       editor.update(() => {
         const selection = $getSelection();
- 
+
         if ($isRangeSelection(selection)) {
           $wrapNodes(selection, () => $createParagraphNode());
         }
@@ -175,12 +169,12 @@ function BlockOptionsDropdownList({
     }
     setShowBlockOptionsDropDown(false);
   };
- 
+
   const formatLargeHeading = () => {
     if (blockType !== "h1") {
       editor.update(() => {
         const selection = $getSelection();
- 
+
         if ($isRangeSelection(selection)) {
           $wrapNodes(selection, () => $createHeadingNode("h1"));
         }
@@ -188,12 +182,12 @@ function BlockOptionsDropdownList({
     }
     setShowBlockOptionsDropDown(false);
   };
- 
+
   const formatSmallHeading = () => {
     if (blockType !== "h2") {
       editor.update(() => {
         const selection = $getSelection();
- 
+
         if ($isRangeSelection(selection)) {
           $wrapNodes(selection, () => $createHeadingNode("h2"));
         }
@@ -201,7 +195,7 @@ function BlockOptionsDropdownList({
     }
     setShowBlockOptionsDropDown(false);
   };
- 
+
   const formatBulletList = () => {
     if (blockType !== "ul") {
       editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND);
@@ -210,7 +204,7 @@ function BlockOptionsDropdownList({
     }
     setShowBlockOptionsDropDown(false);
   };
- 
+
   const formatNumberedList = () => {
     if (blockType !== "ol") {
       editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND);
@@ -219,12 +213,12 @@ function BlockOptionsDropdownList({
     }
     setShowBlockOptionsDropDown(false);
   };
- 
+
   const formatQuote = () => {
     if (blockType !== "quote") {
       editor.update(() => {
         const selection = $getSelection();
- 
+
         if ($isRangeSelection(selection)) {
           $wrapNodes(selection, () => $createQuoteNode());
         }
@@ -232,12 +226,12 @@ function BlockOptionsDropdownList({
     }
     setShowBlockOptionsDropDown(false);
   };
- 
+
   const formatCode = () => {
     if (blockType !== "code") {
       editor.update(() => {
         const selection = $getSelection();
- 
+
         if ($isRangeSelection(selection)) {
           $wrapNodes(selection, () => $createCodeNode());
         }
@@ -245,7 +239,7 @@ function BlockOptionsDropdownList({
     }
     setShowBlockOptionsDropDown(false);
   };
- 
+
   return (
     <List
       className="absolute z-[5] flex flex-col gap-0.5 rounded-lg border border-blue-gray-50 bg-white p-1"
@@ -567,7 +561,7 @@ function BlockOptionsDropdownList({
     </List>
   );
 }
- 
+
 function positionEditorElement(editor, rect) {
   if (rect === null) {
     editor.style.opacity = "0";
@@ -581,7 +575,7 @@ function positionEditorElement(editor, rect) {
     }px`;
   }
 }
- 
+
 function FloatingLinkEditor({ editor }) {
   const editorRef = useRef(null);
   const inputRef = useRef(null);
@@ -589,7 +583,7 @@ function FloatingLinkEditor({ editor }) {
   const [linkUrl, setLinkUrl] = useState("");
   const [isEditMode, setEditMode] = useState(false);
   const [lastSelection, setLastSelection] = useState(null);
- 
+
   const updateLinkEditor = useCallback(() => {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
@@ -606,11 +600,11 @@ function FloatingLinkEditor({ editor }) {
     const editorElem = editorRef.current;
     const nativeSelection = window.getSelection();
     const activeElement = document.activeElement;
- 
+
     if (editorElem === null) {
       return;
     }
- 
+
     const rootElement = editor.getRootElement();
     if (
       selection !== null &&
@@ -629,7 +623,7 @@ function FloatingLinkEditor({ editor }) {
       } else {
         rect = domRange.getBoundingClientRect();
       }
- 
+
       if (!mouseDownRef.current) {
         positionEditorElement(editorElem, rect);
       }
@@ -640,10 +634,10 @@ function FloatingLinkEditor({ editor }) {
       setEditMode(false);
       setLinkUrl("");
     }
- 
+
     return true;
   }, [editor]);
- 
+
   useEffect(() => {
     return mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
@@ -651,30 +645,30 @@ function FloatingLinkEditor({ editor }) {
           updateLinkEditor();
         });
       }),
- 
+
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
         () => {
           updateLinkEditor();
           return true;
         },
-        LowPriority,
-      ),
+        LowPriority
+      )
     );
   }, [editor, updateLinkEditor]);
- 
+
   useEffect(() => {
     editor.getEditorState().read(() => {
       updateLinkEditor();
     });
   }, [editor, updateLinkEditor]);
- 
+
   useEffect(() => {
     if (isEditMode && inputRef.current) {
       inputRef.current.focus();
     }
   }, [isEditMode]);
- 
+
   return (
     <div
       ref={editorRef}
@@ -747,7 +741,7 @@ function FloatingLinkEditor({ editor }) {
     </div>
   );
 }
- 
+
 function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
   const toolbarRef = useRef(null);
@@ -761,7 +755,7 @@ function ToolbarPlugin() {
   const [isItalic, setIsItalic] = useState(false);
   const [isStrikethrough, setIsStrikethrough] = useState(false);
   const [isCode, setIsCode] = useState(false);
- 
+
   const updateToolbar = useCallback(() => {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
@@ -793,7 +787,7 @@ function ToolbarPlugin() {
       setIsItalic(selection.hasFormat("italic"));
       setIsStrikethrough(selection.hasFormat("strikethrough"));
       setIsCode(selection.hasFormat("code"));
- 
+
       // Update links
       const node = getSelectedNode(selection);
       const parent = node.getParent();
@@ -804,7 +798,7 @@ function ToolbarPlugin() {
       }
     }
   }, [editor]);
- 
+
   useEffect(() => {
     return mergeRegister(
       editor.registerUpdateListener(({ editorState }) => {
@@ -818,11 +812,11 @@ function ToolbarPlugin() {
           updateToolbar();
           return false;
         },
-        LowPriority,
-      ),
+        LowPriority
+      )
     );
   }, [editor, updateToolbar]);
- 
+
   const codeLanguges = useMemo(() => getCodeLanguages(), []);
   const onCodeLanguageSelect = useCallback(
     (e) => {
@@ -835,9 +829,9 @@ function ToolbarPlugin() {
         }
       });
     },
-    [editor, selectedElementKey],
+    [editor, selectedElementKey]
   );
- 
+
   const insertLink = useCallback(() => {
     if (!isLink) {
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, "https://");
@@ -845,7 +839,7 @@ function ToolbarPlugin() {
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
     }
   }, [editor, isLink]);
- 
+
   return (
     <div
       className="m-1 flex items-center gap-0.5 rounded-lg bg-gray-100 p-1"
@@ -883,7 +877,7 @@ function ToolbarPlugin() {
                 toolbarRef={toolbarRef}
                 setShowBlockOptionsDropDown={setShowBlockOptionsDropDown}
               />,
-              document.body,
+              document.body
             )}
           <Divider />
         </>
@@ -1019,7 +1013,7 @@ function ToolbarPlugin() {
     </div>
   );
 }
- 
+
 const editorConfig = {
   namespace: "MyEditor",
   onError(error) {
@@ -1036,17 +1030,15 @@ const editorConfig = {
     LinkNode,
   ],
 };
- 
-export function TextEditorReact() {
+
+const RichTextEditor = ({ onContentChange }) => {
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      <div className="relative mx-auto overflow-hidden my-5 w-full max-w-xl rounded-xl border border-gray-300 bg-white text-left font-normal leading-5 text-gray-900">
+      <div className="relative w-full rounded-xl border border-gray-300 bg-white">
         <ToolbarPlugin />
-        <div className="relative rounded-b-lg border-opacity-5 bg-white">
+        <div className="relative">
           <RichTextPlugin
-            contentEditable={
-              <ContentEditable className="lexical min-h-[280px] resize-none px-2.5 py-4 text-base caret-gray-900 outline-none" />
-            }
+            contentEditable={<ContentEditable className="min-h-[280px] resize-y p-4 outline-none" />}
             placeholder={<Placeholder />}
             ErrorBoundary={null}
           />
@@ -1055,6 +1047,9 @@ export function TextEditorReact() {
           <LinkPlugin />
         </div>
       </div>
+      <OnChangePlugin onChange={onContentChange} />
     </LexicalComposer>
   );
 }
+
+export default RichTextEditor;

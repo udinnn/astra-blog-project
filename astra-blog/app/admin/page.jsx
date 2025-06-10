@@ -1,108 +1,159 @@
 "use client";
 
+import React, { useState, useMemo, useEffect } from "react";
+import clsx from "clsx";
+import { Toaster } from "react-hot-toast";
+
+// Hooks & Komponen yang sudah dioptimalkan
+import { useAuth } from "@/hooks/useAuth";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import Sidebar from "@/Components/Sidebar";
+
+// Komponen Halaman Konten
 import List from "@/Components/List";
 import New from "@/Components/New";
-import Sidebar from "@/Components/Sidebar";
-import React, { useState, useEffect } from "react";
 import Edit from "@/Components/Edit";
-import { useRouter } from "next/navigation"; // Import useRouter untuk navigasi
 import KolaborAksi from "@/Components/KolaborAksi";
 import Chapter from "@/Components/Chapter";
 import Kegiatan from "@/Components/Kegiatan";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// Konstanta untuk kemudahan maintenance
+const SIDEBAR_WIDTH_PX = 260;
 
 const Page = () => {
-  const [activePage, setActivePage] = useState("dashboard"); // State untuk halaman aktif
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false); // State untuk visibilitas sidebar
-  const [isLoading, setIsLoading] = useState(true); // State untuk menampilkan halaman loading
-  const router = useRouter(); // Inisialisasi router
+  const { isLoading } = useAuth();
+ const [isMobile, setIsMobile] = useState(false);
+  const [activePage, setActivePage] = useState("list"); // Halaman default adalah list
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarPinned, setIsSidebarPinned] = useState(false); // Untuk UX desktop
 
-  useEffect(() => {
-    // Periksa apakah user sudah login
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    if (!isLoggedIn) {
-      router.push("/unauthorized"); // Redirect ke halaman unauthorized jika belum login
-    } else {
-      setIsLoading(false); // Hentikan loading jika user sudah login
-    }
-  }, [router]);
-
-  const renderContent = () => {
-    switch (activePage) {
-      case "new":
-        return <New />;
-      case "list":
-        return <List setActivePage={setActivePage} />;
-      case "kolaboraksi":
-        return <KolaborAksi />;
-      case "chapter":
-        return <Chapter />; // Kirim setActivePage ke komponen List
-      case "edit":
-        return <Edit />;
-      case "kegiatan":
-        return <Kegiatan />; // Gunakan komponen New untuk halaman edit
-      default:
-        return <List setActivePage={setActivePage}/>;
+  // Handler untuk klik menu, sekarang lebih sederhana
+  const handleMenuItemClick = (page) => {
+    setActivePage(page);
+    if (isMobile) {
+      setIsSidebarOpen(false); // Selalu tutup sidebar di mobile setelah klik
     }
   };
 
-  if (isLoading) {
-    // Tampilkan halaman loading jika sedang memeriksa login
-    return (
-      <div className="flex items-center justify-center h-screen bg-gray-100">
-        <h1 className="text-2xl font-bold text-gray-700">Loading...</h1>
-      </div>
-    );
-  }
+  // Render konten halaman menggunakan useMemo untuk optimisasi
+  const contentComponent = useMemo(() => {
+    switch (activePage) {
+      case "new":
+        return <New setActivePage={setActivePage} />;
+      case "list":
+        return <List setActivePage={setActivePage} />;
+      case "kolaboraksi":
+        return <KolaborAksi setActivePage={setActivePage} />;
+      case "chapter":
+        return <Chapter setActivePage={setActivePage} />;
+      case "edit":
+        return <Edit setActivePage={setActivePage} />;
+      case "kegiatan":
+        return <Kegiatan setActivePage={setActivePage} />;
+      default:
+        // Default ke 'list' untuk menghindari halaman kosong
+        return <List setActivePage={setActivePage} />;
+    }
+  }, [activePage]);
 
+  // Tentukan apakah sidebar harus terlihat
+  // Di mobile: tergantung state `isSidebarOpen`
+  // Di desktop: terlihat jika di-hover (`isSidebarOpen`) atau di-pin (`isSidebarPinned`)
+  const isSidebarCurrentlyVisible = isMobile
+    ? isSidebarOpen
+    : isSidebarOpen || isSidebarPinned;
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIfMobile();
+    window.addEventListener("resize", checkIfMobile);
+
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
+
+  // Tambahkan toggle button untuk sidebar
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
   return (
-    <div className="relative flex flex-col md:flex-row">
-      {/* Sidebar */}
-      <div
-        className={`fixed top-0 left-0 h-full text-white transition-transform duration-300 ${
-          isSidebarVisible ? "translate-x-0" : "-translate-x-full"
-        }`}
-        style={{ width: "250px" }}
-        onMouseEnter={() => setIsSidebarVisible(true)}
-        onMouseLeave={() => setIsSidebarVisible(false)}
-      >
-        <Sidebar setActivePage={setActivePage} />
-      </div>
+    <>
+      {/* Container untuk notifikasi toast, harus ada di level atas */}
+      <Toaster position="top-right" reverseOrder={false} />
 
-      {/* Icon untuk menampilkan sidebar */}
-      <div
-        className={`fixed top-1/2 transform -translate-y-1/2 cursor-pointer z-40 transition-transform duration-300 ${
-          isSidebarVisible ? "-translate-x-[250px]" : "translate-x-0"
-        }`}
-        onMouseEnter={() => setIsSidebarVisible(true)}
+      {/* Toggle Button - Selalu Visible */}
+      <button
+        className="fixed top-4 left-4 z-50 p-2 bg-white rounded-md shadow-md hover:bg-gray-100"
+        onClick={toggleSidebar}
       >
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="35"
-          height="35"
-          viewBox="0 0 24 24"
+          className="w-6 h-6"
           fill="none"
-          stroke="black"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="text-black"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
         >
-          <line x1="12" y1="2" x2="12" y2="22"></line>
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M4 6h16M4 12h16M4 18h16"
+          />
         </svg>
-      </div>
+      </button>
+      <div className="flex h-screen bg-gray-100">
+        {/* Overlay untuk mobile saat sidebar terbuka */}
+        {isMobile && isSidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black/60 z-40"
+            onClick={() => setIsSidebarOpen(false)}
+            aria-hidden="true"
+          />
+        )}
 
-      {/* Content */}
-      <div
-        className={`flex-1 transition-all duration-300 ${
-          isSidebarVisible ? "ml-[250px]" : "ml-0"
-        }`}
-      >
-        <div className="w-auto mx-10 mt-10 flex flex-col justify-start">
-          {renderContent()}
+        {/* Sidebar */}
+        <div
+          className={clsx(
+            "fixed top-0 left-0 h-full bg-white z-50 transition-transform duration-300 ease-in-out",
+            {
+              "translate-x-0": isSidebarCurrentlyVisible,
+              "-translate-x-full": !isSidebarCurrentlyVisible,
+            }
+          )}
+          style={{ width: `${SIDEBAR_WIDTH_PX}px` }}
+          // Logika hover hanya untuk desktop
+          onMouseEnter={() => !isMobile && setIsSidebarOpen(true)}
+          onMouseLeave={() => !isMobile && setIsSidebarOpen(false)}
+        >
+          {/* Menggunakan komponen Sidebar yang sudah dioptimalkan */}
+          <Sidebar
+            activePage={activePage}
+            setActivePage={handleMenuItemClick}
+            isPinned={isSidebarPinned}
+            setIsPinned={setIsSidebarPinned}
+            isMobile={isMobile}
+          />
         </div>
+
+        {/* Konten Utama */}
+        <main
+          className={clsx(
+            "flex-1 flex flex-col w-full transition-all duration-300 ease-in-out",
+            {
+              // Geser konten hanya jika sidebar di-pin pada mode desktop
+              "ml-0": isMobile || !isSidebarPinned,
+              [`md:ml-[${SIDEBAR_WIDTH_PX}px]`]: !isMobile && isSidebarPinned,
+            }
+          )}
+        >
+          {/* Area Konten dengan scroll */}
+          <div className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+            <div className="w-full max-w-7xl mx-auto">{contentComponent}</div>
+          </div>
+        </main>
       </div>
-    </div>
+    </>
   );
 };
 

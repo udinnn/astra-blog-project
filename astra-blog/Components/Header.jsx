@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
@@ -31,12 +32,12 @@ const Header = () => {
   return (
     <div>
       <div className="fixed top-0 w-full z-50 flex flex-row flex-wrap items-center justify-between p-2 bg-astraColor-100">
-        <img
+        <Image
           src="/assets/aorta.png"
           width={100}
           height={100}
           alt="Logo Aorta"
-          className="mx-4 md:mx-8"
+          className="mx-4 md:mx-8 filter invert"
         />
 
         {/* Hamburger menu untuk layar mobile */}

@@ -226,14 +226,14 @@ const Footer = () => {
               alt="aorta"
               width={40}
               height={40}
-              className="w-8 h-8 sm:w-10 sm:h-10 lg:w-10 lg:h-10 object-contain"
+              className="filter invert w-8 h-8 sm:w-10 sm:h-10 lg:w-10 lg:h-10 object-contain"
             />
             <Image
               src="/assets/astra.png"
               alt="astra"
               width={40}
               height={40}
-              className="w-8 h-8 sm:w-10 sm:h-10 lg:w-10 lg:h-10 object-contain"
+              className="filter invert w-8 h-8 sm:w-10 sm:h-10 lg:w-10 lg:h-10 object-contain"
             />
             <Image
               src="/assets/satu-indonesia.png"

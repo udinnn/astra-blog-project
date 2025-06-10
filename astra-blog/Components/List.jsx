@@ -1,212 +1,165 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import { toast } from "react-hot-toast";
+import { storageService } from "./services/localStorageService";
+import Card from "./ui/Card";
+import Button from "./ui/Button";
+import Input from "./ui/Input";
+import ConfirmationModal from "./ui/ConfirmationModal";
+import { MoreVertical, Edit, Trash2, FileText, Search } from "lucide-react";
 
-const List = ({setActivePage}) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedArticle, setSelectedArticle] = useState(null);
-  const [filter, setFilter] = useState("all");
+const List = ({ setActivePage }) => {
   const [articles, setArticles] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredArticles, setFilteredArticles] = useState([]);
+  
+  // State for modal
+  const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [selectedArticle, setSelectedArticle] = useState(null);
 
-
-  // Load articles from localStorage on component mount
-  useEffect(() => {
-    const loadedArticles = JSON.parse(localStorage.getItem("articles") || "[]");
+  const loadArticles = () => {
+    setIsLoading(true);
+    const loadedArticles = storageService.getItems("articles");
     setArticles(loadedArticles);
-  }, []);
-
-  // Apply filtering and search
-  useEffect(() => {
-    let result = articles;
-    
-    // Apply type filter
-    if (filter !== "all") {
-      result = result.filter(article => article.publishType === filter);
-    }
-    
-    // Apply search filter if there's a query
-    if (searchQuery.trim() !== "") {
-      const query = searchQuery.toLowerCase();
-      result = result.filter(article => 
-        article.title.toLowerCase().includes(query) || 
-        article.id.toLowerCase().includes(query)
-      );
-    }
-    
-    // Sort by date (newest first)
-    result = result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    
-    setFilteredArticles(result);
-  }, [articles, filter, searchQuery]);
-
-  const handleActionClick = (article) => {
-    setSelectedArticle(article);
-    setIsModalVisible(true);
+    setIsLoading(false);
   };
 
-  const handleCloseModal = () => {
-    setIsModalVisible(false);
+  useEffect(() => {
+    loadArticles();
+    // Listen for storage changes from other components
+    window.addEventListener('storage', loadArticles);
+    return () => window.removeEventListener('storage', loadArticles);
+  }, []);
+
+  const filteredArticles = useMemo(() => {
+    return articles
+      .filter(article => 
+        (filter === "all" || article.publishType === filter) &&
+        (searchQuery.trim() === "" || 
+         article.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+         article.id.toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }, [articles, filter, searchQuery]);
+
+  const handleEdit = (article) => {
+    if(storageService.setItemToEdit(article)) {
+        setActivePage("edit");
+    } else {
+        toast.error("Could not prepare article for editing.");
+    }
+  };
+  
+  const handleDeleteClick = (article) => {
+    setSelectedArticle(article);
+    setDeleteModalVisible(true);
+  };
+  
+  const confirmDelete = () => {
+    if (!selectedArticle) return;
+    const updatedArticles = articles.filter(article => article.id !== selectedArticle.id);
+    if(storageService.saveItems("articles", updatedArticles)) {
+        toast.success("Article deleted successfully!");
+        setArticles(updatedArticles);
+    } else {
+        toast.error("Could not delete article.");
+    }
+    setDeleteModalVisible(false);
     setSelectedArticle(null);
   };
 
-  const handleDelete = () => {
-    if (!selectedArticle) return;
-    
-    // Filter out the selected article
-    const updatedArticles = articles.filter(article => article.id !== selectedArticle.id);
-    
-    // Update state and localStorage with error handling
-    try {
-      setArticles(updatedArticles);
-      localStorage.setItem("articles", JSON.stringify(updatedArticles));
-      
-      handleCloseModal();
-      alert("Article deleted successfully!");
-    } catch (error) {
-      console.error("Storage error:", error);
-      alert("Could not delete article. Storage error occurred.");
-    }
-  };
-
-  const handleItemClick = (item) => {
-    setActivePage(item); // Panggil fungsi untuk mengubah halaman aktif
-  handleCloseModal();
-  };
-
-  const handleEdit = () => {
-    // For edit functionality, you could:
-    // 1. Store the selected article in localStorage
-    // 2. Redirect to a different page or show a modal with the edit form
-    // 3. Update the article in localStorage when changes are submitted
-    
-    localStorage.setItem("articleToEdit", JSON.stringify(selectedArticle));
-    alert("Edit functionality would open an edit form. Article stored for editing.");
-    handleCloseModal();
-  };
-
-  const handleSearch = () => {
-    // Search is already handled by the useEffect
-  };
+  if (isLoading) {
+    return <div>Loading articles...</div>;
+  }
 
   return (
-    <div>
-      <div className="flex flex-row justify-between items-center mb-4 w-auto">
-        <h1 className="font-bold text-4xl">ARTICLE LIST</h1>
-        <div className="flex flex-row justify-between items-center">
-          <select
-            className="text-sm border border-gray-300 p-2 rounded-lg mr-2"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-          >
-            <option value="all">All Articles</option>
-            <option value="chapter">Chapter</option>
-            <option value="kolaboraksi">KolaborAksi</option>
-          </select>
-          <input
-            type="text"
-            placeholder="Search..."
-            className="text-sm border border-gray-300 p-1 rounded-lg"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-          />
-          <button 
-            className="text-sm bg-blue-500 text-white p-1 rounded-lg ml-2"
-            onClick={handleSearch}
-          >
-            Search
-          </button>
-        </div>
-      </div>
-
-      {/* Header Row */}
-      <div className="w-auto flex flex-row mt-10 mx-20 border-b-2 border-black p-2 text-center text-sm">
-        <div className="w-full flex flex-row md:w-3/4">
-          <label className="mx-2 md:w-1/4">Article ID</label>
-          <label className="mx-2 md:w-3/4">Title</label>
-        </div>
-        <div className="w-full flex flex-row md:w-1/4">
-          <label className="mx-2 md:w-3/4">Date</label>
-          <label className="mx-2 md:w-1/4">Action</label>
-        </div>
-      </div>
-
-      {/* Content Rows */}
-      {filteredArticles.length > 0 ? (
-        filteredArticles.map((article, index) => (
-          <div
-            key={index}
-            className="w-auto flex flex-row mx-20 border-b-2 border-black-75 p-2 text-center text-sm"
-          >
-            <div className="w-full flex flex-row md:w-3/4 items-center">
-              <p className="mx-2 md:w-1/4 flex justify-center items-center">
-                {article.id}
-              </p>
-              <p className="mx-2 md:w-3/4 flex justify-center items-center">
-                {article.title}
-              </p>
-            </div>
-            <div className="w-full flex flex-row md:w-1/4 items-center">
-              <p className="mx-2 md:w-3/4 flex justify-center items-center">
-                {article.date}
-              </p>
-              <div
-                className="mx-2 md:w-1/4 flex justify-center items-center cursor-pointer"
-                onClick={() => handleActionClick(article)}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  fill="currentColor"
-                  className="bi bi-three-dots-vertical"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        ))
-      ) : (
-        <div className="mx-20 py-4 text-center text-gray-500">
-          No articles found.
-        </div>
-      )}
-
-      {/* Modal */}
-      {isModalVisible && selectedArticle && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg w-96">
-            <h2 className="text-lg font-bold mb-4">
-              What would you like to do with this article?
-            </h2>
-            <div className="flex justify-between">
-              <button
-                className="text-sm bg-blue-500 text-white p-2 rounded-lg"
-                onClick={() => handleItemClick("edit")}
-              >
-                Edit Article
-              </button>
-              <button
-                className="text-sm bg-red-500 text-white p-2 rounded-lg"
-                onClick={handleDelete}
-              >
-                Delete Article
-              </button>
-            </div>
-            <button
-              className="text-sm mt-4 bg-gray-300 text-black p-2 rounded-lg w-full"
-              onClick={handleCloseModal}
+    <>
+      <Card>
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+          <h1 className="text-2xl font-bold text-gray-800">ARTICLE LIST</h1>
+          <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+            <select
+              className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-auto"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
             >
-              Cancel
-            </button>
+              <option value="all">All Types</option>
+              <option value="chapter">Chapter</option>
+              <option value="kolaboraksi">KolaborAksi</option>
+            </select>
+            <div className="relative w-full md:w-64">
+                <Input
+                    type="text"
+                    placeholder="Search title or ID..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
+                />
+                <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"/>
+            </div>
           </div>
         </div>
-      )}
-    </div>
+
+        <p className="text-sm text-gray-500 mb-4">
+          Showing {filteredArticles.length} of {articles.length} results.
+        </p>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left text-gray-500">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+              <tr>
+                <th scope="col" className="px-6 py-3">Article ID</th>
+                <th scope="col" className="px-6 py-3">Title</th>
+                <th scope="col" className="px-6 py-3">Type</th>
+                <th scope="col" className="px-6 py-3">Date</th>
+                <th scope="col" className="px-6 py-3 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredArticles.length > 0 ? (
+                filteredArticles.map(article => (
+                  <tr key={article.id} className="bg-white border-b hover:bg-gray-50">
+                    <td className="px-6 py-4 font-medium text-gray-900">{article.id}</td>
+                    <td className="px-6 py-4">{article.title}</td>
+                    <td className="px-6 py-4">
+                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${article.publishType === 'chapter' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
+                            {article.publishType}
+                        </span>
+                    </td>
+                    <td className="px-6 py-4">{article.date}</td>
+                    <td className="px-6 py-4 text-center">
+                      <div className="flex justify-center gap-2">
+                          <button onClick={() => handleEdit(article)} className="p-2 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded-full"><Edit size={16} /></button>
+                          <button onClick={() => handleDeleteClick(article)} className="p-2 text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded-full"><Trash2 size={16} /></button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5" className="text-center py-10">
+                    <FileText size={40} className="mx-auto text-gray-300 mb-2"/>
+                    <p className="font-semibold">No Articles Found</p>
+                    <p className="text-gray-500">Try adjusting your filters or search.</p>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+      
+      <ConfirmationModal
+        isOpen={isDeleteModalVisible}
+        onClose={() => setDeleteModalVisible(false)}
+        onConfirm={confirmDelete}
+        title="Confirm Deletion"
+      >
+        Are you sure you want to delete the article titled "<strong>{selectedArticle?.title}</strong>"? This action cannot be undone.
+      </ConfirmationModal>
+    </>
   );
 };
 

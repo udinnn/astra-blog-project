@@ -1,197 +1,131 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
+import { storageService } from "./services/localStorageService";
+import Card from "./ui/Card";
+import Input from "./ui/Input";
+import Button from "./ui/Button";
+import ImageUploader from "./ui/ImageUploader";
+import ConfirmationModal from "./ui/ConfirmationModal";
+import { ArrowLeft } from "lucide-react";
 
-const Edit = () => {
-  const [article, setArticle] = useState(null); // State untuk menyimpan artikel yang akan diedit
-  const [imagePreview, setImagePreview] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false); // State untuk modal
-  const [modalType, setModalType] = useState(""); // State untuk menentukan jenis modal (Save/Cancel)
-
+const Edit = ({ setActivePage }) => {
+  const router = useRouter();
+  const [article, setArticle] = useState(null);
+  const [isSaveModalVisible, setSaveModalVisible] = useState(false);
+  
   useEffect(() => {
-    // Ambil artikel dari localStorage
-    const articleToEdit = JSON.parse(localStorage.getItem("articleToEdit"));
+    const articleToEdit = storageService.getItemToEdit();
     if (articleToEdit) {
       setArticle(articleToEdit);
-      setImagePreview(articleToEdit.imageReference); // Tampilkan gambar jika ada
+    } else {
+      toast.error("No article selected for editing.");
+      setActivePage("list"); // Redirect back if no article
     }
-  }, []);
+  }, [setActivePage]);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setImagePreview(imageUrl);
-      setArticle({ ...article, imageReference: imageUrl }); // Perbarui referensi gambar di artikel
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setArticle(prev => ({ ...prev, [name]: value }));
+  };
+  
+  const handleImageChange = (imageUrl) => {
+    setArticle(prev => ({ ...prev, imageReference: imageUrl }));
+  };
+
+  const confirmSave = () => {
+    const articles = storageService.getItems("articles");
+    const updatedArticles = articles.map((item) =>
+      item.id === article.id ? article : item
+    );
+    
+    if (storageService.saveItems("articles", updatedArticles)) {
+      toast.success("Article saved successfully!");
+      setActivePage("list");
+    } else {
+      toast.error("Failed to save article.");
     }
+    
+    setSaveModalVisible(false);
   };
-
-  const handleSave = () => {
-    setModalType("save");
-    setIsModalVisible(true); // Tampilkan modal untuk konfirmasi save
-  };
-
-  const handleCancel = () => {
-    setModalType("cancel");
-    setIsModalVisible(true); // Tampilkan modal untuk konfirmasi cancel
-  };
-
-  const handleConfirm = () => {
-    if (modalType === "save") {
-      // Simpan perubahan artikel ke localStorage
-      const articles = JSON.parse(localStorage.getItem("articles") || "[]");
-      const updatedArticles = articles.map((item) =>
-        item.id === article.id ? article : item
-      );
-      localStorage.setItem("articles", JSON.stringify(updatedArticles));
-      alert("Article saved successfully!");
-    } else if (modalType === "cancel") {
-      alert("Action canceled!");
-    }
-    setIsModalVisible(false); // Tutup modal setelah konfirmasi
-  };
-
-  const handleCloseModal = () => {
-    setIsModalVisible(false); // Tutup modal tanpa melakukan tindakan
-  };
+  
+  if (!article) {
+    return <div>Loading article...</div>; // or a proper spinner
+  }
 
   return (
-    <div>
-      <div>
-        <div className="flex flex-row justify-between items-center mb-4 w-auto">
-          <h1 className="font-bold text-4xl">EDIT ARTICLE</h1>
+    <>
+      <Card>
+        <div className="flex items-center gap-4 mb-6">
+           <Button variant="secondary" onClick={() => setActivePage('list')} className="p-2 h-10 w-10 !rounded-full">
+             <ArrowLeft size={20} />
+           </Button>
+           <h1 className="text-2xl font-bold text-gray-800">EDIT ARTICLE</h1>
         </div>
-
-        {article ? (
-          <div className="flex flex-col justify-start items-start mx-20 mt-10">
-            <div className="flex flex-col mb-4">
-              <label className="font-bold text-lg">Article ID</label>
-              <input
-                type="text"
-                className="text-sm border border-gray-300 p-1 rounded-lg"
-                value={article.id}
-                readOnly // ID tidak dapat diedit
-              />
+        
+        <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Article ID</label>
+              <Input type="text" value={article.id} readOnly className="bg-gray-100"/>
             </div>
 
-            <div className="flex flex-col mb-4">
-              <label className="text-lg font-bold">Add Image</label>
-              <input
-                type="file"
-                accept="image/*"
-                className="text-sm border border-gray-300 p-1 rounded-lg"
-                onChange={handleImageChange}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Article Image</label>
+              <ImageUploader 
+                onImageChange={handleImageChange} 
+                initialPreview={article.imageReference} 
               />
-              {imagePreview && (
-                <div className="mt-4">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-62 h-64 object-cover rounded-lg my-2"
-                  />
-                </div>
-              )}
             </div>
-
-            <div className="flex flex-col mb-4 w-full">
-              <label className="font-bold text-lg">Title</label>
-              <input
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+              <Input
                 type="text"
-                className="text-sm border border-gray-300 p-1 rounded-lg"
+                name="title"
                 value={article.title}
-                onChange={(e) =>
-                  setArticle({ ...article, title: e.target.value })
-                }
+                onChange={handleInputChange}
               />
             </div>
 
-            <div className="flex flex-col mb-4 w-full">
-              <label className="font-bold text-lg">Image Description</label>
-              <input
-                type="text"
-                className="text-sm border border-gray-300 p-1 rounded-lg"
-                value={article.imageDescription || ""}
-                onChange={(e) =>
-                  setArticle({ ...article, imageDescription: e.target.value })
-                }
-              />
-            </div>
-
-            <div className="flex flex-col mb-4">
-              <label className="font-bold text-lg">Date</label>
-              <input
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+              <Input
                 type="date"
-                className="text-sm border border-gray-300 p-1 rounded-lg"
+                name="date"
                 value={article.date}
-                onChange={(e) =>
-                  setArticle({ ...article, date: e.target.value })
-                }
+                onChange={handleInputChange}
               />
             </div>
-
-            <div className="flex flex-col mb-4 w-full">
-              <label className="font-bold text-lg">Content</label>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
               <textarea
-                className="text-sm border border-gray-300 p-1 rounded-lg resize-none overflow-y-auto"
+                name="content"
                 rows="10"
                 value={article.content}
-                onChange={(e) =>
-                  setArticle({ ...article, content: e.target.value })
-                }
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               ></textarea>
             </div>
-          </div>
-        ) : (
-          <p className="text-center text-gray-500">Loading article...</p>
-        )}
-
-        <div className="flex flex-row justify-end items-end mb-4 mx-20">
-          <button
-            className="text-sm bg-blue-500 text-white p-2 rounded-lg mx-2"
-            onClick={handleSave}
-          >
-            Save
-          </button>
-          <button
-            className="text-sm bg-red-500 text-white p-2 rounded-lg"
-            onClick={handleCancel}
-          >
-            Cancel
-          </button>
         </div>
 
-        {/* Modal */}
-        {isModalVisible && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-4 rounded-lg shadow-lg w-96">
-              <h2 className="text-lg font-bold mb-4">
-                {modalType === "save"
-                  ? "Are you sure you want to save this edited article?"
-                  : "Your article will be deleted if you cancel the action."}
-              </h2>
-              <div className="flex justify-end">
-                <button
-                  className="text-sm bg-gray-300 text-black p-2 rounded-lg mx-2"
-                  onClick={handleCloseModal}
-                >
-                  Close
-                </button>
-                <button
-                  className={`${
-                    modalType === "save"
-                      ? "bg-blue-500 text-white"
-                      : "bg-red-500 text-white"
-                  } text-sm p-2 rounded-lg`}
-                  onClick={handleConfirm}
-                >
-                  Confirm
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+        <div className="flex justify-end mt-8 gap-3">
+           <Button variant="secondary" onClick={() => setActivePage('list')}>Cancel</Button>
+           <Button variant="primary" onClick={() => setSaveModalVisible(true)}>Save Changes</Button>
+        </div>
+      </Card>
+      
+      <ConfirmationModal
+        isOpen={isSaveModalVisible}
+        onClose={() => setSaveModalVisible(false)}
+        onConfirm={confirmSave}
+        title="Confirm Save"
+      >
+        Are you sure you want to save the changes to this article?
+      </ConfirmationModal>
+    </>
   );
 };
 
