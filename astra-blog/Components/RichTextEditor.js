@@ -1,16 +1,25 @@
-// components/RichTextEditor.js
-// Salin semua kode Lexical dari komponen New.js Anda ke sini
-// (ToolbarPlugin, FloatingLinkEditor, Placeholder, dll.)
-// dan ekspor sebagai satu komponen.
-
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { List, ListItem, ListItemPrefix, Input, Typography, IconButton, Button } from "@material-tailwind/react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
-  $getNodeByKey,
+  List,
+  ListItem,
+  ListItemPrefix,
+  Input,
+  Typography,
+  IconButton,
+  Button,
+} from "@material-tailwind/react";
+import {
+  $getRoot,
+  $insertNodes,
   $getSelection,
   $isRangeSelection,
   FORMAT_TEXT_COMMAND,
-  $createParagraphNode,
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
 import {
@@ -49,7 +58,7 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import { $generateHtmlFromNodes } from "@lexical/html";
+import { $generateHtmlFromNodes, $generateNodesFromDOM } from "@lexical/html";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
 const LowPriority = 1;
@@ -1017,39 +1026,90 @@ function ToolbarPlugin() {
 const editorConfig = {
   namespace: "MyEditor",
   onError(error) {
-    throw error;
+    console.error(error);
   },
+  // Daftarkan semua node yang Anda gunakan
   nodes: [
     HeadingNode,
+    QuoteNode,
     ListNode,
     ListItemNode,
-    QuoteNode,
+    LinkNode,
+    AutoLinkNode,
     CodeNode,
     CodeHighlightNode,
-    AutoLinkNode,
-    LinkNode,
   ],
 };
 
-const RichTextEditor = ({ onContentChange }) => {
+function HtmlOnChangePlugin({ onHtmlChange }) {
+  const [editor] = useLexicalComposerContext();
+
+  useEffect(() => {
+    const unregister = editor.registerUpdateListener(({ editorState }) => {
+      editorState.read(() => {
+        const htmlString = $generateHtmlFromNodes(editor, null);
+        onHtmlChange(htmlString);
+      });
+    });
+    return () => {
+      unregister();
+    };
+  }, [editor, onHtmlChange]); // Dependensi untuk effect
+
+  return null; // Plugin ini tidak me-render elemen apapun
+}
+
+function InitialContentPlugin({ initialHtml }) {
+  const [editor] = useLexicalComposerContext();
+
+  useEffect(() => {
+    // Efek ini hanya berjalan sekali saat komponen pertama kali dimuat
+    if (!initialHtml) {
+      return;
+    }
+
+    editor.update(() => {
+      // 1. Buat DOM dari string HTML
+      const parser = new DOMParser();
+      const dom = parser.parseFromString(initialHtml, "text/html");
+
+      // 2. Ubah elemen DOM menjadi Node Lexical
+      const nodes = $generateNodesFromDOM(editor, dom);
+
+      // 3. Bersihkan editor dan masukkan node baru
+      const root = $getRoot();
+      root.clear();
+      root.select();
+      $insertNodes(nodes);
+    });
+  }, [editor, initialHtml]); // Menambahkan dependensi agar sesuai dengan aturan React Hook
+
+  return null;
+}
+
+const RichTextEditor = ({ onContentChange, initialContent = "" }) => {
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <div className="relative w-full rounded-xl border border-gray-300 bg-white">
         <ToolbarPlugin />
         <div className="relative">
           <RichTextPlugin
-            contentEditable={<ContentEditable className="min-h-[280px] resize-y p-4 outline-none" />}
+            contentEditable={
+              <ContentEditable className="min-h-[280px] resize-y p-4 outline-none" />
+            }
             placeholder={<Placeholder />}
-            ErrorBoundary={null}
+            ErrorBoundary={({ error }) => <div>{error.message}</div>} // ErrorBoundary yang lebih baik
           />
           <AutoFocusPlugin />
           <ListPlugin />
           <LinkPlugin />
         </div>
       </div>
-      <OnChangePlugin onChange={onContentChange} />
+      {/* Menggunakan plugin kustom kita, bukan OnChangePlugin bawaan */}
+      <HtmlOnChangePlugin onHtmlChange={onContentChange} />
+      <InitialContentPlugin initialHtml={initialContent} />
     </LexicalComposer>
   );
-}
+};
 
 export default RichTextEditor;

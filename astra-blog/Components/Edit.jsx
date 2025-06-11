@@ -1,9 +1,10 @@
+// components/Edit.jsx
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { storageService } from "./services/localStorageService";
+// PERBAIKAN: Sesuaikan path ke service jika perlu
+import { storageService } from "@/Components/services/localStorageService"; 
 import Card from "./ui/Card";
 import Input from "./ui/Input";
 import Button from "./ui/Button";
@@ -11,8 +12,10 @@ import ImageUploader from "./ui/ImageUploader";
 import ConfirmationModal from "./ui/ConfirmationModal";
 import { ArrowLeft } from "lucide-react";
 
+// PERBAIKAN: Impor RichTextEditor
+import RichTextEditor from "./RichTextEditor";
+
 const Edit = ({ setActivePage }) => {
-  const router = useRouter();
   const [article, setArticle] = useState(null);
   const [isSaveModalVisible, setSaveModalVisible] = useState(false);
   
@@ -22,20 +25,33 @@ const Edit = ({ setActivePage }) => {
       setArticle(articleToEdit);
     } else {
       toast.error("No article selected for editing.");
-      setActivePage("list"); // Redirect back if no article
+      if(setActivePage) setActivePage("list");
     }
   }, [setActivePage]);
 
+  // Handler untuk input biasa (title, date)
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setArticle(prev => ({ ...prev, [name]: value }));
   };
   
+  // Handler untuk gambar
   const handleImageChange = (imageUrl) => {
     setArticle(prev => ({ ...prev, imageReference: imageUrl }));
   };
 
+  // PERBAIKAN: Handler baru untuk perubahan konten dari RichTextEditor
+  const handleContentChange = (htmlString) => {
+    setArticle(prev => ({ ...prev, content: htmlString }));
+  };
+
   const confirmSave = () => {
+    // Validasi sederhana sebelum menyimpan
+    if (!article.title || !article.date || !article.content || article.content === "<p><br></p>") {
+        toast.error("Title, Date, and Content cannot be empty.");
+        return;
+    }
+
     const articles = storageService.getItems("articles");
     const updatedArticles = articles.map((item) =>
       item.id === article.id ? article : item
@@ -43,7 +59,7 @@ const Edit = ({ setActivePage }) => {
     
     if (storageService.saveItems("articles", updatedArticles)) {
       toast.success("Article saved successfully!");
-      setActivePage("list");
+      if(setActivePage) setActivePage("list");
     } else {
       toast.error("Failed to save article.");
     }
@@ -52,7 +68,7 @@ const Edit = ({ setActivePage }) => {
   };
   
   if (!article) {
-    return <div>Loading article...</div>; // or a proper spinner
+    return <div>Loading article...</div>; // Atau tampilkan LoadingSkeleton
   }
 
   return (
@@ -99,15 +115,16 @@ const Edit = ({ setActivePage }) => {
               />
             </div>
             
+            {/* PERBAIKAN: Mengganti <textarea> dengan <RichTextEditor> */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Content</label>
-              <textarea
-                name="content"
-                rows="10"
-                value={article.content}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              ></textarea>
+              {/* Cek apakah 'article' sudah ada sebelum me-render editor */}
+              {article && (
+                <RichTextEditor
+                    initialContent={article.content}
+                    onContentChange={handleContentChange}
+                />
+              )}
             </div>
         </div>
 

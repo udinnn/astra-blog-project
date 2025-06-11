@@ -2,22 +2,25 @@
 
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-import { storageService } from "./services/localStorageService";
+// PERBAIKAN: Pastikan path ke service sudah benar
+import { storageService } from "@/Components/services/localStorageService"; 
 import Card from "./ui/Card";
 import Input from "./ui/Input";
 import Button from "./ui/Button";
 import ImageUploader from "./ui/ImageUploader";
 import ConfirmationModal from "./ui/ConfirmationModal";
 
-const KolaborAksi = () => {
-const [image, setImage] = useState(null);
+const KolaborAksi = ({ setActivePage }) => {
+  const [image, setImage] = useState(null);
   const [partnerName, setPartnerName] = useState("");
   const [collaborationDate, setCollaborationDate] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const generateId = () => {
-    const savedCollaboration = storageService.getItems("kolaboraksi");
-    return `CHAP${String(savedCollaboration.length + 1).padStart(3, "0")}`;
+    // PERBAIKAN 1: Menggunakan kunci "collaborations" yang benar
+    const savedCollaborations = storageService.getItems("collaborations");
+    // PERBAIKAN 2: Menggunakan prefix ID yang sesuai, misal "KOLB"
+    return `KOLB${String(savedCollaborations.length + 1).padStart(3, "0")}`;
   };
   
   const resetForm = () => {
@@ -32,9 +35,12 @@ const [image, setImage] = useState(null);
       return;
     }
 
-    const savedCollaboration = storageService.getItems("kolaboraksi");
-    const existingCollaboration = savedCollaboration.find(
-      (kolaboraksi) => collaboration.name.toLowerCase() === partnerName.toLowerCase()
+    // PERBAIKAN 1: Menggunakan kunci "collaborations" yang benar
+    const savedCollaborations = storageService.getItems("collaborations");
+    
+    // PERBAIKAN 3: Memperbaiki logika pengecekan duplikat
+    const existingCollaboration = savedCollaborations.find(
+      (collab) => collab.partnerName.toLowerCase() === partnerName.toLowerCase()
     );
 
     if (existingCollaboration) {
@@ -46,20 +52,23 @@ const [image, setImage] = useState(null);
   };
 
   const confirmSave = () => {
+    // PERBAIKAN 4: Menggunakan nama properti 'partnerName' agar konsisten
     const collaborationData = {
       id: generateId(),
-      imageReference: image, // In real app, this would be a URL from server
-      name: partnerName,
+      imageReference: image,
+      partnerName: partnerName, // Menggunakan properti 'partnerName'
       collaborationDate,
       createdAt: new Date().toISOString(),
     };
 
-    const savedCollaboration = storageService.getItems("kolaboraksi");
-    const updatedCollaboration = [...savedCollaboration, collaborationData];
+    // PERBAIKAN 1: Menggunakan kunci "collaborations" yang benar
+    const savedCollaborations = storageService.getItems("collaborations");
+    const updatedCollaborations = [...savedCollaborations, collaborationData];
     
-    if (storageService.saveItems("kolaboraksi", updatedCollaboration)) {
+    if (storageService.saveItems("collaborations", updatedCollaborations)) {
       toast.success("Collaboration saved successfully!");
       resetForm();
+      if (setActivePage) setActivePage("list"); // Arahkan ke list setelah berhasil
     } else {
       toast.error("Could not save collaboration. Storage might be full.");
     }
@@ -74,7 +83,7 @@ const [image, setImage] = useState(null);
         
         <div className="space-y-6">
           <div className="form-group">
-            <label className="block text-sm font-medium text-gray-700 mb-2">KolaborAksi Image</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Partner / Logo</label>
             <ImageUploader onImageChange={setImage} />
           </div>
 
