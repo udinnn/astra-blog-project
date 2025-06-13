@@ -14,6 +14,7 @@ const List = ({ setActivePage }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
   
   // State for modal
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
@@ -25,6 +26,22 @@ const List = ({ setActivePage }) => {
     setArticles(loadedArticles);
     setIsLoading(false);
   };
+
+  // Hook untuk mendeteksi ukuran layar
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Check initial screen size
+    checkScreenSize();
+
+    // Add event listener untuk resize
+    window.addEventListener('resize', checkScreenSize);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   useEffect(() => {
     loadArticles();
@@ -106,49 +123,95 @@ const List = ({ setActivePage }) => {
           Showing {filteredArticles.length} of {articles.length} results.
         </p>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left text-gray-500">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3">Article ID</th>
-                <th scope="col" className="px-6 py-3">Title</th>
-                <th scope="col" className="px-6 py-3">Type</th>
-                <th scope="col" className="px-6 py-3">Date</th>
-                <th scope="col" className="px-6 py-3 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredArticles.length > 0 ? (
-                filteredArticles.map(article => (
-                  <tr key={article.id} className="bg-white border-b hover:bg-gray-50">
-                    <td className="px-6 py-4 font-medium text-gray-900">{article.id}</td>
-                    <td className="px-6 py-4">{article.title}</td>
-                    <td className="px-6 py-4">
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${article.publishType === 'chapter' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
-                            {article.publishType}
-                        </span>
-                    </td>
-                    <td className="px-6 py-4">{article.date}</td>
-                    <td className="px-6 py-4 text-center">
-                      <div className="flex justify-center gap-2">
-                          <button onClick={() => handleEdit(article)} className="p-2 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded-full"><Edit size={16} /></button>
-                          <button onClick={() => handleDeleteClick(article)} className="p-2 text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded-full"><Trash2 size={16} /></button>
-                      </div>
+        {/* Conditional Rendering berdasarkan ukuran layar */}
+        {!isMobile ? (
+          // Desktop Table View
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left text-gray-500">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                  <th scope="col" className="px-6 py-3">Article ID</th>
+                  <th scope="col" className="px-6 py-3">Title</th>
+                  <th scope="col" className="px-6 py-3">Type</th>
+                  <th scope="col" className="px-6 py-3">Date</th>
+                  <th scope="col" className="px-6 py-3 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredArticles.length > 0 ? (
+                  filteredArticles.map(article => (
+                    <tr key={article.id} className="bg-white border-b hover:bg-gray-50">
+                      <td className="px-6 py-4 font-medium text-gray-900">{article.id}</td>
+                      <td className="px-6 py-4">{article.title}</td>
+                      <td className="px-6 py-4">
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${article.publishType === 'chapter' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
+                              {article.publishType}
+                          </span>
+                      </td>
+                      <td className="px-6 py-4">{article.date}</td>
+                      <td className="px-6 py-4 text-center">
+                        <div className="flex justify-center gap-2">
+                            <button onClick={() => handleEdit(article)} className="p-2 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded-full"><Edit size={16} /></button>
+                            <button onClick={() => handleDeleteClick(article)} className="p-2 text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded-full"><Trash2 size={16} /></button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="text-center py-10">
+                      <FileText size={40} className="mx-auto text-gray-300 mb-2"/>
+                      <p className="font-semibold">No Articles Found</p>
+                      <p className="text-gray-500">Try adjusting your filters or search.</p>
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="text-center py-10">
-                    <FileText size={40} className="mx-auto text-gray-300 mb-2"/>
-                    <p className="font-semibold">No Articles Found</p>
-                    <p className="text-gray-500">Try adjusting your filters or search.</p>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+                )}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          // Mobile Card View
+          <div className="space-y-4">
+            {filteredArticles.length > 0 ? (
+              filteredArticles.map(article => (
+                <div key={article.id} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-900 text-sm mb-1">{article.id}</p>
+                      <h3 className="font-semibold text-gray-800 text-base leading-tight">{article.title}</h3>
+                    </div>
+                    <div className="flex gap-1 ml-3">
+                      <button 
+                        onClick={() => handleEdit(article)} 
+                        className="p-2 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded-full"
+                      >
+                        <Edit size={16} />
+                      </button>
+                      <button 
+                        onClick={() => handleDeleteClick(article)} 
+                        className="p-2 text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded-full"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${article.publishType === 'chapter' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
+                      {article.publishType}
+                    </span>
+                    <span className="text-sm text-gray-500">{article.date}</span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-10">
+                <FileText size={40} className="mx-auto text-gray-300 mb-2"/>
+                <p className="font-semibold">No Articles Found</p>
+                <p className="text-gray-500">Try adjusting your filters or search.</p>
+              </div>
+            )}
+          </div>
+        )}
       </Card>
       
       <ConfirmationModal
