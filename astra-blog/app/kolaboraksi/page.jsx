@@ -42,7 +42,8 @@ const KolaboraksiPage = () => {
             KolaborAksi AORTA
           </h1>
           <p className="text-center text-gray-500 max-w-2xl mx-auto">
-            Bersama para mitra, kami berkolaborasi untuk menciptakan dampak positif yang lebih luas bagi masyarakat.
+            Bersama para mitra, kami berkolaborasi untuk menciptakan dampak
+            positif yang lebih luas bagi masyarakat.
           </p>
 
           {/* Kartu Kolaborasi */}
@@ -52,7 +53,9 @@ const KolaboraksiPage = () => {
                 key={collab.id}
                 className="relative cursor-pointer group rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
                 onClick={() =>
-                  router.push(`/kolaboraksi/${encodeURIComponent(collab.partnerName)}`)
+                  router.push(
+                    `/kolaboraksi/${encodeURIComponent(collab.partnerName)}`
+                  )
                 }
               >
                 <div className="relative h-48 w-full">
@@ -88,10 +91,36 @@ const KolaboraksiPage = () => {
         </div>
       </div>
 
-       {/* CTA Section */}
-       <div className="relative z-0 w-full mt-12">
-         {/* ... (Kode CTA section Anda bisa diletakkan di sini, tidak perlu diubah) ... */}
-       </div>
+      {/* CTA Section */}
+      <div className="relative z-0 w-full h-[400px]">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center h-3/4 p-6 sm:p-8 w-full text-white bg-blue-800">
+          <div className="flex flex-col items-start text-left space-y-2">
+            <h1 className="text-3xl sm:text-4xl font-bold">COLLABORATION</h1>
+            <h3 className="text-lg sm:text-xl font-semibold">
+              Let's collaborate for better future
+            </h3>
+            <button className="text-astraColor-100 rounded-lg bg-white px-4 py-2 mt-4 hover:scale-105 transition duration-300 ease-in-out">
+              <Link href="/daftar">Ajukan Kolaboraksi</Link>
+            </button>
+          </div>
+
+          {/* Maskot image untuk mobile: tampil di kolom yang sama */}
+          <div className="lg:hidden mt-4 w-full flex justify-center">
+            <img
+              src="/assets/alya-aryo.png"
+              alt="maskot"
+              className="w-[200px] h-[200px] object-contain"
+            />
+          </div>
+        </div>
+
+        {/* Maskot image untuk desktop: tetap terpisah dan di luar background biru */}
+        <img
+          src="/assets/alya-aryo.png"
+          alt="maskot"
+          className="hidden lg:block absolute right-0 bottom-0 w-[400px] h-[400px] z-10 mx-8 -translate-y-8"
+        />
+      </div>
 
       <Footer />
     </div>
