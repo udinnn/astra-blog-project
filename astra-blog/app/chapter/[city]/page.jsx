@@ -1,19 +1,15 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import Image from "next/image";
-
-// Ganti dengan path yang sesuai ke komponen Anda
+import { createClient } from "@/utils/supabase/client";
 import Header from "@/components/Header";
 import Maskot from "@/components/Maskot";
 import Footer from "@/components/Footer";
-import { storageService } from "@/Components/services/localStorageService";
-
-// Impor Ikon untuk Tombol Share
 import { Twitter, Facebook, Linkedin, Link2 } from "lucide-react";
 
-// Komponen untuk Loading Skeleton
+// Komponen Loading & Share bisa Anda letakkan di sini atau impor dari file UI terpisah
 const LoadingSkeleton = () => (
   <div className="animate-pulse">
     <div className="h-[50vh] bg-gray-300"></div>
@@ -23,19 +19,16 @@ const LoadingSkeleton = () => (
       <div className="space-y-4">
         <div className="h-6 bg-gray-300 rounded"></div>
         <div className="h-6 bg-gray-300 rounded w-5/6"></div>
-        <div className="h-6 bg-gray-300 rounded w-full"></div>
-        <div className="h-6 bg-gray-300 rounded w-3/4"></div>
       </div>
     </div>
   </div>
 );
 
-// Komponen untuk Tombol Share
 const ShareButtons = ({ title, url }) => {
+  if (!url) return null;
   const text = `Check out this article: ${title}`;
   const encodedUrl = encodeURIComponent(url);
   const encodedText = encodeURIComponent(text);
-
   return (
     <div className="flex items-center gap-4">
       <p className="text-sm font-semibold text-gray-700">Share:</p>
@@ -43,30 +36,26 @@ const ShareButtons = ({ title, url }) => {
         href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-gray-500 hover:text-blue-500"
-      >
+        className="text-gray-500 hover:text-blue-500">
         <Twitter size={20} />
       </a>
       <a
         href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-gray-500 hover:text-blue-700"
-      >
+        className="text-gray-500 hover:text-blue-700">
         <Facebook size={20} />
       </a>
       <a
         href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-gray-500 hover:text-blue-600"
-      >
+        className="text-gray-500 hover:text-blue-600">
         <Linkedin size={20} />
       </a>
       <button
         onClick={() => navigator.clipboard.writeText(url)}
-        className="text-gray-500 hover:text-green-600"
-      >
+        className="text-gray-500 hover:text-green-600">
         <Link2 size={20} />
       </button>
     </div>
@@ -77,53 +66,49 @@ const CityPage = () => {
   const { city } = useParams();
   const decodedCity = useMemo(() => decodeURIComponent(city || ""), [city]);
 
-  const [allArticles, setAllArticles] = useState([]);
-  const [allChapters, setAllChapters] = useState([]);
+  const [cityArticles, setCityArticles] = useState([]);
+  const [chapterDetails, setChapterDetails] = useState(null);
   const [currentArticle, setCurrentArticle] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Menggunakan useMemo untuk mengkalkulasi data yang relevan
-  const cityArticles = useMemo(() => {
-    return allArticles
-      .filter(
-        (article) =>
-          article.publishType === "chapter" && article.target === decodedCity
-      )
-      .sort((a, b) => new Date(b.date) - new Date(a.date));
-  }, [allArticles, decodedCity]);
-
-  const chapterDetails = useMemo(() => {
-    return allChapters.find((chapter) => chapter.name === decodedCity);
-  }, [allChapters, decodedCity]);
-
-  // Efek untuk memuat data dari localStorage
   useEffect(() => {
-    const loadData = () => {
-      setIsLoading(true);
-      // PERBAIKAN 1: Salah ketik pada key localStorage. Seharusnya "articles".
-      const savedArticles = storageService.getItems("articles");
-      const savedChapters = storageService.getItems("chapters");
+    if (!decodedCity) return;
 
-      setAllArticles(savedArticles);
-      setAllChapters(savedChapters);
+    const loadData = async () => {
+      setIsLoading(true);
+      const supabase = createClient();
+
+      // Mengambil detail chapter dari database
+      const { data: chapterData } = await supabase
+        .from("chapters")
+        .select("*")
+        .eq("name", decodedCity)
+        .single();
+
+      // Mengambil artikel yang berhubungan dengan chapter ini
+      const { data: articlesData } = await supabase
+        .from("articles")
+        .select("*")
+        .eq("publish_type", "chapter")
+        .eq("target_name", decodedCity)
+        .order("publish_date", { ascending: false });
+
+      setChapterDetails(chapterData);
+      const sortedArticles = articlesData || [];
+      setCityArticles(sortedArticles);
+
+      // Mengatur artikel pertama sebagai artikel utama yang ditampilkan
+      if (sortedArticles.length > 0) {
+        setCurrentArticle(sortedArticles[0]);
+      } else {
+        setCurrentArticle(null);
+      }
       setIsLoading(false);
     };
 
     loadData();
-    window.addEventListener("storage", loadData);
-    return () => window.removeEventListener("storage", loadData);
-  }, []);
+  }, [decodedCity]);
 
-  // Efek untuk mengatur artikel utama saat data berubah
-  useEffect(() => {
-    if (cityArticles.length > 0) {
-      setCurrentArticle(cityArticles[0]);
-    } else {
-      setCurrentArticle(null);
-    }
-  }, [cityArticles]);
-
-  // --- Helper Functions ---
   const formatDate = (dateString) => {
     if (!dateString) return "";
     return new Date(dateString).toLocaleDateString("id-ID", {
@@ -134,20 +119,13 @@ const CityPage = () => {
   };
 
   const calculateReadingTime = (htmlContent) => {
-    // PERBAIKAN: Tambahkan pengecekan ini
-    // Jika htmlContent bukan string atau kosong, langsung kembalikan 0.
-    if (typeof htmlContent !== "string" || !htmlContent) {
-      return 0;
-    }
-
-    const text = htmlContent.replace(/<[^>]+>/g, ""); // Baris ini sekarang aman
+    if (typeof htmlContent !== "string" || !htmlContent) return 0;
+    const text = htmlContent.replace(/<[^>]+>/g, "");
     const wordsPerMinute = 200;
     const noOfWords = text.split(/\s/g).length;
-    const minutes = Math.ceil(noOfWords / wordsPerMinute);
-    return minutes;
+    return Math.ceil(noOfWords / wordsPerMinute);
   };
 
-  // Tampilkan loading skeleton saat data dimuat
   if (isLoading) {
     return (
       <div className="bg-white">
@@ -158,16 +136,18 @@ const CityPage = () => {
     );
   }
 
+  if (!chapterDetails) {
+    return <div className="text-center p-10">Chapter not found.</div>;
+  }
+
   return (
     <div className="bg-white">
       <Header />
       <Maskot />
-
       <main className="flex flex-col min-h-screen mt-12">
-        {/* Hero Banner yang Responsif */}
         <div className="relative w-full h-[50vh] md:h-[60vh]">
           <Image
-            src={chapterDetails?.imageReference || "/api/placeholder/1920/1080"}
+            src={chapterDetails.image_url || "/assets/placeholder.jpg"}
             alt={`Chapter ${decodedCity}`}
             layout="fill"
             objectFit="cover"
@@ -183,8 +163,6 @@ const CityPage = () => {
             </h1>
           </div>
         </div>
-
-        {/* Konten Artikel atau Empty State */}
         {currentArticle ? (
           <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
             <article>
@@ -193,17 +171,15 @@ const CityPage = () => {
                   {currentArticle.title}
                 </h2>
                 <div className="flex items-center justify-center gap-x-4 mt-4 text-sm text-gray-500">
-                  <p>Published on: {formatDate(currentArticle.date)}</p>
+                  <p>Published on: {formatDate(currentArticle.publish_date)}</p>
                   <span aria-hidden="true">&middot;</span>
                   <p>{calculateReadingTime(currentArticle.content)} min read</p>
                 </div>
               </header>
-
               <div
                 className="prose prose-lg max-w-none prose-img:rounded-xl prose-headings:text-gray-800"
                 dangerouslySetInnerHTML={{ __html: currentArticle.content }}
               />
-
               <footer className="mt-12 pt-8 border-t">
                 <ShareButtons
                   title={currentArticle.title}
@@ -225,8 +201,6 @@ const CityPage = () => {
             </p>
           </div>
         )}
-
-        {/* PERBAIKAN 2: Menggunakan variabel yang benar, yaitu 'cityArticles'. */}
         {cityArticles.length > 1 && (
           <aside className="w-full bg-gray-50 py-12">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -240,13 +214,12 @@ const CityPage = () => {
                     <div
                       key={article.id}
                       className="bg-white border p-4 rounded-lg cursor-pointer transition-transform duration-200 hover:scale-105 hover:shadow-md"
-                      onClick={() => setCurrentArticle(article)}
-                    >
+                      onClick={() => setCurrentArticle(article)}>
                       <h4 className="font-bold text-lg text-gray-800 line-clamp-2">
                         {article.title}
                       </h4>
                       <div className="flex items-center gap-x-2 mt-2 text-xs text-gray-500">
-                        <p>{formatDate(article.date)}</p>
+                        <p>{formatDate(article.publish_date)}</p>
                         <span>&middot;</span>
                         <p>{calculateReadingTime(article.content)} min read</p>
                       </div>
@@ -257,10 +230,8 @@ const CityPage = () => {
           </aside>
         )}
       </main>
-
       <Footer />
     </div>
   );
 };
-
 export default CityPage;

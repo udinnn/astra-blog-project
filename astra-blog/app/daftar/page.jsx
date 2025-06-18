@@ -1,8 +1,8 @@
 "use client";
 
-import Footer from "@/Components/Footer";
-import Header from "@/Components/Header";
-import Maskot from "@/Components/Maskot";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import Maskot from "@/components/Maskot";
 import React, { useState, useEffect, useRef } from "react";
 
 const Page = () => {
@@ -115,8 +115,7 @@ const Page = () => {
                     frameBorder="0"
                     marginHeight="0"
                     marginWidth="0"
-                    onLoad={adjustIframeHeight}
-                  >
+                    onLoad={adjustIframeHeight}>
                     Memuat…
                   </iframe>
                 </div>
@@ -125,7 +124,8 @@ const Page = () => {
               <div className="mt-4 sm:mt-6 text-center px-4">
                 <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 sm:p-6 shadow-lg border border-white/30">
                   <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
-                    Silakan isi formulir di atas dan klik tombol "Submit" atau "kirim" untuk mengirimkan formulir Anda.
+                    Silakan isi formulir di atas dan klik tombol "Submit" atau
+                    "kirim" untuk mengirimkan formulir Anda.
                   </p>
                   <p className="text-gray-600 text-xs sm:text-sm mt-3 leading-relaxed">
                     Jika ada masalah dengan formulir, silakan{" "}
@@ -133,8 +133,7 @@ const Page = () => {
                       href={formUrl}
                       className="text-blue-600 hover:text-astraColor-100 font-semibold transition-colors duration-200 hover:underline decoration-2"
                       target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                      rel="noopener noreferrer">
                       coba lagi
                     </a>
                   </p>

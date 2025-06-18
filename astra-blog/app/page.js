@@ -1,8 +1,8 @@
 "use client";
 
-import Footer from "@/Components/Footer";
-import Header from "@/Components/Header";
-import Maskot from "@/Components/Maskot";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import Maskot from "@/components/Maskot";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -12,19 +12,6 @@ export default function Home() {
   return (
     <div className="relative min-h-screen">
       <Header />
-
-      {/* Background Batik
-      <div
-        className="fixed inset-0 z-0"
-        style={{
-          backgroundImage: "url('/assets/batik.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          opacity: 0.8,
-          pointerEvents: "none",
-        }}
-        aria-hidden="true"
-      /> */}
 
       {/* Hero section */}
       <div className="relative w-full h-screen flex items-center justify-center pt-[72px] sm:pt-[90px] md:pt-[110px] z-10 overflow-hidden">
@@ -50,15 +37,14 @@ export default function Home() {
                 Remaja SMART: Sehat, Mandiri, Aktif, Resilien, Peduli Gizi
               </h1>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
-                &ldquo;Empower the Future: Youth Collaboration for a Resilient
-                Indonesia&rdquo;
+                “Empower the Future: Youth Collaboration for a Resilient
+                Indonesia”
               </h1>
             </div>
             <div className="flex justify-start mt-8">
               <button
                 onClick={() => router.push("/about")}
-                className="bg-white rounded-lg text-astraColor-100 px-6 py-3 text-sm sm:text-base font-semibold inline-block hover:scale-105 duration-300 ease-in-out shadow-lg hover:shadow-xl transform transition-all"
-              >
+                className="bg-white rounded-lg text-astraColor-100 px-6 py-3 text-sm sm:text-base font-semibold inline-block hover:scale-105 duration-300 ease-in-out shadow-lg hover:shadow-xl transform transition-all">
                 Kenalan Lebih Dekat Dengan AORTA
               </button>
             </div>
@@ -66,46 +52,41 @@ export default function Home() {
         </div>
       </div>
 
+      {/* ========== KODE YANG DIPERBAIKI ========== */}
       <div className="relative w-full">
-        <div className="absolute right-0 bottom-0 z-[60] -translate-x-16 -translate-y-8">
+        {/* Maskot Aryo dengan ukuran yang lebih besar dan responsif */}
+        <div className="absolute right-0 bottom-0 z-40 -translate-x-16 -translate-y-8">
           <Image
             src="/assets/aryo.png"
-            width={300}
-            height={300}
+            width={384} // Nilai width disesuaikan dengan ukuran xl:w-96
+            height={384} // Nilai height disesuaikan dengan ukuran xl:h-96
             alt="maskot"
             draggable={false}
             priority
-            className="w-32 h-32 sm:w-40 sm:h-40 md:w-60 md:h-60 lg:w-72 lg:h-72 xl:w-80 xl:h-80 object-contain"
+            className="w-36 h-36 sm:w-48 sm:h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 xl:w-96 xl:h-96 object-contain"
           />
         </div>
-        <div className="absolute right-20 bottom-32 sm:right-28 sm:bottom-40 md:right-40 md:bottom-48 lg:right-48 lg:bottom-56 xl:right-72 xl:bottom-64 z-[65]">
-          <div className="rounded-lg shadow-lg p-2 md:p-3">
+        {/* Video YouTube dengan ukuran dan posisi yang disesuaikan */}
+        <div className="absolute right-24 bottom-40 sm:right-48 sm:bottom-52 md:right-48 md:bottom-64 lg:right-60 lg:bottom-72 xl:right-80 xl:bottom-80 z-40">
+          <div className="rounded-lg p-2 md:p-3">
             <iframe
-              width="120"
-              height="68"
+              width="288" // Nilai width disesuaikan dengan ukuran xl:w-72
+              height="160" // Nilai height disesuaikan dengan ukuran xl:h-40
               src="https://www.youtube.com/embed/dQw4w9WgXcQ"
               title="AORTA Program Video"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
-              className="rounded md:w-32 md:h-18 lg:w-40 lg:h-24 xl:w-48 xl:h-28"
-            ></iframe>
+              className="rounded w-40 h-24 sm:w-48 sm:h-28 md:w-56 md:h-32 lg:w-64 lg:h-36 xl:w-96 xl:h-52"></iframe>
           </div>
         </div>
       </div>
+      {/* ========== AKHIR DARI KODE YANG DIPERBAIKI ========== */}
 
-      {/* Testimoni Section dengan Rounded Top dan Background Batik */}
+      {/* Testimoni Section dengan Rounded Top */}
       <div className="relative z-10">
-        {/* Container Testimoni dengan Rounded Top dan Background Batik */}
-        <div
-          className="relative rounded-t-[3rem] sm:rounded-t-[4rem] md:rounded-t-[5rem] z-20 -mt-16 sm:-mt-20 md:-mt-24 overflow-hidden"
-          // style={{
-          //   backgroundImage: "url('/assets/batik2.jpg')",
-          //   backgroundSize: "cover",
-          //   backgroundPosition: "center",
-          // }}
-        >
-          {/* Overlay untuk background batik */}
+        <div className="relative rounded-t-[3rem] sm:rounded-t-[4rem] md:rounded-t-[5rem] z-20 -mt-16 sm:-mt-20 md:-mt-24 overflow-hidden">
+          {/* Overlay untuk background */}
           <div className="absolute inset-0 bg-gray-300 bg-opacity-100 backdrop-blur-sm"></div>
           <div className="relative flex flex-col flex-wrap justify-center items-center space-y-8 p-4 z-10">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center mt-8 text-astraColor-100">
@@ -153,8 +134,8 @@ export default function Home() {
                 <div className="bg-white p-3 sm:p-4 md:p-5 rounded-b-3xl shadow-lg w-full max-w-[280px]">
                   <p className="text-xs sm:text-sm md:text-base text-gray-700 leading-relaxed">
                     Program AORTA memberikan pengalaman luar biasa dalam
-                    mengembangkan potensi diri dan networking dengan sesama
-                    remaja Indonesia.
+                    mengembangkan potensi diri dan networking dengan remaja
+                    Indonesia.
                   </p>
                   <div className="mt-2 sm:mt-3 pt-2 sm:pt-3 border-t border-gray-200">
                     <p className="text-xs sm:text-sm font-semibold text-astraColor-100">

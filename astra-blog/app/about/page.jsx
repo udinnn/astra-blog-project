@@ -1,8 +1,8 @@
 "use client";
 
-import Footer from "@/Components/Footer";
-import Header from "@/Components/Header";
-import Maskot from "@/Components/Maskot";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import Maskot from "@/components/Maskot";
 import {
   Card,
   CardBody,
@@ -41,22 +41,22 @@ const page = () => {
   const data = [
     {
       title: "Kesehatan Reproduksi",
-      fokusLink: "/fokus_isu/kesehatan_reproduksi",
+      fokusLink: "/fokus_isu/kesehatan_reproduksi", // Sesuai dengan slug
       logo: "/assets/kespro.png",
     },
     {
       title: "Kesehatan Mental",
-      fokusLink: "/fokus_isu/kesehatan_mental",
+      fokusLink: "/fokus_isu/kesehatan_mental", // Sesuai dengan slug
       logo: "/assets/kesmen.png",
     },
     {
       title: "PHBS",
-      fokusLink: "/fokus_isu/PHBS",
+      fokusLink: "/fokus_isu/PHBS", // Sesuai dengan slug
       logo: "/assets/phbs.png",
     },
     {
       title: "Gizi Remaja",
-      fokusLink: "/fokus_isu/gizi_remaja",
+      fokusLink: "/fokus_isu/gizi_remaja", // Sesuai dengan slug
       logo: "/assets/gizi.png",
     },
   ];
@@ -117,16 +117,14 @@ const page = () => {
                       color="black"
                       size="lg"
                       onClick={handlePrev}
-                      className="!absolute top-2/4 left-2 sm:left-4 -translate-y-2/4 z-50"
-                    >
+                      className="!absolute top-2/4 left-2 sm:left-4 -translate-y-2/4 z-50">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth={2}
                         stroke="black"
-                        className="h-4 w-4 sm:h-6 sm:w-6"
-                      >
+                        className="h-4 w-4 sm:h-6 sm:w-6">
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -141,16 +139,14 @@ const page = () => {
                       color="black"
                       size="lg"
                       onClick={handleNext}
-                      className="!absolute top-2/4 !right-2 sm:!right-4 -translate-y-2/4 z-50"
-                    >
+                      className="!absolute top-2/4 !right-2 sm:!right-4 -translate-y-2/4 z-50">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth={2}
                         stroke="black"
-                        className="h-4 w-4 sm:h-6 sm:w-6"
-                      >
+                        className="h-4 w-4 sm:h-6 sm:w-6">
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -173,8 +169,7 @@ const page = () => {
                         />
                       ))}
                     </div>
-                  )}
-                >
+                  )}>
                   {/* Slide 1 - ALYA */}
                   <div className="relative h-[400px] sm:h-[500px] md:h-[600px] w-full">
                     <div className="absolute inset-0 flex h-full w-full items-center justify-center bg-white">
@@ -273,15 +268,13 @@ const page = () => {
                     }`}
                     onClick={() => router.push(item.fokusLink)}
                     onMouseEnter={() => setHoveredCard(index)}
-                    onMouseLeave={() => setHoveredCard(null)}
-                  >
+                    onMouseLeave={() => setHoveredCard(null)}>
                     <Card className="w-full sm:w-[220px] lg:w-[250px]">
                       {" "}
                       {/* Responsif untuk lebar card */}
                       <CardHeader
                         floated={false}
-                        className="h-[180px] sm:h-[200px] lg:h-[250px]"
-                      >
+                        className="h-[180px] sm:h-[200px] lg:h-[250px]">
                         <img
                           src={item.logo}
                           alt={item.title}
@@ -289,9 +282,7 @@ const page = () => {
                         />
                       </CardHeader>
                       <CardBody className="text-center py-4 px-2">
-                        <p
-                          className="mb-2 font-bold text-gray-700"
-                        >
+                        <p className="mb-2 font-bold text-gray-700">
                           {item.title}
                         </p>
                       </CardBody>

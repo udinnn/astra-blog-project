@@ -4,29 +4,35 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown, ChevronUp } from "lucide-react";
-
-// Komponen standar
+import { ChevronDown } from "lucide-react";
 import Header from "@/components/Header";
 import Maskot from "@/components/Maskot";
 import Footer from "@/components/Footer";
-import { storageService } from "@/Components/services/localStorageService"; // Sesuaikan path jika perlu
+import { createClient } from "@/utils/supabase/client";
 
 const KolaboraksiPage = () => {
   const router = useRouter();
   const [collaborations, setCollaborations] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(8); // Tampilkan 8 item pertama
+  const [visibleCount, setVisibleCount] = useState(8); // Mengembalikan state untuk "Show More"
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const loadCollaborations = () => {
-      // Menggunakan service terpusat
-      const savedCollaborations = storageService.getItems("collaborations");
-      setCollaborations(savedCollaborations);
+    const loadCollaborations = async () => {
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from("collaborations")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching collaborations:", error);
+      } else {
+        setCollaborations(data);
+      }
+      setIsLoading(false);
     };
 
     loadCollaborations();
-    window.addEventListener("storage", loadCollaborations);
-    return () => window.removeEventListener("storage", loadCollaborations);
   }, []);
 
   const showMore = () => setVisibleCount((prev) => prev + 8);
@@ -54,23 +60,22 @@ const KolaboraksiPage = () => {
                 className="relative cursor-pointer group rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
                 onClick={() =>
                   router.push(
-                    `/kolaboraksi/${encodeURIComponent(collab.partnerName)}`
+                    `/kolaboraksi/${encodeURIComponent(collab.partner_name)}`
                   )
-                }
-              >
+                }>
                 <div className="relative h-48 w-full">
                   <Image
-                    src={collab.imageReference || "/api/placeholder/400/300"}
-                    alt={`Collaboration with ${collab.partnerName}`}
+                    src={collab.image_url || "/assets/placeholder.jpg"}
+                    alt={`Collaboration with ${collab.partner_name}`}
                     layout="fill"
                     objectFit="cover"
                     className="transition-transform duration-300 group-hover:scale-110"
                   />
                 </div>
-                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors duration-300 flex items-end p-4">
-                  <h3 className="text-white font-bold text-lg leading-tight drop-shadow-md">
-                    {collab.partnerName}
-                  </h3>
+                <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-lg group-hover:bg-black/70 transition-all duration-300 ease-in-out">
+                  <p className="text-white font-semibold text-sm sm:text-base md:text-lg text-center">
+                    {collab.partner_name}
+                  </p>
                 </div>
               </article>
             ))}
@@ -81,8 +86,7 @@ const KolaboraksiPage = () => {
             {visibleCount < collaborations.length && (
               <button
                 onClick={showMore}
-                className="flex items-center gap-2 text-blue-600 font-semibold px-6 py-3 rounded-full bg-white shadow hover:bg-gray-100 transition"
-              >
+                className="flex items-center gap-2 text-blue-600 font-semibold px-6 py-3 rounded-full bg-white shadow hover:bg-gray-100 transition">
                 <ChevronDown size={20} />
                 Tampilkan Lebih Banyak
               </button>
@@ -104,7 +108,6 @@ const KolaboraksiPage = () => {
             </button>
           </div>
 
-          {/* Maskot image untuk mobile: tampil di kolom yang sama */}
           <div className="lg:hidden mt-4 w-full flex justify-center">
             <img
               src="/assets/alya-aryo.png"
@@ -113,8 +116,6 @@ const KolaboraksiPage = () => {
             />
           </div>
         </div>
-
-        {/* Maskot image untuk desktop: tetap terpisah dan di luar background biru */}
         <img
           src="/assets/alya-aryo.png"
           alt="maskot"

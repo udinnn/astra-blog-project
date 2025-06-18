@@ -1,51 +1,55 @@
+// page.jsx
+
 "use client";
 
 import React from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 
-// Komponen standar
-import Header from "@/components/Header";
-import Maskot from "@/components/Maskot";
-import Footer from "@/components/Footer";
+import Header from "@/components/Header"; // Pastikan path ini juga benar
+import Maskot from "@/components/Maskot"; // Pastikan path ini juga benar
+import Footer from "@/components/Footer"; // Pastikan path ini juga benar
 
-// Data Hardcoded untuk UI
-// Kita bisa memperluas ini nanti jika ada data artikel sungguhan
-const hardcodedArticle = {
-  title: "Memajukan Pendidikan di Era Digital",
-  date: "2025-06-11",
-  // Konten ditulis sebagai string HTML agar bisa diproses oleh 'prose'
-  content: `
-    <p>Pendidikan merupakan pilar utama dalam membangun masa depan bangsa. Di tengah pesatnya perkembangan teknologi, AORTA berkomitmen untuk memastikan bahwa setiap anak Indonesia mendapatkan akses terhadap pendidikan berkualitas yang relevan dengan tuntutan zaman.</p>
-    <img src="" alt="Siswa belajar dengan laptop" class="rounded-xl shadow-lg my-8" />
-    <h2>Inisiatif Kami</h2>
-    <p>Melalui berbagai program, kami fokus pada tiga area utama:</p>
-    <ul>
-      <li><strong>Literasi Digital:</strong> Mengajarkan keterampilan digital dasar kepada siswa dan guru di daerah terpencil.</li>
-      <li><strong>Akses Teknologi:</strong> Menyediakan perangkat belajar seperti laptop dan tablet untuk sekolah-sekolah yang membutuhkan.</li>
-      <li><strong>Pengembangan Kurikulum:</strong> Bekerja sama dengan para ahli untuk mengembangkan materi ajar yang interaktif dan menarik.</li>
-    </ul>
-    <p>Kami percaya bahwa dengan sinergi dan kolaborasi, kita dapat menciptakan ekosistem pendidikan yang inovatif dan inklusif, membuka jalan bagi generasi penerus untuk meraih potensi terbaik mereka.</p>
-  `,
-};
+// Impor data artikel dari lokasi yang sudah benar
+import { articles } from "@/app/data/articles"; // Path ini sekarang akan berfungsi
 
-// Fungsi helper bisa diletakkan di sini atau di file terpisah
+// Fungsi helper untuk format tanggal
 const formatDate = (dateString) => {
-    if (!dateString) return "";
-    return new Date(dateString).toLocaleDateString("id-ID", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
+  if (!dateString) return "";
+  return new Date(dateString).toLocaleDateString("id-ID", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 };
 
 const FokusIsuPage = () => {
   const { fokus } = useParams();
-  
-  // Membersihkan dan memformat parameter URL untuk judul
+
+  const article = articles.find((a) => a.slug === fokus);
+
+  // Membersihkan dan memformat slug untuk judul halaman
   const decodedFokus = decodeURIComponent(fokus || "")
-    .replace(/[-_]/g, ' ') // Ganti tanda hubung dengan spasi
-    .replace(/\b\w/g, l => l.toUpperCase()); // Jadikan setiap kata huruf kapital
+    .replace(/[-_]/g, " ")
+    .replace(/\b\w/g, (l) => l.toUpperCase());
+
+  // Tampilkan pesan jika artikel tidak ditemukan
+  if (!article) {
+    return (
+      <div className="bg-white">
+        <Header />
+        <main className="flex flex-col items-center justify-center min-h-screen text-center px-4">
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">
+            404 - Artikel Tidak Ditemukan
+          </h1>
+          <p className="text-lg text-gray-600">
+            Maaf, kami tidak dapat menemukan artikel untuk "{decodedFokus}".
+          </p>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white">
@@ -53,10 +57,10 @@ const FokusIsuPage = () => {
       <Maskot />
 
       <main className="flex flex-col min-h-screen mt-12">
-        {/* Hero Banner yang Responsif, meniru CityPage */}
+        {/* Hero Banner dinamis berdasarkan artikel */}
         <div className="relative w-full h-[50vh] md:h-[60vh]">
           <Image
-            src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070"
+            src={article.imageUrl} // Gunakan gambar dari data artikel
             alt={`Fokus Isu ${decodedFokus}`}
             layout="fill"
             objectFit="cover"
@@ -73,28 +77,26 @@ const FokusIsuPage = () => {
           </div>
         </div>
 
-        {/* Konten Artikel Hardcoded */}
+        {/* Konten Artikel Dinamis */}
         <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
           <article>
             <header className="text-center mb-8">
               <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
-                {hardcodedArticle.title}
+                {article.title} {/* Gunakan judul dari data artikel */}
               </h2>
               <div className="flex items-center justify-center gap-x-4 mt-4 text-sm text-gray-500">
-                <p>Published on: {formatDate(hardcodedArticle.date)}</p>
+                <p>Published on: {formatDate(article.date)}</p>{" "}
+                {/* Gunakan tanggal dari data artikel */}
               </div>
             </header>
 
             {/* Konten Artikel dengan styling 'prose' */}
             <div
               className="prose prose-lg max-w-none prose-img:rounded-xl prose-headings:text-gray-800"
-              dangerouslySetInnerHTML={{ __html: hardcodedArticle.content }}
+              dangerouslySetInnerHTML={{ __html: article.content }} // Gunakan konten dari data artikel
             />
           </article>
         </div>
-        
-        {/* Bagian "More Articles" sengaja tidak ditampilkan karena konten masih hardcoded */}
-
       </main>
 
       <Footer />

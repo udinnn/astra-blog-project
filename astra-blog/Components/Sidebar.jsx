@@ -15,8 +15,8 @@ import {
   PinOff,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { createClient } from "@/utils/supabase/client";
 
-// Definisikan item menu sebagai array objek untuk kemudahan mapping
 const menuItems = [
   { id: "list", label: "Article List", icon: LayoutDashboard },
   { id: "new", label: "New Article", icon: FilePlus2 },
@@ -32,9 +32,8 @@ const SidebarMenuItem = ({ item, activePage, onClick }) => (
       "flex items-center w-full gap-3 px-3 py-2.5 rounded-lg transition-colors duration-200",
       activePage === item.id
         ? "bg-blue-600 text-white shadow-sm"
-        : "text-gray-600 hover:bg-gray-100"
-    )}
-  >
+        : "text-gray-400 hover:bg-gray-100"
+    )}>
     <item.icon size={20} />
     <span className="font-medium text-sm">{item.label}</span>
   </button>
@@ -50,8 +49,12 @@ const Sidebar = ({
   const router = useRouter();
 
   const handleLogout = () => {
+    // INTI PERUBAHAN: Hapus localStorage saat logout
     localStorage.removeItem("isLoggedIn");
+
+    // Arahkan ke halaman utama dan refresh
     router.push("/");
+    router.refresh();
     toast.success("You have been logged out.");
   };
 
@@ -59,13 +62,18 @@ const Sidebar = ({
     <div className="flex flex-col h-full bg-astraColor-100 text-white">
       {/* Header */}
       <div className="flex items-center justify-between p-4">
-        <Image src="/assets/aorta.png" width={120} height={40} alt="Logo" />
+        <Image
+          src="/assets/aorta.png"
+          width={120}
+          height={40}
+          alt="Logo"
+          className="filter invert"
+        />
         {!isMobile && (
           <button
             onClick={() => setIsPinned(!isPinned)}
             className="p-2 rounded-md text-gray-500 hover:bg-gray-100"
-            title={isPinned ? "Unpin Sidebar" : "Pin Sidebar"}
-          >
+            title={isPinned ? "Unpin Sidebar" : "Pin Sidebar"}>
             {isPinned ? <PinOff size={18} /> : <Pin size={18} />}
           </button>
         )}
@@ -88,13 +96,12 @@ const Sidebar = ({
         <div className="flex items-center gap-3">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            fill="#000000"
+            fill="#ffffff"
             height="40px"
             width="40px"
             version="1.1"
             id="Capa_1"
-            viewBox="0 0 474.565 474.565"
-          >
+            viewBox="0 0 474.565 474.565">
             <g>
               <path d="M255.204,102.3c-0.606-11.321-12.176-9.395-23.465-9.395C240.078,95.126,247.967,98.216,255.204,102.3z" />
               <path d="M134.524,73.928c-43.825,0-63.997,55.471-28.963,83.37c11.943-31.89,35.718-54.788,66.886-63.826   C163.921,81.685,150.146,73.928,134.524,73.928z" />
@@ -107,12 +114,11 @@ const Sidebar = ({
           </svg>
           <div className="flex-1 text-sm">
             <p className="font-semibold">Admin</p>
-            <p className="text-gray-500 truncate">admin@gmail.com</p>
+            <p className="text-gray-500 truncate">&copy; 2025 AORTA</p>
           </div>
           <button
             onClick={handleLogout}
-            className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md"
-          >
+            className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-md">
             <LogOut size={20} />
           </button>
         </div>

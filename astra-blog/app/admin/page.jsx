@@ -1,41 +1,61 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation"; // Pastikan useRouter diimpor
 import clsx from "clsx";
 import { Toaster } from "react-hot-toast";
 
-// Hooks & Komponen yang sudah dioptimalkan
-import { useAuth } from "@/hooks/useAuth";
+// Hooks & Komponen
+// Impor useAuth tidak lagi digunakan untuk proteksi di sini, tapi mungkin masih berguna untuk mendapatkan data user
+// import { useAuth } from "@/hooks/useAuth";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import Sidebar from "@/Components/Sidebar";
+import Sidebar from "@/components/Sidebar";
 
 // Komponen Halaman Konten
-import List from "@/Components/List";
-import New from "@/Components/New";
-import Edit from "@/Components/Edit";
-import KolaborAksi from "@/Components/KolaborAksi";
-import Chapter from "@/Components/Chapter";
-import Kegiatan from "@/Components/Kegiatan";
+import List from "@/components/List";
+import New from "@/components/New";
+import Edit from "@/components/Edit";
+import KolaborAksi from "@/components/KolaborAksi";
+import Chapter from "@/components/Chapter";
+import Kegiatan from "@/components/Kegiatan";
 
-// Konstanta untuk kemudahan maintenance
+// Konstanta
 const SIDEBAR_WIDTH_PX = 260;
 
 const Page = () => {
-  const { isLoading } = useAuth();
- const [isMobile, setIsMobile] = useState(false);
-  const [activePage, setActivePage] = useState("list"); // Halaman default adalah list
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isSidebarPinned, setIsSidebarPinned] = useState(false); // Untuk UX desktop
+  const router = useRouter();
 
-  // Handler untuk klik menu, sekarang lebih sederhana
+  // 1. Tambahkan state untuk memeriksa otorisasi
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  const [activePage, setActivePage] = useState("list");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarPinned, setIsSidebarPinned] = useState(false);
+
+  // Hook useMediaQuery bisa tetap digunakan jika ada
+  const isMobile = useMediaQuery(`(max-width: 768px)`);
+
+  // 2. useEffect bertindak sebagai "Penjaga" Halaman
+  useEffect(() => {
+    // Periksa status login dari localStorage saat komponen dimuat
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+    if (!isLoggedIn) {
+      // Jika tidak ada status login, arahkan ke halaman unauthorized
+      router.push("/unauthorized");
+    } else {
+      // Jika ada, izinkan komponen untuk dirender
+      setIsAuthorized(true);
+    }
+  }, [router]);
+
   const handleMenuItemClick = (page) => {
     setActivePage(page);
     if (isMobile) {
-      setIsSidebarOpen(false); // Selalu tutup sidebar di mobile setelah klik
+      setIsSidebarOpen(false);
     }
   };
 
-  // Render konten halaman menggunakan useMemo untuk optimisasi
   const contentComponent = useMemo(() => {
     switch (activePage) {
       case "new":
@@ -51,49 +71,37 @@ const Page = () => {
       case "kegiatan":
         return <Kegiatan setActivePage={setActivePage} />;
       default:
-        // Default ke 'list' untuk menghindari halaman kosong
         return <List setActivePage={setActivePage} />;
     }
   }, [activePage]);
 
-  // Tentukan apakah sidebar harus terlihat
-  // Di mobile: tergantung state `isSidebarOpen`
-  // Di desktop: terlihat jika di-hover (`isSidebarOpen`) atau di-pin (`isSidebarPinned`)
   const isSidebarCurrentlyVisible = isMobile
     ? isSidebarOpen
     : isSidebarOpen || isSidebarPinned;
 
-  useEffect(() => {
-    const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkIfMobile();
-    window.addEventListener("resize", checkIfMobile);
-
-    return () => window.removeEventListener("resize", checkIfMobile);
-  }, []);
-
-  // Tambahkan toggle button untuk sidebar
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  // 3. Jangan render apapun sampai otorisasi selesai diperiksa
+  //    Ini untuk mencegah "flash" konten admin sebelum redirect
+  if (!isAuthorized) {
+    return null; // atau tampilkan komponen loading
+  }
+
+  // Jika sudah terotorisasi, tampilkan halaman admin
   return (
     <>
-      {/* Container untuk notifikasi toast, harus ada di level atas */}
       <Toaster position="top-right" reverseOrder={false} />
 
-      {/* Toggle Button - Selalu Visible */}
       <button
         className="fixed top-4 left-4 z-50 p-2 bg-white rounded-md shadow-md hover:bg-gray-100"
-        onClick={toggleSidebar}
-      >
+        onClick={toggleSidebar}>
         <svg
           className="w-6 h-6"
           fill="none"
           stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
+          viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -102,8 +110,8 @@ const Page = () => {
           />
         </svg>
       </button>
+
       <div className="flex h-screen bg-gray-100">
-        {/* Overlay untuk mobile saat sidebar terbuka */}
         {isMobile && isSidebarOpen && (
           <div
             className="fixed inset-0 bg-black/60 z-40"
@@ -112,7 +120,6 @@ const Page = () => {
           />
         )}
 
-        {/* Sidebar */}
         <div
           className={clsx(
             "fixed top-0 left-0 h-full bg-white z-50 transition-transform duration-300 ease-in-out",
@@ -122,11 +129,12 @@ const Page = () => {
             }
           )}
           style={{ width: `${SIDEBAR_WIDTH_PX}px` }}
-          // Logika hover hanya untuk desktop
-          onMouseEnter={() => !isMobile && setIsSidebarOpen(true)}
-          onMouseLeave={() => !isMobile && setIsSidebarOpen(false)}
-        >
-          {/* Menggunakan komponen Sidebar yang sudah dioptimalkan */}
+          onMouseEnter={() =>
+            !isMobile && !isSidebarPinned && setIsSidebarOpen(true)
+          }
+          onMouseLeave={() =>
+            !isMobile && !isSidebarPinned && setIsSidebarOpen(false)
+          }>
           <Sidebar
             activePage={activePage}
             setActivePage={handleMenuItemClick}
@@ -136,19 +144,15 @@ const Page = () => {
           />
         </div>
 
-        {/* Konten Utama */}
         <main
           className={clsx(
             "flex-1 flex flex-col w-full transition-all duration-300 ease-in-out",
             {
-              // Geser konten hanya jika sidebar di-pin pada mode desktop
               "ml-0": isMobile || !isSidebarPinned,
               [`md:ml-[${SIDEBAR_WIDTH_PX}px]`]: !isMobile && isSidebarPinned,
             }
-          )}
-        >
-          {/* Area Konten dengan scroll */}
-          <div className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+          )}>
+          <div className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 pt-20">
             <div className="w-full max-w-7xl mx-auto">{contentComponent}</div>
           </div>
         </main>

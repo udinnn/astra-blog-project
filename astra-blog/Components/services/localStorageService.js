@@ -3,7 +3,10 @@ const getItems = (key) => {
   try {
     return JSON.parse(localStorage.getItem(key) || "[]");
   } catch (error) {
-    console.error(`Error loading items from localStorage with key "${key}":`, error);
+    console.error(
+      `Error loading items from localStorage with key "${key}":`,
+      error
+    );
     return [];
   }
 };
@@ -15,14 +18,17 @@ const saveItems = (key, data) => {
     window.dispatchEvent(new Event("storage"));
     return true;
   } catch (error) {
-    console.error(`Error saving items to localStorage with key "${key}":`, error);
+    console.error(
+      `Error saving items to localStorage with key "${key}":`,
+      error
+    );
     return false;
   }
 };
 
 const getItemById = (key, id) => {
   const items = getItems(key);
-  return items.find(item => item.id === id);
+  return items.find((item) => item.id === id);
 };
 
 const setItemToEdit = (item) => {
