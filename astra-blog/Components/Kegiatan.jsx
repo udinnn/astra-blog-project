@@ -57,11 +57,11 @@ const Kegiatan = () => {
   return (
     <>
       <Card>
-        <h1 className="text-2xl font-bold mb-6 text-gray-800">NEW ACTIVITY</h1>
+        <h1 className="text-2xl font-bold mb-6 text-gray-800">KEGIATAN BARU</h1>
         <div className="space-y-6">
           <div className="form-group">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Activity Image
+              Gambar Kegiatan
             </label>
             <ImageUploader
               onImageChange={setImageUrl}
@@ -70,7 +70,7 @@ const Kegiatan = () => {
           </div>
           <div className="form-group">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Activity Name
+              Nama Kegiatan
             </label>
             <Input
               type="text"
@@ -82,7 +82,7 @@ const Kegiatan = () => {
           </div>
           <div className="form-group">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Activity Date
+              Tanggal
             </label>
             <Input
               type="date"
@@ -94,10 +94,10 @@ const Kegiatan = () => {
         </div>
         <div className="flex justify-end mt-8 gap-3">
           <Button variant="secondary" onClick={resetForm} disabled={isLoading}>
-            Cancel
+            Batas
           </Button>
           <Button variant="primary" onClick={handleSave} disabled={isLoading}>
-            {isLoading ? "Saving..." : "Save Activity"}
+            {isLoading ? "Menyimpan..." : "Simpan Kegiatan"}
           </Button>
         </div>
       </Card>
@@ -106,7 +106,7 @@ const Kegiatan = () => {
         onClose={() => setIsModalVisible(false)}
         onConfirm={confirmSave}
         title="Confirm Save">
-        Are you sure you want to save this new activity?
+        Apakah Anda yakin ingin menyimpan kegiatan ini?
       </ConfirmationModal>
     </>
   );

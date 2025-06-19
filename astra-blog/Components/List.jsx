@@ -77,7 +77,7 @@ const List = ({ setActivePage }) => {
     if (setItemToEditInSession(article)) {
       setActivePage("edit");
     } else {
-      toast.error("Could not prepare article for editing.");
+      toast.error("Tidak dapat mengedit artikel. Silakan coba lagi.");
     }
   };
 
@@ -97,9 +97,9 @@ const List = ({ setActivePage }) => {
     setSelectedArticle(null);
 
     if (error) {
-      toast.error(`Failed to delete: ${error.message}`);
+      toast.error(`Gagal menghapus: ${error.message}`);
     } else {
-      toast.success("Article deleted successfully!");
+      toast.success("Artikel berhasil dihapus!");
       loadArticles(); // Muat ulang data setelah berhasil hapus
     }
   };
@@ -108,20 +108,20 @@ const List = ({ setActivePage }) => {
     <>
       <Card>
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">ARTICLE LIST</h1>
+          <h1 className="text-2xl font-bold text-gray-800">DAFTAR ARTIKEL</h1>
           <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
             <select
               className="px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-auto"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}>
-              <option value="all">All Types</option>
+              <option value="all">Semua Tipe</option>
               <option value="chapter">Chapter</option>
               <option value="kolaboraksi">KolaborAksi</option>
             </select>
             <div className="relative w-full md:w-64">
               <Input
                 type="text"
-                placeholder="Search by title or ID..."
+                placeholder="Cari artikel berdasarkan judul atau ID..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
@@ -135,7 +135,7 @@ const List = ({ setActivePage }) => {
         </div>
 
         <p className="text-sm text-gray-500 mb-4">
-          Showing {filteredArticles.length} of {articles.length} total articles.
+          Menampilkan {filteredArticles.length} dari {articles.length} total artikel.
         </p>
 
         {!isMobile ? (
@@ -147,19 +147,19 @@ const List = ({ setActivePage }) => {
                     ID
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Title
+                    Judul
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Type
+                    Tipe
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Target
+                    Kota/Mitra
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Date
+                    Tanggal
                   </th>
                   <th scope="col" className="px-6 py-3 text-center">
-                    Actions
+                    Aksi
                   </th>
                 </tr>
               </thead>
@@ -216,7 +216,7 @@ const List = ({ setActivePage }) => {
                         size={40}
                         className="mx-auto text-gray-300 mb-2"
                       />
-                      <p className="font-semibold">No Articles Found</p>
+                      <p className="font-semibold">Artikel tidak ditemukan.</p>
                     </td>
                   </tr>
                 )}
@@ -270,7 +270,7 @@ const List = ({ setActivePage }) => {
             ) : (
               <div className="text-center py-10">
                 <FileText size={40} className="mx-auto text-gray-300 mb-2" />
-                <p className="font-semibold">No Articles Found</p>
+                <p className="font-semibold">Artikel tidak ditemukan.</p>
               </div>
             )}
           </div>
@@ -281,7 +281,7 @@ const List = ({ setActivePage }) => {
         onClose={() => setDeleteModalVisible(false)}
         onConfirm={confirmDelete}
         title="Confirm Deletion">
-        Are you sure you want to delete the article titled "
+        Apakah Anda yakin ingin menghapus artikel{" "}
         <strong>{selectedArticle?.title}</strong>"?
       </ConfirmationModal>
     </>

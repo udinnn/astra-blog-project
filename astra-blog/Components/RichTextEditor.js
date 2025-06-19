@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { createPortal } from "react-dom";
 import {
   List,
   ListItem,
@@ -21,12 +22,16 @@ import {
   $isRangeSelection,
   FORMAT_TEXT_COMMAND,
   SELECTION_CHANGE_COMMAND,
+  $createParagraphNode, // <-- Tambahkan ini
+  ParagraphNode,
 } from "lexical";
 import {
   $isListNode,
   REMOVE_LIST_COMMAND,
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
+  ListItemNode, // <-- Pindahkan ke sini dari bawah agar lebih rapi
+  ListNode,
 } from "@lexical/list";
 import {
   QuoteNode,
@@ -41,13 +46,13 @@ import {
   getCodeLanguages,
   getDefaultCodeLanguage,
 } from "@lexical/code";
-import { ListItemNode, ListNode } from "@lexical/list";
 import {
   AutoLinkNode,
   LinkNode,
   $isLinkNode,
   TOGGLE_LINK_COMMAND,
 } from "@lexical/link";
+import theme from "./LexicalTheme";
 import { CodeHighlightNode, CodeNode } from "@lexical/code";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
@@ -1029,7 +1034,9 @@ const editorConfig = {
     console.error(error);
   },
   // Daftarkan semua node yang Anda gunakan
+  theme: theme,
   nodes: [
+    ParagraphNode,
     HeadingNode,
     QuoteNode,
     ListNode,

@@ -79,7 +79,7 @@ const page = () => {
           style={{ zIndex: 1 }}
         />
         {/* Overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/20 z-10"></div>
         <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
           <h1 className="text-white font-extrabold text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
             TENTANG AORTA
@@ -117,14 +117,16 @@ const page = () => {
                       color="black"
                       size="lg"
                       onClick={handlePrev}
-                      className="!absolute top-2/4 left-2 sm:left-4 -translate-y-2/4 z-50">
+                      className="!absolute top-2/4 left-2 sm:left-4 -translate-y-2/4 z-50"
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth={2}
                         stroke="black"
-                        className="h-4 w-4 sm:h-6 sm:w-6">
+                        className="h-4 w-4 sm:h-6 sm:w-6"
+                      >
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -139,14 +141,16 @@ const page = () => {
                       color="black"
                       size="lg"
                       onClick={handleNext}
-                      className="!absolute top-2/4 !right-2 sm:!right-4 -translate-y-2/4 z-50">
+                      className="!absolute top-2/4 !right-2 sm:!right-4 -translate-y-2/4 z-50"
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth={2}
                         stroke="black"
-                        className="h-4 w-4 sm:h-6 sm:w-6">
+                        className="h-4 w-4 sm:h-6 sm:w-6"
+                      >
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -169,7 +173,8 @@ const page = () => {
                         />
                       ))}
                     </div>
-                  )}>
+                  )}
+                >
                   {/* Slide 1 - ALYA */}
                   <div className="relative h-[400px] sm:h-[500px] md:h-[600px] w-full">
                     <div className="absolute inset-0 flex h-full w-full items-center justify-center bg-white">
@@ -245,40 +250,43 @@ const page = () => {
               </div>
             </div>
           </div>
-
-          {/* Fokus Isu Section */}
+          {/* Fokus Isu Section */}{" "}
           <div className="relative w-full py-8 sm:py-12 md:py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
               <div className="text-center mb-8 sm:mb-12">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-800">
                   Fokus Isu
                 </h1>
               </div>
 
-              {/* Responsive Grid untuk Cards */}
-              <div className="flex flex-col"></div>
-              <div className="flex flex-wrap gap-6 sm:gap-8 md:gap-10 justify-center">
+              {/* PERBAIKAN 1: Menggunakan CSS Grid untuk layout yang lebih baik */}
+              {/* - 2 kolom di mobile, 3 di tablet, 4 di desktop */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                 {data.map((item, index) => (
                   <div
                     key={index}
-                    className={`relative flex flex-col items-center justify-center overflow-hidden text-center transition-all duration-300 cursor-pointer rounded-xl ${
+                    className={`relative group transition-all duration-300 cursor-pointer ${
                       hoveredCard !== null && hoveredCard !== index
                         ? "blur-sm scale-95"
                         : "blur-none scale-100 hover:scale-105"
                     }`}
                     onClick={() => router.push(item.fokusLink)}
                     onMouseEnter={() => setHoveredCard(index)}
-                    onMouseLeave={() => setHoveredCard(null)}>
-                    <Card className="w-full sm:w-[220px] lg:w-[250px]">
-                      {" "}
-                      {/* Responsif untuk lebar card */}
+                    onMouseLeave={() => setHoveredCard(null)}
+                  >
+                    {/* PERBAIKAN 2: Menghapus lebar tetap dari Card, biarkan grid yang mengatur */}
+                    <Card className="w-full overflow-hidden">
+                      {/* PERBAIKAN 3: Menggunakan aspect-ratio, bukan tinggi tetap */}
                       <CardHeader
                         floated={false}
-                        className="h-[180px] sm:h-[200px] lg:h-[250px]">
+                        shadow={false}
+                        className="relative aspect-square bg-gray-50 m-0" // Aspek rasio 1:1 (persegi)
+                      >
                         <img
                           src={item.logo}
                           alt={item.title}
-                          className="h-fit w-fit object-cover rounded-t-xl"
+                          // PERBAIKAN 4: object-contain agar seluruh gambar terlihat + padding
+                          className="h-full w-full object-contain p-4 sm:p-6"
                         />
                       </CardHeader>
                       <CardBody className="text-center py-4 px-2">
@@ -292,7 +300,6 @@ const page = () => {
               </div>
             </div>
           </div>
-
           {/* Footer */}
         </div>
         <Footer />

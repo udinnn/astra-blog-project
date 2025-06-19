@@ -29,7 +29,7 @@ const Page = () => {
         <Header />
         <Maskot />
         <div className="flex flex-col mt-10 p-6 md:p-8">
-          <h1 className="text-4xl font-extrabold text-center text-gray-700 p-4">
+          <h1 className="text-4xl font-extrabold text-center text-gray-800 p-4">
             Chapter AORTA
           </h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center mt-6">

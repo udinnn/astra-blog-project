@@ -62,26 +62,19 @@ const Footer = () => {
                 handler={toggleMobileMenu}
                 className="bg-white text-astraColor-100 p-4 rounded-lg max-w-xs w-full text-center relative">
                 <button
-                  className="absolute top-2 right-3 text-xl text-gray-400 hover:text-red-700"
+                  className="absolute top-2 right-3 text-xl font-bold text-gray-400 hover:text-red-700"
                   onClick={toggleMobileMenu}
                   aria-label="Tutup">
                   &times;
                 </button>
                 <div className="flex flex-col space-y-4 justify-center items-center p-2">
                   <label className="text-xs text-gray-500">Menu</label>
-                  <ul className="flex flex-col justify-center items-center space-y-2 mb-4">
+                  <ul className="flex flex-col justify-center text-medium items-center space-y-2 mb-4">
                     <li>
                       <a
                         href="/"
                         className="transition-colors hover:text-blue-400 focus:text-blue-400 px-2 py-1">
                         AORTA
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="/"
-                        className="transition-colors hover:text-blue-400 focus:text-blue-400 px-2 py-1">
-                        Kontak
                       </a>
                     </li>
                     <li>
@@ -96,7 +89,7 @@ const Footer = () => {
                     </li>
                   </ul>
                   <label className="text-xs text-gray-500 mb-1">
-                    Social Media
+                    Media Sosial
                   </label>
                   <div className="flex flex-row justify-center items-center space-x-4">
                     <a
@@ -243,13 +236,6 @@ const Footer = () => {
                 href="/"
                 className="transition-colors hover:text-blue-400 focus:text-blue-400 px-2 py-1">
                 AORTA
-              </a>
-            </li>
-            <li>
-              <a
-                href="/"
-                className="transition-colors hover:text-blue-400 focus:text-blue-400 px-2 py-1">
-                Kontak
               </a>
             </li>
             <li>

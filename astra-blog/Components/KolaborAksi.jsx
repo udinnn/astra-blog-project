@@ -70,12 +70,12 @@ const KolaborAksi = ({ setActivePage }) => {
     <>
       <Card>
         <h1 className="text-2xl font-bold mb-6 text-gray-800">
-          NEW KOLABORAKSI
+          KOLABORAKSI BARU
         </h1>
         <div className="space-y-6">
           <div className="form-group">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Partner / Logo
+              Gambar Mitra/Logo
             </label>
             <ImageUploader
               onImageChange={setImageUrl}
@@ -84,7 +84,7 @@ const KolaborAksi = ({ setActivePage }) => {
           </div>
           <div className="form-group">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Partner Name
+              Nama Mitra
             </label>
             <Input
               type="text"
@@ -96,7 +96,7 @@ const KolaborAksi = ({ setActivePage }) => {
           </div>
           <div className="form-group">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Collaboration Date
+              Tanggal
             </label>
             <Input
               type="date"
@@ -108,10 +108,10 @@ const KolaborAksi = ({ setActivePage }) => {
         </div>
         <div className="flex justify-end mt-8 gap-3">
           <Button variant="secondary" onClick={resetForm} disabled={isLoading}>
-            Cancel
+            Batal
           </Button>
           <Button variant="primary" onClick={handleSave} disabled={isLoading}>
-            {isLoading ? "Saving..." : "Save Collaboration"}
+            {isLoading ? "Menyimpan..." : "Simpan KolaborAksi"}
           </Button>
         </div>
       </Card>
@@ -120,7 +120,7 @@ const KolaborAksi = ({ setActivePage }) => {
         onClose={() => setIsModalVisible(false)}
         onConfirm={confirmSave}
         title="Confirm Save">
-        Are you sure you want to save this new collaboration?
+        Apakah Anda yakin ingin menyimpan kolaboraksi ini?
       </ConfirmationModal>
     </>
   );

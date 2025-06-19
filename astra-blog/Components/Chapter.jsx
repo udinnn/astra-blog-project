@@ -61,17 +61,17 @@ const Chapter = () => {
   return (
     <>
       <Card>
-        <h1 className="text-2xl font-bold mb-6 text-gray-800">NEW CHAPTER</h1>
+        <h1 className="text-2xl font-bold mb-6 text-gray-800">CHAPTER BARU</h1>
         <div className="space-y-6">
           <div className="form-group">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Chapter Image
+              Gambar Chapter
             </label>
             <ImageUploader onImageChange={setImageUrl} folderPath="chapters" />
           </div>
           <div className="form-group">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              City Name
+              Nama Kota
             </label>
             <Input
               type="text"
@@ -83,7 +83,7 @@ const Chapter = () => {
           </div>
           <div className="form-group">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Chapter Date
+              Tanggal
             </label>
             <Input
               type="date"
@@ -95,10 +95,10 @@ const Chapter = () => {
         </div>
         <div className="flex justify-end mt-8 gap-3">
           <Button variant="secondary" onClick={resetForm} disabled={isLoading}>
-            Cancel
+            Batal
           </Button>
           <Button variant="primary" onClick={handleSave} disabled={isLoading}>
-            {isLoading ? "Saving..." : "Save Chapter"}
+            {isLoading ? "Menyimpan" : "Simpan Chapter"}
           </Button>
         </div>
       </Card>
@@ -107,7 +107,7 @@ const Chapter = () => {
         onClose={() => setIsModalVisible(false)}
         onConfirm={confirmSave}
         title="Confirm Save">
-        Are you sure you want to save this new chapter?
+        Apakah Anda yakin ingin menyimpan chapter ini?
       </ConfirmationModal>
     </>
   );

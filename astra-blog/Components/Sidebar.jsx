@@ -18,11 +18,11 @@ import { toast } from "react-hot-toast";
 import { createClient } from "@/utils/supabase/client";
 
 const menuItems = [
-  { id: "list", label: "Article List", icon: LayoutDashboard },
-  { id: "new", label: "New Article", icon: FilePlus2 },
-  { id: "kolaboraksi", label: "New Kolaboraksi", icon: Users },
-  { id: "chapter", label: "New Chapter", icon: Map },
-  { id: "kegiatan", label: "New Kegiatan", icon: CalendarCheck2 },
+  { id: "list", label: "Daftar Artikel", icon: LayoutDashboard },
+  { id: "new", label: "Tambahkan Artikel", icon: FilePlus2 },
+  { id: "kolaboraksi", label: "Tambahkan Kolaboraksi", icon: Users },
+  { id: "chapter", label: "Tambahkan Chapter", icon: Map },
+  { id: "kegiatan", label: "Tambahkan Kegiatan", icon: CalendarCheck2 },
 ];
 
 const SidebarMenuItem = ({ item, activePage, onClick }) => (

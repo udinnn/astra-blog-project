@@ -93,10 +93,10 @@ const Login = ({ onClose }) => {
 
         <div className="text-center mb-6 mt-2">
           <h1 className="font-bold text-2xl text-gray-800 mb-1">
-            Welcome Back
+            Selamat datang di AORTA!
           </h1>
           <p className="text-gray-600 text-sm">
-            Please sign in to your account
+            Silakan Sign In untuk melanjutkan ke halaman admin
           </p>
         </div>
 
@@ -135,7 +135,7 @@ const Login = ({ onClose }) => {
           </div>
           <div className="relative">
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Password
+              Kata Sandi
             </label>
             <div className="relative">
               <input
@@ -167,7 +167,7 @@ const Login = ({ onClose }) => {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
-                aria-label={showPassword ? "Hide password" : "Show password"}>
+                aria-label={showPassword ? "Sembunyikan Kata Sandi" : "Tampilkan Kata Sandi"}>
                 {showPassword ? (
                   <svg
                     width="20"
