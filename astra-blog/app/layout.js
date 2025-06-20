@@ -1,5 +1,6 @@
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const dm_sans = DM_Sans({
   variable: "--font-DM-Sans",
@@ -16,7 +17,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${dm_sans.variable}`}>{children}</body>
+      <body className={`${dm_sans.variable}`}>
+        {children}
+        <SpeedInsights />
+      </body>
     </html>
   );
 }
