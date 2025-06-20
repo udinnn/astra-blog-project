@@ -52,32 +52,33 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ========== KODE YANG DIPERBAIKI ========== */}
+      {/* ========== KODE YANG DIPERBAIKI - MIRIP ASLI ========== */}
       <div className="relative w-full">
-        {/* Maskot Aryo dengan ukuran yang lebih besar dan responsif */}
-        <div className="absolute right-0 bottom-0 z-40 -translate-x-16 -translate-y-8">
+        {/* Maskot Aryo dengan ukuran yang responsif */}
+        <div className="absolute right-0 bottom-0 z-40 transform -translate-x-6 -translate-y-4 sm:-translate-x-8 sm:-translate-y-6 md:-translate-x-10 md:-translate-y-8 lg:-translate-x-12 lg:-translate-y-10 xl:-translate-x-16 xl:-translate-y-12">
           <Image
             src="/assets/aryo.png"
-            width={384} // Nilai width disesuaikan dengan ukuran xl:w-96
-            height={384} // Nilai height disesuaikan dengan ukuran xl:h-96
+            width={384}
+            height={384}
             alt="maskot"
             draggable={false}
             priority
-            className="w-36 h-36 sm:w-48 sm:h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 xl:w-96 xl:h-96 object-contain"
+            className="w-32 h-32 sm:w-40 sm:h-40 md:w-56 md:h-56 lg:w-72 lg:h-72 xl:w-80 xl:h-80 2xl:w-90 2xl:h-90 object-contain"
           />
         </div>
-        {/* Video YouTube dengan ukuran dan posisi yang disesuaikan */}
-        <div className="absolute right-24 bottom-40 sm:right-48 sm:bottom-52 md:right-48 md:bottom-64 lg:right-60 lg:bottom-72 xl:right-80 xl:bottom-80 z-40">
-          <div className="rounded-lg p-2 md:p-3">
+
+        {/* Video YouTube dengan posisi yang disesuaikan - digeser ke kiri */}
+        <div className="absolute right-24 bottom-28 sm:right-48 sm:bottom-32 md:right-32 md:bottom-56 lg:right-44 lg:bottom-72 xl:right-56 xl:bottom-52 2xl:right-64 2xl:bottom-80 z-40">
+          <div className="rounded-lg p-1 sm:p-2 md:p-3">
             <iframe
-              width="288" // Nilai width disesuaikan dengan ukuran xl:w-72
-              height="160" // Nilai height disesuaikan dengan ukuran xl:h-40
+              width="268"
+              height="160"
               src="https://www.youtube.com/embed/dQw4w9WgXcQ"
               title="AORTA Program Video"
-              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
-              className="rounded w-40 h-24 sm:w-48 sm:h-28 md:w-56 md:h-32 lg:w-64 lg:h-36 xl:w-96 xl:h-52"></iframe>
+              className="rounded w-40 h-24 sm:w-48 sm:h-28 md:w-48 md:h-28 lg:w-56 lg:h-32 xl:w-64 xl:h-36 2xl:w-72 2xl:h-40"
+            />
           </div>
         </div>
       </div>

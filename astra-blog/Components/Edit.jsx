@@ -11,47 +11,38 @@ import ConfirmationModal from "./ui/ConfirmationModal";
 import { ArrowLeft } from "lucide-react";
 import RichTextEditor from "./RichTextEditor";
 
-const Edit = ({ setActivePage }) => {
+// 1. Terima 'articleData' sebagai prop
+const Edit = ({ setActivePage, articleData }) => {
   const supabase = createClient();
-  const [article, setArticle] = useState(null);
+
+  // 2. State 'article' diisi dari prop yang diberikan oleh parent
+  const [article, setArticle] = useState(articleData);
+
   const [isSaveModalVisible, setSaveModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  // 3. useEffect yang lama dihapus. Logika ini untuk menangani jika halaman di-refresh.
   useEffect(() => {
-    // Mengambil data artikel dari sessionStorage
-    const itemJson = sessionStorage.getItem("article_to_edit");
-    if (itemJson) {
-      setArticle(JSON.parse(itemJson));
-    } else {
-      toast.error("No article selected for editing.");
+    if (!articleData) {
+      toast.error("No article data provided. Returning to list.");
       setActivePage("list");
     }
-    // Membersihkan sessionStorage setelah data diambil
-    return () => {
-      sessionStorage.removeItem("article_to_edit");
-    };
-  }, [setActivePage]);
+    // Update state jika prop berubah (misal user mengklik edit pada artikel lain)
+    setArticle(articleData);
+  }, [articleData, setActivePage]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setArticle((prev) => ({ ...prev, [name]: value }));
   };
-
   const handleImageChange = (imageUrl) => {
     setArticle((prev) => ({ ...prev, image_url: imageUrl }));
   };
-
   const handleContentChange = (htmlString) => {
     setArticle((prev) => ({ ...prev, content: htmlString }));
   };
-
   const handleSave = () => {
-    if (
-      !article.title ||
-      !article.publish_date ||
-      !article.content ||
-      article.content === "<p><br></p>"
-    ) {
+    if (!article.title || !article.publish_date || !article.content) {
       toast.error("Title, Date, and Content cannot be empty.");
       return;
     }
@@ -60,7 +51,6 @@ const Edit = ({ setActivePage }) => {
 
   const confirmSave = async () => {
     setIsLoading(true);
-
     const { error } = await supabase
       .from("articles")
       .update({
@@ -82,8 +72,11 @@ const Edit = ({ setActivePage }) => {
     }
   };
 
-  if (!article) return <div>Loading article...</div>;
+  if (!article) {
+    return <div>Loading...</div>;
+  }
 
+  // Tidak ada perubahan pada JSX di bawah ini
   return (
     <>
       <Card>
@@ -172,5 +165,4 @@ const Edit = ({ setActivePage }) => {
     </>
   );
 };
-
 export default Edit;

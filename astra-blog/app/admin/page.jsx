@@ -1,17 +1,12 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Pastikan useRouter diimpor
+import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import { Toaster } from "react-hot-toast";
 
-// Hooks & Komponen
-// Impor useAuth tidak lagi digunakan untuk proteksi di sini, tapi mungkin masih berguna untuk mendapatkan data user
-// import { useAuth } from "@/hooks/useAuth";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import Sidebar from "@/components/Sidebar";
-
-// Komponen Halaman Konten
 import List from "@/components/List";
 import New from "@/components/New";
 import Edit from "@/components/Edit";
@@ -19,41 +14,38 @@ import KolaborAksi from "@/components/KolaborAksi";
 import Chapter from "@/components/Chapter";
 import Kegiatan from "@/components/Kegiatan";
 
-// Konstanta
 const SIDEBAR_WIDTH_PX = 260;
 
 const Page = () => {
   const router = useRouter();
-
-  // 1. Tambahkan state untuk memeriksa otorisasi
   const [isAuthorized, setIsAuthorized] = useState(false);
-
   const [activePage, setActivePage] = useState("list");
+
+  // 1. State baru untuk menyimpan data artikel yang akan diedit
+  const [articleToEdit, setArticleToEdit] = useState(null);
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSidebarPinned, setIsSidebarPinned] = useState(false);
-
-  // Hook useMediaQuery bisa tetap digunakan jika ada
   const isMobile = useMediaQuery(`(max-width: 768px)`);
 
-  // 2. useEffect bertindak sebagai "Penjaga" Halaman
   useEffect(() => {
-    // Periksa status login dari localStorage saat komponen dimuat
     const isLoggedIn = localStorage.getItem("isLoggedIn");
-
     if (!isLoggedIn) {
-      // Jika tidak ada status login, arahkan ke halaman unauthorized
       router.push("/unauthorized");
     } else {
-      // Jika ada, izinkan komponen untuk dirender
       setIsAuthorized(true);
     }
   }, [router]);
 
+  // 2. Fungsi baru untuk menangani saat tombol Edit di List diklik
+  const handleSelectArticleToEdit = (article) => {
+    setArticleToEdit(article); // Simpan data artikel
+    setActivePage("edit"); // Pindah ke halaman Edit
+  };
+
   const handleMenuItemClick = (page) => {
     setActivePage(page);
-    if (isMobile) {
-      setIsSidebarOpen(false);
-    }
+    if (isMobile) setIsSidebarOpen(false);
   };
 
   const contentComponent = useMemo(() => {
@@ -61,39 +53,42 @@ const Page = () => {
       case "new":
         return <New setActivePage={setActivePage} />;
       case "list":
-        return <List setActivePage={setActivePage} />;
+        // 3. Kirim fungsi handleSelectArticleToEdit sebagai prop ke List
+        return (
+          <List
+            setActivePage={setActivePage}
+            onEditClick={handleSelectArticleToEdit}
+          />
+        );
+      case "edit":
+        // 4. Kirim data articleToEdit sebagai prop ke Edit
+        return (
+          <Edit setActivePage={setActivePage} articleData={articleToEdit} />
+        );
       case "kolaboraksi":
         return <KolaborAksi setActivePage={setActivePage} />;
       case "chapter":
         return <Chapter setActivePage={setActivePage} />;
-      case "edit":
-        return <Edit setActivePage={setActivePage} />;
       case "kegiatan":
         return <Kegiatan setActivePage={setActivePage} />;
       default:
-        return <List setActivePage={setActivePage} />;
+        return (
+          <List
+            setActivePage={setActivePage}
+            onEditClick={handleSelectArticleToEdit}
+          />
+        );
     }
-  }, [activePage]);
+  }, [activePage, articleToEdit]);
 
-  const isSidebarCurrentlyVisible = isMobile
-    ? isSidebarOpen
-    : isSidebarOpen || isSidebarPinned;
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+  if (!isAuthorized) return null;
 
-  // 3. Jangan render apapun sampai otorisasi selesai diperiksa
-  //    Ini untuk mencegah "flash" konten admin sebelum redirect
-  if (!isAuthorized) {
-    return null; // atau tampilkan komponen loading
-  }
-
-  // Jika sudah terotorisasi, tampilkan halaman admin
+  // Tidak ada perubahan pada JSX di bawah ini
   return (
     <>
       <Toaster position="top-right" reverseOrder={false} />
-
       <button
         className="fixed top-4 left-4 z-50 p-2 bg-white rounded-md shadow-md hover:bg-gray-100"
         onClick={toggleSidebar}>
@@ -110,22 +105,20 @@ const Page = () => {
           />
         </svg>
       </button>
-
       <div className="flex h-screen bg-gray-100">
         {isMobile && isSidebarOpen && (
           <div
-            className="fixed inset-0 bg-black/60 z-40"
+            className="fixed inset-0 bg-black/60 z-[55]"
             onClick={() => setIsSidebarOpen(false)}
             aria-hidden="true"
           />
         )}
-
         <div
           className={clsx(
-            "fixed top-0 left-0 h-full bg-white z-50 transition-transform duration-300 ease-in-out",
+            "fixed top-0 left-0 h-full bg-white z-[60] transition-transform duration-300 ease-in-out",
             {
-              "translate-x-0": isSidebarCurrentlyVisible,
-              "-translate-x-full": !isSidebarCurrentlyVisible,
+              "translate-x-0": isSidebarOpen || isSidebarPinned,
+              "-translate-x-full": !(isSidebarOpen || isSidebarPinned),
             }
           )}
           style={{ width: `${SIDEBAR_WIDTH_PX}px` }}
@@ -143,7 +136,6 @@ const Page = () => {
             isMobile={isMobile}
           />
         </div>
-
         <main
           className={clsx(
             "flex-1 flex flex-col w-full transition-all duration-300 ease-in-out",
@@ -160,5 +152,4 @@ const Page = () => {
     </>
   );
 };
-
 export default Page;

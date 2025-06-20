@@ -102,8 +102,7 @@ const New = ({ setActivePage }) => {
   };
 
   const optionsForType = publishType === "chapter" ? chapters : collaborations;
-  const optionLabel =
-    publishType === "chapter" ? "Nama Kota" : "Nama Mitra";
+  const optionLabel = publishType === "chapter" ? "Nama Kota" : "Nama Mitra";
 
   return (
     <>
