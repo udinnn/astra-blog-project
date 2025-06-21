@@ -79,15 +79,15 @@ export default function Home() {
 
             {/* KOLOM KANAN: MASKOT & VIDEO */}
             {/* PERBAIKAN 2: z-index dinaikkan ke level tertinggi */}
-            <div className="relative z-30 w-full h-64 sm:h-80 lg:h-full flex items-center justify-center lg:justify-end">
-              <div className="relative w-[175px] h-[175px] sm:w-[250px] sm:h-[250px] lg:w-[350px] lg:h-[350px] top-[25%] left-[20%]  lg:top-[15%] lg:left-[5%]">
+            <div className="relative z-30 w-full h-64 sm:h-80 lg:h-full flex items-center justify-center lg:justify-end lg:items-end 2xl:items-end 2xl:justify-end">
+              <div className="absolute w-[175px] h-[175px] sm:w-[250px] sm:h-[250px] lg:w-[350px] lg:h-[350px] 2xl:w-[450px] 2xl:h-[450px] top-[30%] left-[50%] lg:top-[20%] lg:left-[40%] 2xl:top-[15%] 2xl:left-[40%]">
                 <Image
                   src="/assets/aryo.png"
                   fill
                   alt="Maskot Aryo"
                   className="object-contain"
                 />
-                <div className="absolute top-[-30%] left-[-70%] w-[160px] h-[90px] sm:w-[240px] sm:h-[135px] lg:top-[-25%] lg:left-[-70%] lg:w-[320px] lg:h-[180px]">
+                <div className="absolute top-[-30%] left-[-70%] w-[160px] h-[90px] sm:w-[240px] sm:h-[135px] lg:top-[-25%] lg:left-[-70%] lg:w-[320px] lg:h-[180px] 2xl:w-[320px] 2xl:h-[180px] 2xl:top-[-20%] 2xl:left-[-50%]">
                   <iframe
                     width="100%"
                     height="100%"
