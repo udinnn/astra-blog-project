@@ -97,7 +97,7 @@ const KolaboraksiPage = () => {
 
       {/* CTA Section */}
       <div className="relative z-0 w-full h-[400px]">
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center h-3/4 p-6 sm:p-8 w-full text-white bg-blue-800">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center h-3/4 p-6 sm:p-8 w-full text-white bg-astraColor-100">
           <div className="flex flex-col items-start text-left space-y-2">
             <h1 className="text-3xl sm:text-4xl font-bold">COLLABORATION</h1>
             <h3 className="text-lg sm:text-xl font-semibold">

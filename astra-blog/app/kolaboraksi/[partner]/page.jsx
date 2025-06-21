@@ -29,7 +29,7 @@ const PartnerShareButtons = ({ title, url }) => {
   const encodedUrl = encodeURIComponent(url);
   const encodedText = encodeURIComponent(text);
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-4 px-8">
       <p className="text-sm font-semibold text-gray-700">Share:</p>
       <a
         href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`}
@@ -170,10 +170,10 @@ const PartnerPage = () => {
                 </div>
               </header>
               <div
-                className="prose prose-lg max-w-none"
+                className="prose prose-lg max-w-none prose-img:rounded-xl prose-headings:text-gray-800 px-8 text-justify"
                 dangerouslySetInnerHTML={{ __html: currentArticle.content }}
               />
-              <footer className="mt-12 pt-8 border-t">
+              <footer className="mt-10 pt-4 border-t">
                 <PartnerShareButtons
                   title={currentArticle.title}
                   url={

@@ -78,7 +78,7 @@ const FokusIsuPage = () => {
         </div>
 
         {/* Konten Artikel Dinamis */}
-        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <div className="w-full max-w-4xl mx-auto px-8 sm:px-6 lg:px-8 py-8 md:py-12">
           <article>
             <header className="text-center mb-8">
               <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
@@ -92,7 +92,7 @@ const FokusIsuPage = () => {
 
             {/* Konten Artikel dengan styling 'prose' */}
             <div
-              className="prose prose-lg max-w-none prose-img:rounded-xl prose-headings:text-gray-800"
+              className="prose prose-lg max-w-none prose-img:rounded-xl prose-headings:text-gray-800 text-justify"
               dangerouslySetInnerHTML={{ __html: article.content }} // Gunakan konten dari data artikel
             />
           </article>

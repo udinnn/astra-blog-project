@@ -107,7 +107,7 @@ export default function Home() {
 
       {/* TESTIMONI SECTION */}
       {/* PERBAIKAN 3: z-index diatur agar berada di antara background dan konten hero */}
-      <section className="relative bg-gray-100 rounded-t-[3rem] -mt-16 py-16 sm:py-20 z-10">
+      <section className="relative bg-gray-100 rounded-t-[3rem] -mt-16 py-16 px-8 sm:py-20 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-center mb-12 text-astraColor-100">
             TESTIMONI

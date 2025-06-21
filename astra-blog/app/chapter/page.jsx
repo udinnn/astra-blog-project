@@ -32,7 +32,11 @@ const Page = () => {
           <h1 className="text-4xl font-extrabold text-center text-gray-800 p-4">
             Chapter AORTA
           </h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center mt-6">
+          <p className="text-center text-gray-500 max-w-2xl mx-auto">
+            Setiap chapter mengadakan berbagai kegiatan yang disesuaikan dengan kebutuhan dan karakteristik komunitas lokal
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center mt-10">
             {chapters.map((chapter, index) => (
               <div
                 key={chapter.id || index}

@@ -2,119 +2,106 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const Header = () => {
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Fungsi untuk memeriksa ukuran layar dan mengatur state isMobile
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    // Periksa ukuran layar saat komponen dimuat
-    checkScreenSize();
-
-    // Tambahkan event listener untuk merespons perubahan ukuran layar
-    window.addEventListener("resize", checkScreenSize);
-
-    // Bersihkan event listener saat komponen unmount
-    return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
-
-  // Toggle menu mobile
-  const toggleMobileMenu = () => {
-    setShowMobileMenu(!showMobileMenu);
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
+  const navLinks = [
+    { href: "/", label: "Beranda" },
+    { href: "/about", label: "Tentang Kami" },
+    { href: "/kegiatan", label: "Kegiatan" },
+    { href: "/chapter", label: "Chapter" },
+    { href: "/kolaboraksi", label: "KolaborAksi" },
+    { href: "/daftar", label: "Daftar" },
+  ];
+
   return (
-    <div>
-      <div className="fixed top-0 w-full z-50 flex flex-row flex-wrap items-center justify-between p-2 bg-astraColor-100">
-        <Image
-          src="/assets/aorta.png"
-          width={100}
-          height={100}
-          alt="Logo Aorta"
-          className="mx-4 md:mx-8 filter invert"
-        />
+    <>
+      {/* Header Utama */}
+      <header className="fixed top-0 w-full z-50 flex items-center justify-between bg-astraColor-100 shadow-lg">
+        <Link href="/" className="flex items-center ml-4">
+          <Image
+            src="/assets/aorta.png"
+            width={120}
+            height={40}
+            alt="Logo Aorta"
+            className="filter invert"
+            />
+        </Link>
 
-        {/* Hamburger menu untuk layar mobile */}
-        {isMobile ? (
-          <div className="mr-4">
-            <button
-              onClick={toggleMobileMenu}
-              className="text-white focus:outline-none"
-              aria-label="Toggle menu"
+        {/* Menu Navigasi Desktop */}
+        <nav className="hidden md:flex items-center space-x-6 text-white mr-8">
+          {navLinks.map((link) => (
+            <Link 
+              key={link.href} 
+              href={link.href} 
+              className="text-sm font-medium tracking-wide relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:w-0 after:h-[2px] after:bg-white after:transition-all after:duration-300 hover:after:w-full"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </button>
+              {link.label}
+            </Link>
+          ))}
+        </nav>
 
-            {/* Menu navigasi mobile yang muncul saat hamburger menu diklik */}
-            {showMobileMenu && (
-              <div className="absolute right-0 mt-2 w-auto bg-astraColor-100 shadow-lg rounded-md py-1 z-50">
-                <nav className="inline-flex flex-col space-y-2 text-white text-sm">
-                  <Link href="/" className="hover:underline px-4 py-2 hover:bg-astraColor-200 rounded shadow-lg">
-                    Beranda
-                  </Link>
-                  <Link href="/about" className="hover:underline px-4 py-2 hover:bg-astraColor-200 rounded shadow-lg">
-                    Tentang Kami
-                  </Link>
-                  <Link href="/kegiatan" className="hover:underline px-4 py-2 hover:bg-astraColor-200 rounded shadow-lg">
-                    Kegiatan
-                  </Link>
-                  <Link href="/chapter" className="hover:underline px-4 py-2 hover:bg-astraColor-200 rounded shadow-lg">
-                    Chapter
-                  </Link>
-                  <Link href="/kolaboraksi" className="hover:underline px-4 py-2 hover:bg-astraColor-200 rounded shadow-lg">
-                    KolaborAksi
-                  </Link>
-                  <Link href="/daftar" className="hover:underline px-4 py-2 hover:bg-astraColor-200 rounded">
-                    Daftar
-                  </Link>
-                </nav>
-              </div>
-            )}
-          </div>
-        ) : (
-          /* Menu navigasi desktop */
-          <div className="flex flex-row space-x-4 text-sm mx-8 text-white">
-            <button className="hover:underline hover:scale-105">
-              <Link href="/">Beranda</Link>
-            </button>
-            <button className="hover:underline hover:scale-105">
-              <Link href="/about">Tentang Kami</Link>
-            </button>
-            <button className="hover:underline hover:scale-105">
-              <Link href="/kegiatan">Kegiatan</Link>
-            </button>
-            <button className="hover:underline hover:scale-105">
-              <Link href="/chapter">Chapter</Link>
-            </button>
-            <button className="hover:underline hover:scale-105">
-              <Link href="/kolaboraksi">KolaborAksi</Link>
-            </button>
-            <button className="hover:underline hover:scale-105">
-              <Link href="/daftar">Daftar</Link>
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
+        {/* Tombol Hamburger Menu (Hanya Tampil di Mobile) */}
+        <button
+          onClick={toggleMenu}
+          className="md:hidden z-50 flex flex-col items-center justify-center w-8 h-8 space-y-1.5 mr-4"
+          aria-label="Toggle menu"
+        >
+          <span
+            className={`block h-0.5 w-6 bg-white transform transition duration-300 ease-in-out ${
+              isMenuOpen ? "rotate-45 translate-y-2" : ""
+            }`}
+          ></span>
+          <span
+            className={`block h-0.5 w-6 bg-white transition duration-300 ease-in-out ${
+              isMenuOpen ? "opacity-0" : ""
+            }`}
+          ></span>
+          <span
+            className={`block h-0.5 w-6 bg-white transform transition duration-300 ease-in-out ${
+              isMenuOpen ? "-rotate-45 -translate-y-2" : ""
+            }`}
+          ></span>
+        </button>
+      </header>
+
+      {/* Panel Menu Mobile dengan Animasi Slide-down */}
+      <div
+        className={`fixed top-0 left-0 w-full h-screen bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-300 ease-in-out md:hidden ${
+          isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={toggleMenu} // Menutup menu saat mengklik backdrop
+      ></div>
+      <nav
+        className={`fixed top-14 left-0 w-full bg-astraColor-100 shadow-xl z-40 transform transition-transform duration-500 ease-in-out md:hidden ${
+          isMenuOpen ? "translate-y-0" : "-translate-y-[120%]"
+        }`}
+      >
+        <div className="flex flex-col items-center space-y-2 p-4">
+          {navLinks.map((link, index) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={toggleMenu}
+              className="w-full text-center text-white text-lg font-semibold py-3 bg-astraColor-100 border-b border-white/20 rounded-lg hover:bg-astraColor-200/30 transition-all duration-300 ease-in-out"
+              style={{
+                transform: isMenuOpen ? 'translateY(0)' : 'translateY(-20px)',
+                opacity: isMenuOpen ? 1 : 0,
+                transition: `transform 0.4s ease-in-out ${index * 0.05 + 0.2}s, opacity 0.4s ease-in-out ${index * 0.05 + 0.2}s`
+              }}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      </nav>
+    </>
   );
 };
 
