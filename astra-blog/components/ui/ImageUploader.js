@@ -10,69 +10,66 @@ import Image from "next/image";
 const ImageUploader = ({
   onImageChange,
   folderPath,
-  initialPreview = null,
+  initialPreview = [], // Default ke array kosong
 }) => {
-  const [preview, setPreview] = useState(initialPreview);
+  const [previews, setPreviews] = useState(initialPreview);
   const [isLoading, setIsLoading] = useState(false);
   const supabase = createClient();
 
   useEffect(() => {
-    setPreview(initialPreview);
+    setPreviews(initialPreview);
   }, [initialPreview]);
 
   const onDrop = useCallback(
     async (acceptedFiles) => {
-      const file = acceptedFiles[0];
-      if (!file) return;
+      if (!acceptedFiles?.length) return;
 
       setIsLoading(true);
 
-      // Buat nama file yang unik untuk menghindari tumpang tindih
-      const fileName = `${folderPath}/${Date.now()}-${file.name.replace(
-        /\s/g,
-        "_"
-      )}`;
+      const uploadPromises = acceptedFiles.map((file) => {
+        const fileName = `${folderPath}/${Date.now()}-${file.name.replace(
+          /\s/g,
+          "_"
+        )}`;
+        return supabase.storage
+          .from("aorta-public-images")
+          .upload(fileName, file, { cacheControl: "3600", upsert: false })
+          .then(({ error }) => {
+            if (error) throw error;
+            const { data } = supabase.storage
+              .from("aorta-public-images")
+              .getPublicUrl(fileName);
+            return data.publicUrl;
+          });
+      });
 
-      // Unggah file ke Supabase Storage
-      const { error } = await supabase.storage
-        .from("aorta-public-images") // Pastikan ini nama bucket Anda
-        .upload(fileName, file, {
-          cacheControl: "3600",
-          upsert: false,
-        });
-
-      if (error) {
-        toast.error(`Upload failed: ${error.message}`);
+      try {
+        const newUrls = await Promise.all(uploadPromises);
+        const updatedUrls = [...previews, ...newUrls];
+        setPreviews(updatedUrls);
+        onImageChange(updatedUrls);
+        toast.success(`${newUrls.length} gambar berhasil diunggah!`);
+      } catch (error) {
+        toast.error(`Upload gagal: ${error.message}`);
+      } finally {
         setIsLoading(false);
-        return;
       }
-
-      // Dapatkan URL publik dari file yang baru diunggah
-      const { data } = supabase.storage
-        .from("aorta-public-images") // Pastikan ini nama bucket Anda
-        .getPublicUrl(fileName);
-
-      if (data.publicUrl) {
-        toast.success("Image uploaded successfully!");
-        setPreview(data.publicUrl); // Tampilkan preview dari URL Supabase
-        onImageChange(data.publicUrl); // Kirim URL kembali ke form utama
-      }
-
-      setIsLoading(false);
     },
-    [onImageChange, folderPath, supabase.storage]
+    [onImageChange, folderPath, supabase.storage, previews]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: { "image/*": [] },
-    multiple: false,
+    multiple: true, // Izinkan multiple file
   });
 
-  const removeImage = () => {
-    // Di aplikasi nyata, Anda mungkin ingin menghapus file dari storage juga
-    setPreview(null);
-    onImageChange(null);
+  const removeImage = (indexToRemove) => {
+    const updatedPreviews = previews.filter(
+      (_, index) => index !== indexToRemove
+    );
+    setPreviews(updatedPreviews);
+    onImageChange(updatedPreviews);
   };
 
   return (
@@ -88,28 +85,39 @@ const ImageUploader = ({
         {isLoading ? (
           <div className="flex flex-col items-center justify-center text-gray-500">
             <Loader2 className="animate-spin h-8 w-8 mb-2" />
-            <p>Uploading...</p>
+            <p>Mengunggah...</p>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center text-gray-500">
             <UploadCloud className="h-8 w-8 mb-2" />
-            <p>Drag & drop an image here, or click to select</p>
+            <p>Seret & lepas gambar di sini, atau klik untuk memilih</p>
+            <p className="text-xs text-gray-400 mt-1">
+              Anda bisa memilih beberapa gambar sekaligus
+            </p>
           </div>
         )}
       </div>
-      {preview && (
-        <div className="mt-4 relative w-48 h-48 border rounded-lg p-2 bg-slate-50">
-          <Image
-            src={preview}
-            alt="Image Preview"
-            layout="fill"
-            objectFit="contain"
-          />
-          <button
-            onClick={removeImage}
-            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-lg hover:bg-red-600 transition-transform hover:scale-110">
-            <X size={16} />
-          </button>
+
+      {previews.length > 0 && (
+        <div className="mt-4 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-4">
+          {previews.map((previewUrl, index) => (
+            <div
+              key={index}
+              className="relative w-full aspect-square border rounded-lg p-1 bg-slate-50">
+              <Image
+                src={previewUrl}
+                alt={`Preview ${index + 1}`}
+                fill
+                className="object-contain"
+              />
+              <button
+                onClick={() => removeImage(index)}
+                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-lg hover:bg-red-600 transition-transform hover:scale-110"
+                aria-label="Hapus gambar">
+                <X size={16} />
+              </button>
+            </div>
+          ))}
         </div>
       )}
     </div>

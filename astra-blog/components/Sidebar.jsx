@@ -49,10 +49,7 @@ const Sidebar = ({
   const router = useRouter();
 
   const handleLogout = () => {
-    // INTI PERUBAHAN: Hapus localStorage saat logout
     localStorage.removeItem("isLoggedIn");
-
-    // Arahkan ke halaman utama dan refresh
     router.push("/");
     router.refresh();
     toast.success("You have been logged out.");
@@ -60,7 +57,6 @@ const Sidebar = ({
 
   return (
     <div className="flex flex-col h-full bg-astraColor-100 text-white">
-      {/* Header */}
       <div className="flex items-center justify-between p-4">
         <Image
           src="/assets/aorta.png"
@@ -78,8 +74,6 @@ const Sidebar = ({
           </button>
         )}
       </div>
-
-      {/* Menu Navigation */}
       <nav className="flex-1 p-4 space-y-2">
         {menuItems.map((item) => (
           <SidebarMenuItem
@@ -90,8 +84,6 @@ const Sidebar = ({
           />
         ))}
       </nav>
-
-      {/* Footer / User Profile */}
       <div className="p-4">
         <div className="flex items-center gap-3">
           <svg

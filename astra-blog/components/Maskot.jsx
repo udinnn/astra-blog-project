@@ -47,7 +47,7 @@ const Maskot = () => {
       question:
         "Bagaimana cara menghubungi AORTA jika saya memiliki pertanyaan lebih lanjut?",
       answer:
-        "Kamu dapat menghubungi kami melalui email di communityaorta@gmail.com atau melalui pesan langsung di akun media sosial resmi AORTA Community.",
+        "Kamu dapat menghubungi kami melalui email di communityaorta@gmail.com, WhatsApp melalui nomor 082211125539, atau melalui pesan langsung di akun media sosial resmi AORTA Community.",
     },
   ];
 
