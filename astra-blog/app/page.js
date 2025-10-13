@@ -9,51 +9,39 @@ import { useRouter } from "next/navigation";
 // Data testimoni (tidak berubah)
 const testimonialsData = [
   {
-    imageSrc: "/assets/teenagers.jpg",
-    text: "Menurut saya program ini sangat membantu...",
+    imageSrc: "/assets/test1.jpg",
+    text: "Aku ga nyangka ada komunitas yang arah geraknya sangat menarik sehingga dapat menambah pengalaman yang sangat berharga bagi saya",
     name: "Sarah",
     role: "Peserta AORTA",
   },
   {
-    imageSrc: "/assets/teenagers.jpg",
-    text: "Program AORTA memberikan pengalaman luar biasa...",
+    imageSrc: "/assets/test2.jpg",
+    text: "Bagus banget, AORTA keren selalu ada terobosan dari setiap program",
     name: "Ahmad",
     role: "Peserta AORTA",
   },
   {
-    imageSrc: "/assets/teenagers.jpg",
-    text: "Bergabung dengan AORTA adalah keputusan terbaik!...",
+    imageSrc: "/assets/test3.jpg",
+    text: "Good, sangat-sangat membantu",
     name: "Maya",
     role: "Peserta AORTA",
   },
   {
-    imageSrc: "/assets/teenagers.jpg",
-    text: "Saya belajar banyak tentang kesehatan remaja...",
+    imageSrc: "/assets/test4.jpg",
+    text: "Pengalaman paling berharga bagi saya bisa tergabung dalam komunitas yang amat sangat peduli pada isu terikin",
     name: "Budi",
     role: "Peserta AORTA",
   },
   {
-    imageSrc: "/assets/teenagers.jpg",
-    text: "AORTA mengajarkan saya arti penting kolaborasi...",
+    imageSrc: "/assets/test5.jpg",
+    text: "Terimakasih Kepada AORTA, acaranya luarbiasa membantu",
     name: "Dewi",
     role: "Peserta AORTA",
   },
   {
-    imageSrc: "/assets/teenagers.jpg",
-    text: "Saya merasa lebih percaya diri setelah mengikuti program ini...",
-    name: "Rudi",
-    role: "Peserta AORTA",
-  },
-  {
-    imageSrc: "/assets/teenagers.jpg",
-    text: "Program ini sangat inspiratif dan mendidik...",
-    name: "Lina",
-    role: "Peserta AORTA",
-  },
-  {
-    imageSrc: "/assets/teenagers.jpg",
-    text: "Saya bangga menjadi bagian dari AORTA Community...",
-    name: "Tono",
+    imageSrc: "/assets/test6.jpg",
+    text: "Terlibat dalam kegiatan AORTA menambah pengalaman dan insight baru bagi saya",
+    name: "Anastasia",
     role: "Peserta AORTA",
   },
 ];
@@ -158,8 +146,8 @@ export default function Home() {
           <h2 className="text-3xl sm:text-4xl font-extrabold text-center mb-12 text-astraColor-100">
             TESTIMONI
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 justify-center group">
-            {testimonialsData.map((testimonial, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 justify-center group">
+            {testimonialsData.slice(0, 6).map((testimonial, index) => (
               <TestimonialCard key={index} {...testimonial} />
             ))}
           </div>

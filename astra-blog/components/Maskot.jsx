@@ -44,6 +44,42 @@ const Maskot = () => {
     },
     {
       id: 7,
+      question: "Kenapa dinamakan “AORTA”?",
+      answer: `Karena AORTA itu pembuluh darah utama yang menyalurkan kehidupan. Filosofinya: kami ingin jadi saluran energi positif dan pengetahuan tentang kesehatan remaja ke seluruh Indonesia. ❤
+
+      Apa aja fokus isu AORTA Community?
+      Kami punya 4 fokus utama, yaitu:
+      1️⃣ Kesehatan Reproduksi Remaja
+      2️⃣ Kesehatan Mental
+      3️⃣ Perilaku Hidup Bersih dan Sehat (PHBS)
+      4️⃣ Gizi Remaja
+
+      AORTA di bawah siapa?
+      Kami merupakan bagian dari program CSR Astra International melalui payung besar SATU Indonesia Awards — yang mendukung generasi muda berprestasi dan berdampak bagi masyarakat.
+
+      Kegiatan AORTA biasanya seperti apa?
+      Seru dan variatif! Ada:
+      💬 Edukasi & kampanye kesehatan di sekolah dan kampus
+      📱 Konten kreatif dan challenge di media sosial
+      🎓 Workshop dan pelatihan remaja sehat
+      🤝 Kolaborasi komunitas & kegiatan sosial
+      🎉 Booth interaktif dan event nasional
+
+      Apakah ada biaya untuk ikut kegiatan AORTA?
+      Nggak ada! Semua kegiatan AORTA bersifat sosial dan edukatif, alias gratis. Kadang malah ada hadiah, sertifikat, atau merchandise untuk peserta aktif.
+
+      Apakah AORTA hanya fokus di kesehatan aja?
+      Fokus utama kami memang kesehatan remaja, tapi kami juga membahas hal-hal seputar empowerment, kepemimpinan, dan gaya hidup positif — karena semua itu berhubungan dengan kesehatan secara menyeluruh. 🌱
+
+      Apa aja manfaat ikut AORTA Community?
+      ✨ Dapat ilmu tentang kesehatan remaja
+      ✨ Bisa ikut kegiatan nasional & lokal
+      ✨ Dapat e-sertifikat dan pengalaman organisasi
+      ✨ Punya jejaring luas antar komunitas
+      ✨ Jadi bagian dari gerakan remaja sehat Indonesia`,
+    },
+    {
+      id: 8,
       question:
         "Bagaimana cara menghubungi AORTA jika saya memiliki pertanyaan lebih lanjut?",
       answer:
