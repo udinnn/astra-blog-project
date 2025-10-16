@@ -29,7 +29,7 @@ const testimonialsData = [
   {
     imageSrc: "/assets/test4.jpg",
     text: "Pengalaman paling berharga bagi saya bisa tergabung dalam komunitas yang amat sangat peduli pada isu terikin",
-    name: "Budi",
+    name: "Hendra",
     role: "Peserta AORTA",
   },
   {
@@ -43,6 +43,66 @@ const testimonialsData = [
     text: "Terlibat dalam kegiatan AORTA menambah pengalaman dan insight baru bagi saya",
     name: "Anastasia",
     role: "Peserta AORTA",
+  },
+  {
+    imageSrc: "/assets/test7.jpeg",
+    text: "AORTA memberi saya ruang untuk berinovasi dan mencoba berbagai hal baru, mulai dari dibekali kepemimpinan di boothcamp, public speaking, dan manajemen organisasi. tentang kesehatan aja tapi juga perkembangan SDM yang ada di AORTA. Saya juga diberikan kesempatan untuk menjadi narasumber di berbagai event AORTA sehingga bisa membantu dalam portofolio saya dan mengembangkan public speaking juga",
+    name: "Amin Mubarok",
+    role: "Pengurus AORTA",
+  },
+  {
+    imageSrc: "/assets/test8.png",
+    text: "Ikut Aksi Gizi bareng AORTA bikin aku sadar kalau pola makan sehat itu nggak ribet",
+    name: "Bintang",
+    role: "Anggota IDS",
+  },
+  {
+    imageSrc: "/assets/test9.png",
+    text: "Kegiatan seru dan banyak ilmu kesehatannyabg didapat khsusunya pola makan dan kebugaran tubuh",
+    name: "Fauzan",
+    role: "Peserta AORTA",
+  },
+  {
+    imageSrc: "/assets/test10.png",
+    text: "Gabung di AORTA itu bukan cuma tentang kegiatan, tapi juga tumbuh bareng orang-orang yang peduli",
+    name: "Hafid",
+    role: "Anggota Chapter Jogja",
+  },
+  {
+    imageSrc: "/assets/test11.jpeg",
+    text: "Saya mendukung dengan adanya kegiatan AORTA di KBA Tanon ini bisa memotivasi generasi muda dan meningkatkan kolaborasi lintas sektor khususnya dalam menyemarakkan isu-isu kesehatan di lingkungan kita sekarang",
+    name: "Kades Ngrawan",
+    role: "Peserta AORTA",
+  },
+  {
+    imageSrc: "/assets/test12.png",
+    text: "Saya termotivasi dengan narasumber dan punya semangat untuk mengikuti jejaknya",
+    name: "Medina",
+    role: "Peserta AORTA",
+  },
+  {
+    imageSrc: "/assets/test13.png",
+    text: "Acaranya bagus banget, kita yang notabene nya anak pesantren kan terkesan bodo amat mengatur pola makan nah dengan adanya acara ini kita semakin sadar bahwa mengatur pola makan itu penting untuk menjaga kesehatan tubuh dan mental",
+    name: "Nasya",
+    role: "Peserta AORTA",
+  },
+  {
+    imageSrc: "/assets/test14.png",
+    text: "Saya merasa terdapat banyak ilmu salah satunya PHBS dan kesehatan bagi remaja terlebih dengan adanya skcreening untuk mengetahui pentingnya kesehatan kita",
+    name: "Rafa Kurniawan",
+    role: "Peserta AORTA",
+  },
+  {
+    imageSrc: "/assets/test15.png",
+    text: "Selama di AORTA khsusnya saya di Ikatan Dokter Santri banyak sekali ilmu dan pengalaman yang didapat terlebih dengan fokus pendidikan saya sekarang di bidang kesehatan yang selaras dengan visi AORTA membuat saya dapat mengintervensikan ilmu yang saya peroleh untuk membantu masyarakat khususnya remaja agar lebih aware tentang kesehatan mereka",
+    name: "Rasyad",
+    role: "Ketua IDS",
+  },
+  {
+    imageSrc: "/assets/test16.png",
+    text: "Bagi saya AORTA Community merupakan wadah untuk para remaja berkembang dan mengabdikan dirinya dalam intervensi kesehatan yang dilakukan di masyarakat, karena networking kita di berbagai wilayah sehingga dalam setiap kegiatan AORTA selalu ada sharing dan ide-ide baru anak muda dalam menangani isu kesehatan sesuai fokus di AORTA",
+    name: "Vira Eliza",
+    role: "Presiden AORTA",
   },
 ];
 
@@ -146,8 +206,8 @@ export default function Home() {
           <h2 className="text-3xl sm:text-4xl font-extrabold text-center mb-12 text-astraColor-100">
             TESTIMONI
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 justify-center group">
-            {testimonialsData.slice(0, 6).map((testimonial, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 justify-center group">
+            {testimonialsData.slice(0, 16).map((testimonial, index) => (
               <TestimonialCard key={index} {...testimonial} />
             ))}
           </div>
